@@ -1,35 +1,42 @@
 # Do & Due: installable app
 
-This folder is a complete, self-contained web app. It needs no build step and no accounts.
+A complete, self-contained web app. There is no build step.
 
-## Put it online (free)
+## Publishing updates (GitHub Pages)
 
-Any host that serves files over https works. Two easy ones:
+1. Open your repository on github.com and choose Add file, then Upload files.
+2. Drag in everything from this folder (the files inside it, not the folder itself) and commit.
+   Files with the same name are replaced.
+3. Wait a minute or two for Pages to publish.
+4. On your phone, open the app. A bar saying "A new version is ready" appears: tap Refresh.
+   (If it does not appear, close the app completely and open it again.)
 
-**Netlify Drop (about a minute, no account needed to try)**
-1. Go to https://app.netlify.com/drop
-2. Drag this whole folder onto the page.
-3. Open the web address it gives you.
+Settings, then Sync, shows the app version, so you can check which one a device is running.
 
-**GitHub Pages**
-1. Create a repository and upload everything in this folder to it.
-2. In the repository, open Settings, then Pages, and publish from the main branch.
-3. Open the address GitHub shows (it ends in github.io).
+## Installing on a phone
 
-## Install it on your phone
-
-Open the address in your phone's browser, then:
+Open your GitHub Pages address in the phone's browser, then:
 - **iPhone (Safari):** Share button, then Add to Home Screen.
 - **Android (Chrome):** menu (three dots), then Install app or Add to Home screen.
 
-Install it before you add tasks. On iPhone the installed app keeps its data separately from Safari.
+## Sync between devices
 
-## Your data
+Tasks, modules, timetable and settings sync through your own Supabase project.
+Open Settings, then Sync, and sign in with the same email and password on each device.
+Changes sync a moment after you make them and whenever the app is opened.
+The app still works offline and catches up when you reconnect.
 
-Tasks and settings are saved on the device, inside the app. They do not sync between devices.
-Use Settings, then Backup and restore, to download a backup, move tasks to another device, or bring in a backup from the Claude version.
-Clearing the browser's site data deletes the saved tasks, so keep a backup now and then.
+Before the first sync a device keeps a copy of what it held. If two devices both already have tasks, sign in on the one with the most first.
 
-## Updating
+## Setting up Supabase (once)
 
-Upload the new files over the old ones. The app picks up the new version the next time it is opened with a connection.
+1. In your Supabase project, open SQL Editor, paste the whole of supabase-setup.sql and press Run.
+2. Open Authentication, then Sign In / Providers, then Email, and switch off "Confirm email". Save.
+3. Create your account in the app (Settings, Sync, Create account), then sign in on your other devices.
+4. Optional but sensible: once your account exists, switch off "Allow new users to sign up" in the same place, so nobody else can create one.
+
+The key in the app is a public key. It is safe in a public repository because each account can only read and write its own rows.
+
+## Backups
+
+Settings, then Backup and restore, downloads a copy of everything. Keep one now and then.

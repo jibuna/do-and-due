@@ -1,9 +1,9 @@
 /* Do & Due service worker: lets the app open and work offline. */
-const CACHE = 'doanddue-98aab43c9c';
+const CACHE = 'doanddue-f275a8cada';
 const CORE = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'icons/apple-touch-icon.png', 'icons/favicon-32.png'];
 
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(CORE)).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(CORE.map((u) => new Request(u, { cache: 'reload' })))).then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', (e) => {
@@ -21,7 +21,8 @@ self.addEventListener('fetch', (e) => {
   // Pages: try the network so updates arrive, fall back to the saved copy offline.
   if (req.mode === 'navigate') {
     e.respondWith(
-      fetch(req).then((res) => {
+      fetch(req.url, { cache: 'no-cache', credentials: 'same-origin' }).then((res) => {
+        if (!res.ok) throw new Error('bad');
         const copy = res.clone();
         caches.open(CACHE).then((c) => c.put('index.html', copy));
         return res;

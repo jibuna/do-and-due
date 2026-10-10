@@ -600,6 +600,14 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
   @keyframes dlg-in { from { transform: translateY(40px); opacity: .6; } }
 }
 </style>
+<style>
+.updbar{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 10px);z-index:60;display:flex;align-items:center;gap:10px;max-width:calc(100vw - 24px);padding:8px 8px 8px 16px;border-radius:999px;background:var(--ink);color:var(--bg);font:500 14px/1.2 var(--font-body,system-ui,sans-serif);box-shadow:0 6px 24px rgba(0,0,0,.25)}
+.updbar span{white-space:nowrap}
+.updbar button{border:0;font:inherit;cursor:pointer;border-radius:999px;height:32px}
+.updbar .u-go{padding:0 14px;background:var(--accent);color:var(--accent-ink);font-weight:600}
+.updbar .u-x{width:32px;background:transparent;color:inherit;opacity:.7;font-size:20px;line-height:1}
+</style>
+<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_BUILD="7941804";</script>
 </head>
 <body>
 
@@ -919,6 +927,26 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
         <p class="note" id="d-msg" role="status" style="margin-top:12px"></p>
       </div>
     </details>
+    <details class="card setc" id="set-sync" hidden>
+      <summary><span class="sico"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.5 14.5a3.5 3.5 0 0 1-.4-6.97A5 5 0 0 1 14.7 7.3 3.6 3.6 0 0 1 14.5 14.5h-9Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span><span class="stitle">Sync</span><span class="ssum" id="ss-set-sync">Keep your devices in step</span></summary>
+      <div class="sbody">
+        <div id="sync-out">
+          <p class="help">Sign in to keep your tasks and settings the same on every device. Use the same email and password on each one. If two devices already hold tasks, sign in on the one with the most first.</p>
+          <form id="sy-form" novalidate>
+            <div class="field"><label for="sy-email">Email</label><input id="sy-email" type="email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false"></div>
+            <div class="field" style="margin-top:12px"><label for="sy-pw">Password</label><input id="sy-pw" type="password" autocomplete="current-password"></div>
+            <div class="actions top"><button class="btn primary" type="submit" id="sy-in">Sign in</button><button class="btn" type="button" id="sy-up">Create account</button></div>
+          </form>
+        </div>
+        <div id="sync-in" hidden>
+          <p class="help" id="sy-who"></p>
+          <p class="help">Changes sync a moment after you make them, and whenever you open the app. Offline changes wait until you are back online.</p>
+          <div class="actions"><button class="btn primary" type="button" id="sy-now">Sync now</button><button class="btn" type="button" id="sy-out">Sign out</button></div>
+        </div>
+        <p class="note" id="sy-msg" role="status" style="margin-top:12px"></p>
+        <p class="hint" id="sy-ver" style="margin-top:12px"></p>
+      </div>
+    </details>
   </section>
 
   <footer class="foot" id="foot"></footer>
@@ -1048,6 +1076,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       applyPref(n, d);
     });
     render();
+    startSync();
   }
   function startDb(db) {
     var col = db.collection('tasks');
@@ -1074,6 +1103,258 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       render();
     });
   }
+  /* ---------- sync between devices (installed app only; needs a Supabase project) ---------- */
+  var SYNC = { on: false, meta: null, busy: false, again: false, p: null, err: '', timer: null, tokenP: null };
+  var SYNC_META_KEY = 'doanddue.sync.meta';
+  function syncLoadMeta() {
+    var m = null;
+    try { m = JSON.parse(lsGet(SYNC_META_KEY) || 'null'); } catch (e) { m = null; }
+    m = m && typeof m === 'object' ? m : {};
+    m.ts = m.ts || {}; m.dirty = m.dirty || {}; m.del = m.del || {};
+    m.sess = m.sess || null; m.last = m.last || 0;
+    return m;
+  }
+  function syncSaveMeta() { lsSet(SYNC_META_KEY, JSON.stringify(SYNC.meta)); }
+  function syncMark(key, deleted) {
+    var m = SYNC.meta;
+    m.ts[key] = Math.max(Date.now(), (m.ts[key] || 0) + 1);
+    m.dirty[key] = true;
+    if (deleted) m.del[key] = true; else delete m.del[key];
+    syncSaveMeta();
+    syncSoon();
+  }
+  function sbCall(path, opts, token) {
+    var c = window.__DD_SYNC, h = { apikey: c.key, 'Content-Type': 'application/json' };
+    if (token) h.Authorization = 'Bearer ' + token;
+    if (opts.headers) Object.keys(opts.headers).forEach(function (k) { h[k] = opts.headers[k]; });
+    return fetch(c.url + path, { method: opts.method || 'GET', headers: h, body: opts.body }).then(function (r) {
+      return r.text().then(function (t) {
+        var j = null; try { j = t ? JSON.parse(t) : null; } catch (e) { j = null; }
+        return { ok: r.ok, status: r.status, j: j };
+      });
+    }, function () { return Promise.reject({ code: 'net' }); });
+  }
+  function syncSetSession(j) {
+    var old = SYNC.meta.sess || {};
+    SYNC.meta.sess = {
+      access: j.access_token, refresh: j.refresh_token,
+      exp: j.expires_at ? j.expires_at * 1000 : Date.now() + (j.expires_in || 3600) * 1000,
+      email: (j.user && j.user.email) || old.email || '', uid: (j.user && j.user.id) || old.uid || ''
+    };
+    syncSaveMeta();
+  }
+  function syncToken() {
+    var s = SYNC.meta.sess;
+    if (!s) return Promise.reject({ code: 'signedout' });
+    if (s.exp - Date.now() > 60000) return Promise.resolve(s.access);
+    if (SYNC.tokenP) return SYNC.tokenP;
+    SYNC.tokenP = sbCall('/auth/v1/token?grant_type=refresh_token', { method: 'POST', body: JSON.stringify({ refresh_token: s.refresh }) }).then(function (r) {
+      if (r.ok && r.j && r.j.access_token) { syncSetSession(r.j); return r.j.access_token; }
+      if (r.status >= 400 && r.status < 500) { SYNC.meta.sess = null; syncSaveMeta(); return Promise.reject({ code: 'signedout' }); }
+      return Promise.reject({ code: 'http', status: r.status });
+    }).then(function (v) { SYNC.tokenP = null; return v; }, function (e) { SYNC.tokenP = null; return Promise.reject(e); });
+    return SYNC.tokenP;
+  }
+  function syncPull(tok) {
+    var out = [];
+    function page(from) {
+      return sbCall('/rest/v1/docs?select=key,data,deleted,ts&order=key&limit=1000&offset=' + from, {}, tok).then(function (r) {
+        if (!r.ok) return Promise.reject({ code: 'http', status: r.status, j: r.j });
+        out = out.concat(Array.isArray(r.j) ? r.j : []);
+        return r.j && r.j.length === 1000 ? page(from + 1000) : out;
+      });
+    }
+    return page(0);
+  }
+  function syncApply(r) {
+    if (r.key.indexOf('task:') === 0) {
+      var id = r.key.slice(5);
+      state.tasks = state.tasks.filter(function (x) { return x.id !== id; });
+      if (!r.deleted && r.data && typeof r.data === 'object') {
+        var t = JSON.parse(JSON.stringify(r.data)); t.id = id;
+        if (!Array.isArray(t.subtasks)) t.subtasks = [];
+        state.tasks.push(t);
+      }
+      persistLocal();
+    } else if (r.key.indexOf('pref:') === 0) {
+      var n = r.key.slice(5);
+      if (PREF_NAMES.indexOf(n) < 0 || r.deleted || !r.data) return;
+      applyPref(n, r.data);
+      lsSet('doanddue.pref.' + n, JSON.stringify(r.data));
+    }
+  }
+  function syncMerge(rows) {
+    var m = SYNC.meta, remote = {}, changed = false;
+    rows.forEach(function (r) { remote[r.key] = r; });
+    rows.forEach(function (r) {
+      var lts = m.ts[r.key] || 0, add = false;
+      if (r.ts > lts) {
+        if (r.key === 'pref:modules' && !lts && !r.deleted && r.data && r.data.items) {
+          /* first meeting of two device's module lists: keep both */
+          var items = JSON.parse(JSON.stringify(r.data.items));
+          Object.keys(state.modsDoc.items).forEach(function (k) { if (!items[k]) { items[k] = state.modsDoc.items[k]; add = true; } });
+          if (add) r = { key: r.key, data: { items: items }, deleted: false, ts: r.ts + 1 };
+        }
+        syncApply(r); m.ts[r.key] = r.ts; changed = true;
+        if (add) m.dirty[r.key] = true; else delete m.dirty[r.key];
+        if (r.deleted) m.del[r.key] = true; else delete m.del[r.key];
+      } else if (lts > r.ts) m.dirty[r.key] = true;
+      else delete m.dirty[r.key];
+    });
+    state.tasks.forEach(function (t) {
+      var k = 'task:' + t.id;
+      if (!remote[k]) { if (!m.ts[k]) m.ts[k] = 1; m.dirty[k] = true; }
+    });
+    PREF_NAMES.forEach(function (n) {
+      var k = 'pref:' + n;
+      if (!remote[k] && lsGet('doanddue.pref.' + n) !== null) { if (!m.ts[k]) m.ts[k] = 1; m.dirty[k] = true; }
+    });
+    Object.keys(m.del).forEach(function (k) {
+      if (!remote[k]) { delete m.dirty[k]; delete m.del[k]; delete m.ts[k]; }
+    });
+    syncSaveMeta();
+    return changed;
+  }
+  function syncRowFor(key) {
+    var m = SYNC.meta, row = { user_id: m.sess.uid, key: key, ts: m.ts[key] || 1, deleted: !!m.del[key], data: null };
+    if (row.deleted) return row;
+    if (key.indexOf('task:') === 0) {
+      var id = key.slice(5), t = state.tasks.find(function (x) { return x.id === id; });
+      if (!t) return null;
+      row.data = t;
+    } else {
+      var n = key.slice(5);
+      if (PREF_NAMES.indexOf(n) < 0) return null;
+      row.data = prefData(n);
+    }
+    return row;
+  }
+  function syncPush(tok) {
+    var m = SYNC.meta, keys = Object.keys(m.dirty), sent = {}, rows = [];
+    keys.forEach(function (k) {
+      var r = syncRowFor(k);
+      if (r) { rows.push(r); sent[k] = r.ts; } else delete m.dirty[k];
+    });
+    if (!rows.length) return Promise.resolve();
+    var chunks = [];
+    for (var i = 0; i < rows.length; i += 200) chunks.push(rows.slice(i, i + 200));
+    return chunks.reduce(function (p, ch) {
+      return p.then(function () {
+        return sbCall('/rest/v1/docs?on_conflict=user_id,key', { method: 'POST', headers: { Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify(JSON.parse(JSON.stringify(ch))) }, tok).then(function (r) {
+          if (!r.ok) return Promise.reject({ code: 'http', status: r.status, j: r.j });
+          ch.forEach(function (row) { if (m.ts[row.key] === sent[row.key]) delete m.dirty[row.key]; });
+        });
+      });
+    }, Promise.resolve()).then(syncSaveMeta);
+  }
+  function syncErrText(e) {
+    if (!e) return 'Sync problem. Will retry.';
+    if (e.code === 'net') return 'Offline. Will sync when you are back online.';
+    if (e.code === 'signedout') return 'Signed out. Sign in again to keep syncing.';
+    if (e.code === 'http' && (e.status === 404 || (e.j && /PGRST205|42P01/.test(e.j.code || '')))) return 'Sync is not set up on the server yet.';
+    return 'Sync problem. Will retry.';
+  }
+  function syncRun() {
+    if (!SYNC.on || !SYNC.meta.sess) return Promise.resolve();
+    if (SYNC.busy) { SYNC.again = true; return SYNC.p; }
+    SYNC.busy = true; SYNC.err = ''; syncUi();
+    SYNC.p = syncToken().then(function (tok) {
+      return syncPull(tok).then(function (rows) {
+        if (!SYNC.meta.backedUp) { lsSet('doanddue.presync.backup', backupText()); SYNC.meta.backedUp = true; }
+        var changed = syncMerge(rows);
+        if (changed) render();
+        return syncPush(tok);
+      });
+    }).then(function () {
+      SYNC.meta.last = Date.now(); syncSaveMeta();
+    }, function (e) {
+      SYNC.err = syncErrText(e);
+      if (e && e.code === 'signedout') toast('Signed out of sync. Sign in again in Settings.');
+    }).then(function () {
+      SYNC.busy = false; syncUi();
+      if (SYNC.again) { SYNC.again = false; syncSoon(); }
+    });
+    return SYNC.p;
+  }
+  function syncSoon() {
+    if (!SYNC.on || !SYNC.meta.sess) return;
+    clearTimeout(SYNC.timer);
+    SYNC.timer = setTimeout(syncRun, 1200);
+  }
+  function syncAgo(t) {
+    var s = Math.round((Date.now() - t) / 1000);
+    if (s < 60) return 'just now';
+    if (s < 3600) return Math.round(s / 60) + ' min ago';
+    var d = new Date(t); return 'at ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+  }
+  function syncUi() {
+    var card = document.getElementById('set-sync');
+    if (!card || !SYNC.on) return;
+    var m = SYNC.meta, s = m.sess, sum;
+    card.hidden = false;
+    $('#sync-out').hidden = !!s; $('#sync-in').hidden = !s;
+    if (s) $('#sy-who').textContent = 'Signed in as ' + s.email + '.';
+    sum = !s ? 'Not signed in' : SYNC.busy ? 'Syncing…' : SYNC.err ? SYNC.err : m.last ? 'Synced ' + syncAgo(m.last) : 'Signed in';
+    $('#ss-set-sync').textContent = sum;
+    $('#sy-now').disabled = SYNC.busy;
+    renderFoot();
+    var v = document.getElementById('sy-ver');
+    if (v) v.textContent = window.__DD_BUILD ? 'App version ' + window.__DD_BUILD : '';
+  }
+  function syncMsg(t, warn) { var el = $('#sy-msg'); el.textContent = t; el.className = 'note' + (warn ? ' warn' : ''); }
+  function syncAuth(create) {
+    var email = $('#sy-email').value.trim(), pw = $('#sy-pw').value;
+    if (!/^\S+@\S+\.\S+$/.test(email)) { syncMsg('Enter your email address.', true); return; }
+    if (pw.length < 6) { syncMsg('Use a password of at least 6 characters.', true); return; }
+    syncMsg(create ? 'Creating your account…' : 'Signing in…');
+    var path = create ? '/auth/v1/signup' : '/auth/v1/token?grant_type=password';
+    sbCall(path, { method: 'POST', body: JSON.stringify({ email: email, password: pw }) }).then(function (r) {
+      if (r.ok && r.j && r.j.access_token) {
+        syncSetSession(r.j);
+        if (!SYNC.meta.sess.email) SYNC.meta.sess.email = email;
+        $('#sy-pw').value = '';
+        syncMsg('Signed in. Syncing…'); syncUi(); syncRun().then(function () { syncMsg(SYNC.err ? SYNC.err : 'Synced.', !!SYNC.err); });
+      } else if (r.ok && create) {
+        syncMsg('Check your email to confirm the account, then come back and sign in.');
+      } else {
+        var code = r.j && (r.j.error_code || r.j.code || r.j.msg || r.j.error_description || '');
+        var txt = /invalid_credentials|Invalid login/i.test(code) ? 'Wrong email or password.'
+          : /user_already_exists|already registered/i.test(code) ? 'That email already has an account. Use Sign in.'
+          : /weak_password/i.test(code) ? 'That password is too weak. Try a longer one.'
+          : /signup_disabled|not allowed/i.test(code) ? 'New accounts are switched off. Use Sign in.'
+          : /email_not_confirmed/i.test(code) ? 'Confirm your email first, then sign in.'
+          : /over_.*rate_limit|rate/i.test(code) ? 'Too many tries. Wait a minute and try again.'
+          : 'That did not work. Try again.';
+        syncMsg(txt, true);
+      }
+    }, function () { syncMsg('No connection. Try again when you are online.', true); });
+  }
+  function startSync() {
+    if (!window.__DD_SYNC || !window.__DD_SYNC.url || !window.__DD_SYNC.key) return;
+    SYNC.on = true; SYNC.meta = syncLoadMeta();
+    var base = store;
+    store = {
+      kind: 'local', newId: base.newId,
+      save: function (t) { return base.save(t).then(function () { syncMark('task:' + t.id); }); },
+      remove: function (id) { return base.remove(id).then(function () { syncMark('task:' + id, true); }); },
+      savePref: function (name, data) { return base.savePref(name, data).then(function () { syncMark('pref:' + name); }); }
+    };
+    $('#sy-form').addEventListener('submit', function (e) { e.preventDefault(); syncAuth(false); });
+    $('#sy-up').addEventListener('click', function () { syncAuth(true); });
+    $('#sy-now').addEventListener('click', function () { syncMsg(''); syncRun().then(function () { syncMsg(SYNC.err ? SYNC.err : 'Synced.', !!SYNC.err); }); });
+    $('#sy-out').addEventListener('click', function () {
+      var s = SYNC.meta.sess;
+      if (s) sbCall('/auth/v1/logout', { method: 'POST' }, s.access).catch(function () {});
+      SYNC.meta.sess = null; SYNC.err = ''; syncSaveMeta(); syncUi();
+      syncMsg('Signed out. Your tasks stay on this device.');
+    });
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) syncRun(); else if (Object.keys(SYNC.meta.dirty).length) syncRun(); });
+    window.addEventListener('online', function () { syncRun(); });
+    setInterval(function () { if (!document.hidden) syncRun(); }, 45000);
+    syncUi();
+    syncRun();
+  }
+
   function init() {
     initUi();
     render();
@@ -1380,7 +1661,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     if (state.tasks.some(function (t) { return t.example; })) {
       parts.push('<span>Tasks marked Example are placeholders.</span><button class="link" type="button" id="clear-examples">Clear examples</button>');
     }
-    if (store && store.kind === 'local') parts.push('<span>Saved on this device only.</span>');
+    if (store && store.kind === 'local') parts.push(SYNC && SYNC.on && SYNC.meta.sess ? '<span>Synced across your devices.</span>' : '<span>Saved on this device only.</span>');
     $('#foot').innerHTML = parts.join('');
   }
 
@@ -2333,6 +2614,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     put('ss-set-modules', nm ? nm + (nm === 1 ? ' module' : ' modules') : 'None yet');
     put('ss-set-tt', (nc ? nc + (nc === 1 ? ' class' : ' classes') : 'No classes') + (state.tt.term.breaks.length ? ', ' + state.tt.term.breaks.length + (state.tt.term.breaks.length === 1 ? ' break' : ' breaks') : ''));
     put('ss-set-hours', s.dayStart + '–' + s.dayEnd + (s.splitWeekend ? ' (weekends ' + s.weekendStart + '–' + s.weekendEnd + ')' : '') + ', ' + s.days.length + (s.days.length === 1 ? ' day' : ' days'));
+    if (SYNC && SYNC.on) syncUi();
     put('ss-set-fixed', s.fixed.length ? s.fixed.length + (s.fixed.length === 1 ? ' commitment' : ' commitments') : 'None');
   }
   (function () {
@@ -2768,10 +3050,28 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
 })();
 </script>
 <script>
-if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
-  window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
-}
-if (navigator.storage && navigator.storage.persist) { navigator.storage.persist().catch(function () {}); }
+(function () {
+  if (navigator.storage && navigator.storage.persist) { navigator.storage.persist().catch(function () {}); }
+  if (!('serviceWorker' in navigator) || !/^https?:$/.test(location.protocol)) return;
+  var hadController = !!navigator.serviceWorker.controller, shown = false;
+  function showBanner() {
+    if (shown) return; shown = true;
+    var b = document.createElement('div');
+    b.className = 'updbar'; b.setAttribute('role', 'status');
+    b.innerHTML = '<span>A new version is ready</span><button type="button" class="u-go">Refresh</button><button type="button" class="u-x" aria-label="Dismiss">\u00d7</button>';
+    b.querySelector('.u-go').addEventListener('click', function () { location.reload(); });
+    b.querySelector('.u-x').addEventListener('click', function () { b.remove(); });
+    document.body.appendChild(b);
+  }
+  navigator.serviceWorker.addEventListener('controllerchange', function () { if (hadController) showBanner(); hadController = true; });
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').then(function (reg) {
+      function check() { reg.update().catch(function () {}); }
+      document.addEventListener('visibilitychange', function () { if (!document.hidden) check(); });
+      setInterval(check, 30 * 60 * 1000);
+    }).catch(function () {});
+  });
+})();
 </script>
 </body>
 </html>
