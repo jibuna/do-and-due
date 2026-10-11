@@ -716,7 +716,7 @@ body.wide .app { max-width: 1180px; }
 .cal-gut { font: 500 10.5px/1 var(--font-mono); color: var(--muted); }
 .cal-gut span { position: absolute; right: 4px; transform: translateY(-50%); }
 .cal-col { position: relative; border-radius: 10px; overflow: hidden; background: color-mix(in srgb, var(--ink) 5%, transparent); }
-.cal-col::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, transparent 0 59px, color-mix(in srgb, var(--ink) 9%, transparent) 59px 60px); pointer-events: none; z-index: 1; }
+.cal-col::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, transparent 0 calc(var(--hr, 60px) - 1px), color-mix(in srgb, var(--ink) 9%, transparent) calc(var(--hr, 60px) - 1px) var(--hr, 60px)); pointer-events: none; z-index: 1; }
 .cal-col.past { opacity: .72; }
 .cal-open { position: absolute; left: 0; right: 0; background: var(--surface); }
 .cal-col.today .cal-open { background: color-mix(in srgb, var(--accent) 5%, var(--surface)); }
@@ -739,6 +739,14 @@ body.wide .app { max-width: 1180px; }
 .cal-blk .cb-s { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; color: var(--muted); font-size: 11px; }
 .cal-blk .cb-s .chip { font-size: 10.5px; padding: 1px 6px; }
 .cal-blk .cb-s .pill { padding: 1px 7px; font-size: 10.5px; }
+
+.field input.size-range, .size-range { -webkit-appearance: none; appearance: none; flex: 1 1 160px; min-width: 140px; max-width: 360px; width: auto; height: 30px; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.size-range::-webkit-slider-runnable-track { height: 6px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 20%, transparent); }
+.size-range::-moz-range-track { height: 6px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 20%, transparent); }
+.size-range::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; margin-top: -9px; border-radius: 50%; background: var(--surface); border: 2px solid var(--ink); }
+.size-range::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: var(--surface); border: 2px solid var(--ink); }
+.size-range:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
+#s-calHour-v { min-width: 48px; font: 600 14px/1 var(--font-mono); color: var(--ink); }
 </style>
 <style>
 .updbar{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 10px);z-index:60;display:flex;align-items:center;gap:10px;max-width:calc(100vw - 24px);padding:8px 8px 8px 16px;border-radius:999px;background:var(--ink);color:var(--bg);font:500 14px/1.2 var(--font-body,system-ui,sans-serif);box-shadow:0 6px 24px rgba(0,0,0,.25)}
@@ -747,7 +755,7 @@ body.wide .app { max-width: 1180px; }
 .updbar .u-go{padding:0 14px;background:var(--accent);color:var(--accent-ink);font-weight:600}
 .updbar .u-x{width:32px;background:transparent;color:inherit;opacity:.7;font-size:20px;line-height:1}
 </style>
-<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_PUSH={vapid:"BGs1idw37HirnuG0r4KvnmqCJD35UeDL2i35_quTmjEItTwAZWuUl9nTZKOKCngJU3p02opFm5cAdo2PvfMUokc"};window.__DD_BUILD="d74fe06";</script>
+<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_PUSH={vapid:"BGs1idw37HirnuG0r4KvnmqCJD35UeDL2i35_quTmjEItTwAZWuUl9nTZKOKCngJU3p02opFm5cAdo2PvfMUokc"};window.__DD_BUILD="64810af";</script>
 </head>
 <body>
 
@@ -1026,12 +1034,9 @@ body.wide .app { max-width: 1180px; }
         <div class="field"><label for="s-maxItemDayHours">Most on one task per day (hours)</label><input id="s-maxItemDayHours" type="number" min="0.5" max="12" step="0.5" data-set="maxItemDayHours"></div>
         <div class="field full"><label for="s-hardFirst">Do high and heavy tasks first</label><select id="s-hardFirst" data-set="hardFirst"><option value="off">No preference</option><option value="early">Earlier in the day</option><option value="lunch">Before lunch when there is a lunch block</option></select></div>
         <label class="nobreak full"><input type="checkbox" id="s-fixedBuffer" data-set="fixedBuffer"> <span>Leave travel time around commitments too (not meals)</span></label>
-        <label class="nobreak full"><input type="checkbox" id="s-showMeals" data-set="showMeals"> <span>Show meals on the day time bars</span></label>
         <label class="nobreak full"><input type="checkbox" id="s-mealBuffer" data-set="mealBuffer"> <span>Leave travel time around meals too</span></label>
         <label class="nobreak full"><input type="checkbox" id="s-showBreaks" data-set="showBreaks"> <span>Show total break time under the time bar <small>Includes meals when they are treated as breaks.</small></span></label>
         <label class="nobreak full"><input type="checkbox" id="s-mealsAsBreaks" data-set="mealsAsBreaks"> <span>Treat meals as breaks <small>Meals are not counted as busy time under the time bar, but this does not affect whether they stay visually represented on the bar.</small></span></label>
-        <label class="nobreak full"><input type="checkbox" id="s-breakStripes" data-set="breakStripes"> <span>Show breaks and travel times on the time bar as light grey stripes <small>The same stripes meals use. Works on its own, whether or not meals count as breaks.</small></span></label>
-        <label class="nobreak full"><input type="checkbox" id="s-calBreaks" data-set="calBreaks"> <span>Show breaks and travel times on the Calendar tab as light grey stripes</span></label>
         <label class="nobreak full"><input type="checkbox" id="s-allowOverrun" data-set="allowOverrun"> <span>Let a block run up to 15 minutes past the end of the study day if that finishes the task</span></label>
       </div>
       <div class="field" style="margin-top:14px"><span class="lbl" id="days-lbl">Study days</span><div class="dchips" id="days-chips" role="group" aria-labelledby="days-lbl"></div></div>
@@ -1073,6 +1078,20 @@ body.wide .app { max-width: 1180px; }
         </div></div>
       </form>
       <div class="rows" id="fx-list" style="margin-top:12px"></div>
+      </div>
+    </details>
+    <details class="card setc" id="set-layout">
+      <summary><span class="sico"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3.4" y="3.4" width="13.2" height="13.2" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3.4 8h13.2M8 8v8.6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></span><span class="stitle">Layout</span><span class="ssum" id="ss-set-layout"></span></summary>
+      <div class="sbody">
+      <p class="help">How the time bars and the Calendar tab look.</p>
+      <div class="grid-form">
+        <label class="nobreak full"><input type="checkbox" id="s-showMeals" data-set="showMeals"> <span>Show meals on the day time bars</span></label>
+        <label class="nobreak full"><input type="checkbox" id="s-breakStripes" data-set="breakStripes"> <span>Show breaks and travel times on the time bar as light grey stripes <small>The same stripes meals use. Works on its own, whether or not meals count as breaks.</small></span></label>
+        <label class="nobreak full"><input type="checkbox" id="s-calBreaks" data-set="calBreaks"> <span>Show breaks and travel times on the Calendar tab as light grey stripes</span></label>
+        <div class="field full"><label for="s-calHour">Calendar hour height</label>
+          <div class="crow"><input id="s-calHour" class="size-range" type="range" min="60" max="150" step="10" data-set="calHour" aria-describedby="s-calHour-v"><output id="s-calHour-v" for="s-calHour">90px</output></div>
+          <small class="effh">Taller hours give long titles more room. Shorter ones fit more of the day on screen.</small></div>
+      </div>
       </div>
     </details>
     <details class="card setc" id="set-remind">
@@ -2324,7 +2343,7 @@ body.wide .app { max-width: 1180px; }
     return {
       dayStart: '09:00', dayEnd: '17:00', days: [1, 2, 3, 4, 5],
       hourSets: [],
-      blockMins: 60, gapMins: 10, classBuffer: 10, maxDayHours: 6, maxItemDayHours: 3, fixedBuffer: false, hardFirst: 'off', autoClear: true, clearMode: 'deadline', clearDay: 5, clearTime: '00:00', lastClear: '', extraDays: [], allowOverrun: true, showMeals: true, mealBuffer: false, mealsAsBreaks: false, showBreaks: false, breakStripes: false, calBreaks: false, notify: true, notifyMins: 5,
+      blockMins: 60, gapMins: 10, classBuffer: 10, maxDayHours: 6, maxItemDayHours: 3, fixedBuffer: false, hardFirst: 'off', autoClear: true, clearMode: 'deadline', clearDay: 5, clearTime: '00:00', lastClear: '', extraDays: [], allowOverrun: true, showMeals: true, mealBuffer: false, mealsAsBreaks: false, showBreaks: false, breakStripes: false, calBreaks: false, calHour: 90, notify: true, notifyMins: 5,
       effortBlocks: { trivial: 0.5, light: 1, medium: 3, high: 4.5, heavy: 6, none: 2 },
       fixed: []
     };
@@ -2383,6 +2402,7 @@ body.wide .app { max-width: 1180px; }
     delete s.mealsBusy; delete s.mealBreak;
     s.breakStripes = !!d.breakStripes;
     s.calBreaks = !!d.calBreaks;
+    s.calHour = +d.calHour >= 60 && +d.calHour <= 150 ? Math.round(+d.calHour / 10) * 10 : 90;
     s.notify = d.notify !== false;
     s.notifyMins = Math.min(15, Math.max(1, Math.round(+d.notifyMins) || 5));
     return s;
@@ -2881,6 +2901,8 @@ body.wide .app { max-width: 1180px; }
     put('s-blockMins', s.blockMins); put('s-gapMins', s.gapMins); put('s-classBuffer', s.classBuffer);
     put('s-maxDayHours', s.maxDayHours); put('s-maxItemDayHours', s.maxItemDayHours); put('s-hardFirst', s.hardFirst);
     var fb = document.getElementById('s-fixedBuffer'); if (fb) fb.checked = !!s.fixedBuffer;
+    put('s-calHour', s.calHour); put('s-calHour-v', s.calHour);
+    var chv = document.getElementById('s-calHour-v'); if (chv) chv.textContent = s.calHour + 'px';
     put('s-clearMode', s.clearMode); put('s-clearDay', s.clearDay); put('s-clearTime', s.clearTime);
     var cw = document.getElementById('clear-weekly'); if (cw) cw.style.display = s.clearMode === 'weekly' ? 'contents' : 'none';
     var cn = document.getElementById('clear-next');
@@ -3024,15 +3046,17 @@ body.wide .app { max-width: 1180px; }
       if (e.target.checked && i < 0) s.days.push(d);
       if (!e.target.checked && i >= 0) s.days.splice(i, 1);
     } else {
-      var n = parseFloat(v), lim = { blockMins: [15, 240], gapMins: [0, 60], classBuffer: [0, 60], maxDayHours: [1, 16], maxItemDayHours: [0.5, 12], notifyMins: [1, 15], 'effort.trivial': [0, 1], 'effort.light': [0, 40], 'effort.medium': [0, 40], 'effort.high': [0, 40], 'effort.heavy': [0, 60], 'effort.none': [0, 40] }[k];
+      var n = parseFloat(v), lim = { blockMins: [15, 240], gapMins: [0, 60], classBuffer: [0, 60], maxDayHours: [1, 16], maxItemDayHours: [0.5, 12], notifyMins: [1, 15], calHour: [60, 150], 'effort.trivial': [0, 1], 'effort.light': [0, 40], 'effort.medium': [0, 40], 'effort.high': [0, 40], 'effort.heavy': [0, 60], 'effort.none': [0, 40] }[k];
       if (!lim || !(n >= lim[0] && n <= lim[1])) { toast('Enter a number between ' + (lim ? lim[0] + ' and ' + lim[1] : 'the allowed range') + '.'); syncSettingsInputs(true); return; }
-      if (k.indexOf('effort.') === 0) s.effortBlocks[k.slice(7)] = n; else s[k] = k === 'notifyMins' ? Math.round(n) : n;
+      if (k.indexOf('effort.') === 0) s.effortBlocks[k.slice(7)] = n; else s[k] = k === 'notifyMins' ? Math.round(n) : k === 'calHour' ? Math.round(n / 10) * 10 : n;
     }
     savePref('schedule'); render();
     if (/^clear/.test(k)) clearExpired();
   }
   $('#set-hours').addEventListener('change', onSchedChange);
   $('#set-clear').addEventListener('change', onSchedChange);
+  $('#set-layout').addEventListener('change', onSchedChange);
+  $('#s-calHour').addEventListener('input', function (e) { $('#s-calHour-v').textContent = e.target.value + 'px'; });
   $('#set-remind').addEventListener('change', onSchedChange);
 
   function fixedPad(f) { var s = state.sched; return (f.kind === 'Meal' ? s.mealBuffer : s.fixedBuffer) ? (+s.classBuffer || 0) : 0; }
@@ -3129,6 +3153,7 @@ body.wide .app { max-width: 1180px; }
     function put(id, t) { var el = document.getElementById(id); if (el) el.textContent = t; }
     put('ss-set-modules', nm ? nm + (nm === 1 ? ' module' : ' modules') : 'None yet');
     put('ss-set-tt', (nc ? nc + (nc === 1 ? ' class' : ' classes') : 'No classes') + (state.tt.term.breaks.length ? ', ' + state.tt.term.breaks.length + (state.tt.term.breaks.length === 1 ? ' break' : ' breaks') : ''));
+    put('ss-set-layout', 'Calendar ' + s.calHour + 'px per hour');
     put('ss-set-clear', s.clearMode === 'weekly' ? 'Weekly, ' + LONGDAYS[s.clearDay] + ' ' + s.clearTime : s.clearMode === 'off' ? 'Never' : 'After deadline');
     put('ss-set-remind', s.notify ? s.notifyMins + (s.notifyMins === 1 ? ' minute' : ' minutes') + ' before' : 'Off');
     var nx = s.extraDays.filter(function (x) { return x.date >= todayStr(); }).length;
@@ -3248,7 +3273,7 @@ body.wide .app { max-width: 1180px; }
   }
   function sigSched() {
     var c = Object.assign({}, state.sched, { autoClear: 0, notify: 0, notifyMins: 0, showMeals: 0, mealsAsBreaks: 0, showBreaks: 0, breakStripes: 0, mealsBusy: 0, mealBreak: 0 });
-    delete c.calBreaks; delete c.clearMode; delete c.clearDay; delete c.clearTime; delete c.lastClear;
+    delete c.calBreaks; delete c.calHour; delete c.clearMode; delete c.clearDay; delete c.clearTime; delete c.lastClear;
     if (!c.extraDays || !c.extraDays.length) delete c.extraDays;
     return c;
   }
@@ -3666,7 +3691,7 @@ body.wide .app { max-width: 1180px; }
     t.setDate(t.getDate() - back + offset * 7);
     return iso(t);
   }
-  var CAL_PPM = 1;   /* pixels per minute */
+  var CAL_PPM = 1.5;   /* pixels per minute; set from the Layout setting each time the calendar draws */
   function calEntries(d) {
     return dayEntries(d).filter(function (x) { return state.sched.showMeals || !(x.kind === 'fixed' && x.fx.kind === 'Meal'); });
   }
@@ -3719,6 +3744,7 @@ body.wide .app { max-width: 1180px; }
     return '<div class="' + cls + '" style="' + st + '"' + attrs + '>' + inner + '</div>';
   }
   function renderCalendar() {
+    CAL_PPM = (state.sched.calHour || 90) / 60;
     var today = todayStr(), nm = nowMin(), day = state.calView === 'day', days = [], i;
     if (!state.calDay) state.calDay = today;
     if (day) days.push(state.calDay);
@@ -3744,7 +3770,7 @@ body.wide .app { max-width: 1180px; }
     });
     if (hi <= lo) { lo = 540; hi = 1020; }
     lo = Math.max(0, Math.floor(lo / 60) * 60); hi = Math.min(1440, Math.ceil(hi / 60) * 60);
-    var H = (hi - lo) * CAL_PPM, html = '<div class="cal' + (day ? ' day' : '') + '" style="--calh:' + H + 'px">';
+    var H = (hi - lo) * CAL_PPM, html = '<div class="cal' + (day ? ' day' : '') + '" style="--calh:' + H + 'px;--hr:' + (60 * CAL_PPM) + 'px">';
     if (day) html += ''; else
     html += '<div class="cal-row cal-headrow"><div class="cal-gut"></div>' + days.map(function (d) {
       var dd = parse(d);
