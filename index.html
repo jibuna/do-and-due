@@ -726,6 +726,7 @@ body.wide .app { max-width: 1180px; }
 .cal-blk.tint { --c: hsl(var(--h) var(--s, 65%) var(--l, 52%)); background: color-mix(in srgb, var(--c) 24%, var(--surface)); box-shadow: inset 3px 0 0 var(--c); }
 .cal-blk.class.tint { background: color-mix(in srgb, var(--c) 12%, var(--surface)); box-shadow: inset 3px 0 0 var(--c), inset 0 0 0 1px color-mix(in srgb, var(--c) 45%, transparent); }
 .cal-blk.class:not(.tint), .cal-blk.fixed { background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--ink) 12%, transparent) 0 2px, transparent 2px 6px), var(--surface); color: var(--muted); }
+.cal-brk { position: absolute; left: 2px; right: 2px; z-index: 1; border-radius: 4px; pointer-events: none; background: repeating-linear-gradient(135deg, color-mix(in srgb, #C9CCD1 85%, transparent) 0 2px, transparent 2px 5px); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 10%, transparent); }
 .cal-blk.meal { background: repeating-linear-gradient(135deg, color-mix(in srgb, #C9CCD1 85%, transparent) 0 2px, transparent 2px 5px), var(--surface); }
 .cal-blk.study { cursor: pointer; }
 .cal-blk.study:hover { filter: brightness(.97); }
@@ -746,7 +747,7 @@ body.wide .app { max-width: 1180px; }
 .updbar .u-go{padding:0 14px;background:var(--accent);color:var(--accent-ink);font-weight:600}
 .updbar .u-x{width:32px;background:transparent;color:inherit;opacity:.7;font-size:20px;line-height:1}
 </style>
-<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_PUSH={vapid:"BGs1idw37HirnuG0r4KvnmqCJD35UeDL2i35_quTmjEItTwAZWuUl9nTZKOKCngJU3p02opFm5cAdo2PvfMUokc"};window.__DD_BUILD="8597de6";</script>
+<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_PUSH={vapid:"BGs1idw37HirnuG0r4KvnmqCJD35UeDL2i35_quTmjEItTwAZWuUl9nTZKOKCngJU3p02opFm5cAdo2PvfMUokc"};window.__DD_BUILD="d74fe06";</script>
 </head>
 <body>
 
@@ -1030,6 +1031,7 @@ body.wide .app { max-width: 1180px; }
         <label class="nobreak full"><input type="checkbox" id="s-showBreaks" data-set="showBreaks"> <span>Show total break time under the time bar <small>Includes meals when they are treated as breaks.</small></span></label>
         <label class="nobreak full"><input type="checkbox" id="s-mealsAsBreaks" data-set="mealsAsBreaks"> <span>Treat meals as breaks <small>Meals are not counted as busy time under the time bar, but this does not affect whether they stay visually represented on the bar.</small></span></label>
         <label class="nobreak full"><input type="checkbox" id="s-breakStripes" data-set="breakStripes"> <span>Show breaks and travel times on the time bar as light grey stripes <small>The same stripes meals use. Works on its own, whether or not meals count as breaks.</small></span></label>
+        <label class="nobreak full"><input type="checkbox" id="s-calBreaks" data-set="calBreaks"> <span>Show breaks and travel times on the Calendar tab as light grey stripes</span></label>
         <label class="nobreak full"><input type="checkbox" id="s-allowOverrun" data-set="allowOverrun"> <span>Let a block run up to 15 minutes past the end of the study day if that finishes the task</span></label>
       </div>
       <div class="field" style="margin-top:14px"><span class="lbl" id="days-lbl">Study days</span><div class="dchips" id="days-chips" role="group" aria-labelledby="days-lbl"></div></div>
@@ -2322,7 +2324,7 @@ body.wide .app { max-width: 1180px; }
     return {
       dayStart: '09:00', dayEnd: '17:00', days: [1, 2, 3, 4, 5],
       hourSets: [],
-      blockMins: 60, gapMins: 10, classBuffer: 10, maxDayHours: 6, maxItemDayHours: 3, fixedBuffer: false, hardFirst: 'off', autoClear: true, clearMode: 'deadline', clearDay: 5, clearTime: '00:00', lastClear: '', extraDays: [], allowOverrun: true, showMeals: true, mealBuffer: false, mealsAsBreaks: false, showBreaks: false, breakStripes: false, notify: true, notifyMins: 5,
+      blockMins: 60, gapMins: 10, classBuffer: 10, maxDayHours: 6, maxItemDayHours: 3, fixedBuffer: false, hardFirst: 'off', autoClear: true, clearMode: 'deadline', clearDay: 5, clearTime: '00:00', lastClear: '', extraDays: [], allowOverrun: true, showMeals: true, mealBuffer: false, mealsAsBreaks: false, showBreaks: false, breakStripes: false, calBreaks: false, notify: true, notifyMins: 5,
       effortBlocks: { trivial: 0.5, light: 1, medium: 3, high: 4.5, heavy: 6, none: 2 },
       fixed: []
     };
@@ -2380,6 +2382,7 @@ body.wide .app { max-width: 1180px; }
     s.showBreaks = !!d.showBreaks;
     delete s.mealsBusy; delete s.mealBreak;
     s.breakStripes = !!d.breakStripes;
+    s.calBreaks = !!d.calBreaks;
     s.notify = d.notify !== false;
     s.notifyMins = Math.min(15, Math.max(1, Math.round(+d.notifyMins) || 5));
     return s;
@@ -2886,7 +2889,7 @@ body.wide .app { max-width: 1180px; }
     if (cm) cm.textContent = s.clearMode === 'deadline' ? 'Completed tasks with no deadline stay until you clear them yourself.' : s.clearMode === 'off' ? 'Completed tasks stay until you delete them.' : 'Everything completed is cleared together at that time.';
     var ao = document.getElementById('s-allowOverrun'); if (ao) ao.checked = !!s.allowOverrun;
     var sm = document.getElementById('s-showMeals'); if (sm) sm.checked = !!s.showMeals;
-    [['s-mealBuffer', 'mealBuffer'], ['s-showBreaks', 'showBreaks'], ['s-mealsAsBreaks', 'mealsAsBreaks'], ['s-breakStripes', 'breakStripes']].forEach(function (p) { var el = document.getElementById(p[0]); if (el) el.checked = !!s[p[1]]; });
+    [['s-mealBuffer', 'mealBuffer'], ['s-showBreaks', 'showBreaks'], ['s-mealsAsBreaks', 'mealsAsBreaks'], ['s-breakStripes', 'breakStripes'], ['s-calBreaks', 'calBreaks']].forEach(function (p) { var el = document.getElementById(p[0]); if (el) el.checked = !!s[p[1]]; });
     var nf = document.getElementById('s-notify'); if (nf) nf.checked = !!s.notify;
     put('s-notifyMins', s.notifyMins);
     EFF_KEYS.concat(['none']).forEach(function (k) {
@@ -3003,7 +3006,7 @@ body.wide .app { max-width: 1180px; }
       s.hardFirst = ['off', 'early', 'lunch'].indexOf(v) >= 0 ? v : 'off';
     } else if (k === 'fixedBuffer') {
       s.fixedBuffer = e.target.checked;
-    } else if (k === 'showMeals' || k === 'mealBuffer' || k === 'showBreaks' || k === 'mealsAsBreaks' || k === 'breakStripes') {
+    } else if (k === 'showMeals' || k === 'mealBuffer' || k === 'showBreaks' || k === 'mealsAsBreaks' || k === 'breakStripes' || k === 'calBreaks') {
       s[k] = e.target.checked;
     } else if (k === 'clearMode' || k === 'clearDay' || k === 'clearTime') {
       if (k === 'clearTime' && !/^\d{2}:\d{2}$/.test(v)) { toast('Pick a time.'); syncSettingsInputs(true); return; }
@@ -3245,7 +3248,7 @@ body.wide .app { max-width: 1180px; }
   }
   function sigSched() {
     var c = Object.assign({}, state.sched, { autoClear: 0, notify: 0, notifyMins: 0, showMeals: 0, mealsAsBreaks: 0, showBreaks: 0, breakStripes: 0, mealsBusy: 0, mealBreak: 0 });
-    delete c.clearMode; delete c.clearDay; delete c.clearTime; delete c.lastClear;
+    delete c.calBreaks; delete c.clearMode; delete c.clearDay; delete c.clearTime; delete c.lastClear;
     if (!c.extraDays || !c.extraDays.length) delete c.extraDays;
     return c;
   }
@@ -3561,6 +3564,16 @@ body.wide .app { max-width: 1180px; }
     all.forEach(function (x) { lo = Math.min(lo, x.s); hi = Math.max(hi, x.e); });
     return { lo: lo, hi: hi, ds: ds, de: de, early: ds - lo > 15, late: hi - de > 15 };
   }
+  /* the gaps between study blocks and the travel time around classes and commitments, as [start, end] minute pairs */
+  function breakSpans(all) {
+    var sc = state.sched, out = [], studies = all.filter(function (x) { return x.kind === 'study'; });
+    for (var q = 0; q + 1 < studies.length; q++) { var g = studies[q + 1].s - studies[q].e; if (g > 0 && g <= (+sc.gapMins || 0) + 5) out.push([studies[q].e, studies[q + 1].s]); }
+    all.forEach(function (x) {
+      var pad = x.kind === 'class' ? (+sc.classBuffer || 0) : x.kind === 'fixed' ? fixedPad(x.fx) : 0;
+      if (pad) { out.push([x.s - pad, x.s]); out.push([x.e, x.e + pad]); }
+    });
+    return out;
+  }
   function dayBarHtml(d, all, isToday) {
     var dh = dayHours(d), lo = tm(dh.start), hi = tm(dh.end);
     all.forEach(function (x) { lo = Math.min(lo, x.s); hi = Math.max(hi, x.e); });
@@ -3572,13 +3585,9 @@ body.wide .app { max-width: 1180px; }
     }).join('');
     var sc = state.sched;
     if (sc.breakStripes) {
-      var pre = '', studies = all.filter(function (x) { return x.kind === 'study'; });
+      var pre = '';
       function stripe(a, z) { if (z - a < 1) return ''; return '<i class="bk meal pad" style="left:' + ((a - lo) / span * 100).toFixed(2) + '%;width:' + Math.max(0.8, (z - a) / span * 100).toFixed(2) + '%"></i>'; }
-      for (var q = 0; q + 1 < studies.length; q++) { var g = studies[q + 1].s - studies[q].e; if (g > 0 && g <= (+sc.gapMins || 0) + 5) pre += stripe(studies[q].e, studies[q + 1].s); }
-      all.forEach(function (x) {
-        var pad = x.kind === 'class' ? (+sc.classBuffer || 0) : x.kind === 'fixed' ? fixedPad(x.fx) : 0;
-        if (pad) pre += stripe(x.s - pad, x.s) + stripe(x.e, x.e + pad);
-      });
+      breakSpans(all).forEach(function (r) { pre += stripe(r[0], r[1]); });
       segs = pre + segs;
     }
     var de = tm(dh.end);
@@ -3748,6 +3757,9 @@ body.wide .app { max-width: 1180px; }
       var dh = dayHours(d), study = isStudyDay(d);
       html += '<div class="cal-col' + (d === today ? ' today' : '') + (d < today ? ' past' : '') + '" style="height:' + H + 'px" data-date="' + d + '">';
       if (study) html += '<div class="cal-open" style="top:' + ((tm(dh.start) - lo) * CAL_PPM) + 'px;height:' + ((tm(dh.end) - tm(dh.start)) * CAL_PPM) + 'px"></div>';
+      if (state.sched.calBreaks) html += breakSpans(dayEntries(d)).map(function (r) {
+        return '<div class="cal-brk" style="top:' + ((r[0] - lo) * CAL_PPM).toFixed(1) + 'px;height:' + Math.max(3, (r[1] - r[0]) * CAL_PPM - 1).toFixed(1) + 'px"></div>';
+      }).join('');
       html += calLanes(per[k]).map(function (x) { return calBlockHtml(x, lo); }).join('');
       if (d === today && nm >= lo && nm <= hi) html += '<div class="cal-now" style="top:' + ((nm - lo) * CAL_PPM) + 'px"></div>';
       html += '</div>';
