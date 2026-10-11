@@ -1,5 +1,5 @@
 /* Do & Due service worker: lets the app open and work offline. */
-const CACHE = 'doanddue-f2f6776ab1';
+const CACHE = 'doanddue-2caa8d67bd';
 const CORE = ['./', 'index.html', 'manifest.webmanifest', 'icon.svg', 'icon-192.png', 'icon-512.png', 'icon-maskable-512.png', 'apple-touch-icon.png', 'favicon-32.png'];
 
 self.addEventListener('install', (e) => {
