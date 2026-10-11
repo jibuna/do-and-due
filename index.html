@@ -754,6 +754,7 @@ body.wide .app { max-width: 1180px; }
   /* on a phone "in 3 days" and "before lecture 10:00" take a line each, so the deadline column stays narrow and the title keeps its room */
   .stamp .bf { display: block; }
   .stamp .bf .sep { display: none; }
+  .stamp .bf .bt { display: block; }
   .stamp { max-width: 42vw; overflow-wrap: anywhere; }
 }
 </style>
@@ -764,7 +765,7 @@ body.wide .app { max-width: 1180px; }
 .updbar .u-go{padding:0 14px;background:var(--accent);color:var(--accent-ink);font-weight:600}
 .updbar .u-x{width:32px;background:transparent;color:inherit;opacity:.7;font-size:20px;line-height:1}
 </style>
-<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_PUSH={vapid:"BGs1idw37HirnuG0r4KvnmqCJD35UeDL2i35_quTmjEItTwAZWuUl9nTZKOKCngJU3p02opFm5cAdo2PvfMUokc"};window.__DD_BUILD="h26a1pw";</script>
+<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_PUSH={vapid:"BGs1idw37HirnuG0r4KvnmqCJD35UeDL2i35_quTmjEItTwAZWuUl9nTZKOKCngJU3p02opFm5cAdo2PvfMUokc"};window.__DD_BUILD="85b289d";</script>
 </head>
 <body>
 
@@ -1842,7 +1843,7 @@ body.wide .app { max-width: 1180px; }
     if (t.due) {
       stampCls = !t.done ? (dueN < 0 ? ' bad' : (dueN <= 2 ? ' warn' : '')) : '';
       var dcOcc = dueClassOcc(t);
-      stamp = '<b>' + esc(sd(t.due)) + '</b><span>' + esc(rel(dueN)) + (dcOcc ? '<span class="bf"><i class="sep"> · </i>before ' + esc((dcOcc.k || 'class').toLowerCase()) + ' ' + esc(dcOcc.s) + '</span>' : '') + '</span>';
+      stamp = '<b>' + esc(sd(t.due)) + '</b><span>' + esc(rel(dueN)) + (dcOcc ? '<span class="bf"><i class="sep"> · </i>before ' + esc((dcOcc.k || 'class').toLowerCase()) + ' <span class="bt">' + esc(dcOcc.s) + '</span></span>' : '') + '</span>';
     } else { stampCls = ' none'; stamp = '<span>No deadline</span>'; }
     if (state.sort === 'due' && t.due) stampCls += ' key';
 
