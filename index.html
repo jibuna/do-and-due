@@ -673,6 +673,10 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
   #mod-form .field.span2 { grid-column: auto; }
   #mod-form .field:last-child { grid-column: 1 / -1; }
 }
+
+.tlab { position: relative; height: 16px; margin-top: -1px; font: 500 11px/1 var(--font-mono); color: var(--muted); }
+.tlab .tk { position: absolute; top: 0; width: 1px; height: 4px; background: color-mix(in srgb, var(--ink) 35%, transparent); }
+.tlab .tl { position: absolute; top: 3px; transform: translateX(-50%); white-space: nowrap; }
 </style>
 <style>
 .updbar{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 10px);z-index:60;display:flex;align-items:center;gap:10px;max-width:calc(100vw - 24px);padding:8px 8px 8px 16px;border-radius:999px;background:var(--ink);color:var(--bg);font:500 14px/1.2 var(--font-body,system-ui,sans-serif);box-shadow:0 6px 24px rgba(0,0,0,.25)}
@@ -681,7 +685,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
 .updbar .u-go{padding:0 14px;background:var(--accent);color:var(--accent-ink);font-weight:600}
 .updbar .u-x{width:32px;background:transparent;color:inherit;opacity:.7;font-size:20px;line-height:1}
 </style>
-<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_PUSH={vapid:"BGs1idw37HirnuG0r4KvnmqCJD35UeDL2i35_quTmjEItTwAZWuUl9nTZKOKCngJU3p02opFm5cAdo2PvfMUokc"};window.__DD_BUILD="627819d";</script>
+<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_PUSH={vapid:"BGs1idw37HirnuG0r4KvnmqCJD35UeDL2i35_quTmjEItTwAZWuUl9nTZKOKCngJU3p02opFm5cAdo2PvfMUokc"};window.__DD_BUILD="18f2927";</script>
 </head>
 <body>
 
@@ -3346,6 +3350,11 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     });
   }, 3000);
   window.addEventListener('resize', function () { if (state.tab === 'plan') renderPlan(); });
+  function barRange(d, all) {
+    var dh = dayHours(d), ds = tm(dh.start), de = tm(dh.end), lo = ds, hi = de;
+    all.forEach(function (x) { lo = Math.min(lo, x.s); hi = Math.max(hi, x.e); });
+    return { lo: lo, hi: hi, ds: ds, de: de, early: ds - lo > 15, late: hi - de > 15 };
+  }
   function dayBarHtml(d, all, isToday) {
     var dh = dayHours(d), lo = tm(dh.start), hi = tm(dh.end);
     all.forEach(function (x) { lo = Math.min(lo, x.s); hi = Math.max(hi, x.e); });
@@ -3380,7 +3389,17 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
         mk = '<i class="nowmk' + (inB ? ' in' : '') + '" style="left:' + ((nm - lo) / span * 100).toFixed(2) + '%;' + (im ? modStyle(im) : '') + '" title="Now"></i>';
       }
     }
-    return '<div class="track" aria-hidden="true">' + segs + '</div>' + mk;
+    /* the study day's own start/end sit part-way along the bar when something runs more than 15 minutes outside it */
+    var R = barRange(d, all), lab = '', mids = [];
+    if (R.early) mids.push(R.ds);
+    if (R.late) mids.push(R.de);
+    if (mids.length) {
+      lab = '<div class="tlab" aria-hidden="true">' + mids.map(function (m) {
+        var p0 = (m - lo) / span * 100;
+        return '<i class="tk" style="left:' + p0.toFixed(2) + '%"></i><span class="tl" style="left:' + Math.min(93, Math.max(7, p0)).toFixed(2) + '%">' + hm(m) + '</span>';
+      }).join('') + '</div>';
+    }
+    return '<div class="track" aria-hidden="true">' + segs + '</div>' + mk + lab;
   }
   function renderPlan() {
     var today = todayStr(), html = '';
@@ -3402,10 +3421,10 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       var d = addDays(today, i), all = dayEntries(d);
       if (!all.length && i > 0) { run.push(d); continue; }
       flush();
-      var rest = state.sched.days.indexOf(dow(d)) < 0, dh = dayHours(d);
+      var rest = state.sched.days.indexOf(dow(d)) < 0, dh = dayHours(d), bR = barRange(d, all);
       var dd = parse(d);
       html += '<section class="day"><div class="dayhead' + (i === 0 ? ' today' : '') + '"><div class="dnum"><b>' + dd.getDate() + '</b><span>' + DAYS[dd.getDay()] + '</span></div>' +
-        '<div class="dbar">' + dayBarHtml(d, all, i === 0) + '<div class="dlab"><span>' + esc(dh.start) + '</span>' + capHtml(i, d, all, rest) + '<span>' + esc(dh.end) + '</span></div></div></div>' +
+        '<div class="dbar">' + dayBarHtml(d, all, i === 0) + '<div class="dlab"><span>' + (bR.early ? hm(bR.lo) : esc(dh.start)) + '</span>' + capHtml(i, d, all, rest) + '<span>' + (bR.late ? hm(bR.hi) : esc(dh.end)) + '</span></div></div></div>' +
         '<ul class="list">' + (all.length ? all.map(function (x) { return entryHtml(x, all); }).join('') : '<li class="pe none">Nothing scheduled</li>') + '</ul></section>';
     }
     flush();
