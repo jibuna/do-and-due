@@ -680,6 +680,64 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
 
 .xd-date input { width: 100%; height: 38px; padding: 0 10px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; font: inherit; color: var(--ink); }
 .day.passed { opacity: .6; }
+
+.pill { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 999px; font: 600 11.5px/1.2 var(--font-body); background: color-mix(in srgb, var(--ink) 9%, transparent); color: var(--muted); white-space: nowrap; }
+.nn .cur.tint .pill, .cal-blk.tint .pill { background: color-mix(in srgb, var(--c) 20%, transparent); color: color-mix(in srgb, var(--c) 60%, var(--ink)); }
+body.wide .app { max-width: 1180px; }
+@media (max-width: 480px) { .tabs button { padding: 0 13px; } }
+.cal-card { padding: 14px; }
+.cal-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.cal-bar h2 { margin: 0 auto 0 4px; font-size: 16px; }
+.cal-bar .btn { min-width: 38px; }
+.cal-scroll { overflow-x: auto; padding: 0 0 4px; -webkit-overflow-scrolling: touch; }
+.cal-sub { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
+.cal-strip { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; margin-bottom: 12px; }
+.cal-strip button { display: grid; justify-items: center; gap: 1px; padding: 6px 0; border: 0; border-radius: 10px; background: color-mix(in srgb, var(--ink) 5%, transparent); color: var(--muted); font-size: 11.5px; }
+.cal-strip button b { font: 650 15px/1.1 var(--font-body); color: var(--ink); }
+.cal-strip button.is-today span { color: var(--accent); font-weight: 600; }
+.cal-strip button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.cal-strip button[aria-pressed="true"] b { color: var(--bg); }
+.cal-strip button[aria-pressed="true"] span { color: var(--bg); }
+.cal.day { min-width: 0; }
+.cal.day .cal-row { grid-template-columns: 38px minmax(0, 1fr); }
+.cal.day .cal-blk { font-size: 13px; padding: 6px 10px 6px 12px; }
+.cal.day .cal-blk .cb-s { font-size: 12px; }
+.cal-bar h2 { overflow-wrap: anywhere; }
+.cal { min-width: 780px; }
+.cal-row { display: grid; grid-template-columns: 38px repeat(7, minmax(0, 1fr)); gap: 4px; }
+.cal-headrow { position: sticky; top: 0; z-index: 4; background: var(--surface); padding-bottom: 4px; }
+.cal-dh { display: grid; justify-items: center; gap: 1px; padding: 4px 0; border-radius: 10px; color: var(--muted); font-size: 12px; }
+.cal-dh b { font: 650 17px/1.1 var(--font-body); color: var(--ink); }
+.cal-dh.today { background: var(--ink); color: var(--bg); }
+.cal-dh.today b { color: var(--bg); }
+.cal-dh.past { opacity: .6; }
+.cal-bodyrow { margin-top: 8px; }
+.cal-row > .cal-gut { position: sticky; left: 0; z-index: 5; background: var(--surface); box-shadow: 4px 0 0 var(--surface); }
+.cal-gut { font: 500 10.5px/1 var(--font-mono); color: var(--muted); }
+.cal-gut span { position: absolute; right: 4px; transform: translateY(-50%); }
+.cal-col { position: relative; border-radius: 10px; overflow: hidden; background: color-mix(in srgb, var(--ink) 5%, transparent); }
+.cal-col::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, transparent 0 59px, color-mix(in srgb, var(--ink) 9%, transparent) 59px 60px); pointer-events: none; z-index: 1; }
+.cal-col.past { opacity: .72; }
+.cal-open { position: absolute; left: 0; right: 0; background: var(--surface); }
+.cal-col.today .cal-open { background: color-mix(in srgb, var(--accent) 5%, var(--surface)); }
+.cal-now { position: absolute; left: 0; right: 0; height: 2px; background: var(--bad); z-index: 3; }
+.cal-now::before { content: ""; position: absolute; left: -1px; top: -3px; width: 8px; height: 8px; border-radius: 50%; background: var(--bad); }
+.cal-blk { position: absolute; z-index: 2; box-sizing: border-box; overflow: hidden; padding: 4px 6px 4px 8px; border-radius: 8px; font-size: 11.5px; line-height: 1.25; display: grid; align-content: start; gap: 2px; background: color-mix(in srgb, var(--ink) 7%, var(--surface)); color: var(--ink); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 10%, transparent); }
+.cal-blk.tint { --c: hsl(var(--h) var(--s, 65%) var(--l, 52%)); background: color-mix(in srgb, var(--c) 24%, var(--surface)); box-shadow: inset 3px 0 0 var(--c); }
+.cal-blk.class.tint { background: color-mix(in srgb, var(--c) 12%, var(--surface)); box-shadow: inset 3px 0 0 var(--c), inset 0 0 0 1px color-mix(in srgb, var(--c) 45%, transparent); }
+.cal-blk.class:not(.tint), .cal-blk.fixed { background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--ink) 12%, transparent) 0 2px, transparent 2px 6px), var(--surface); color: var(--muted); }
+.cal-blk.meal { background: repeating-linear-gradient(135deg, color-mix(in srgb, #C9CCD1 85%, transparent) 0 2px, transparent 2px 5px), var(--surface); }
+.cal-blk.study { cursor: pointer; }
+.cal-blk.study:hover { filter: brightness(.97); }
+.cal-blk.study:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.cal-blk.done { opacity: .55; }
+.cal-blk.done .cb-t { text-decoration: line-through; }
+.cal-blk.now { box-shadow: inset 3px 0 0 var(--c), 0 0 0 2px var(--c); }
+.cal-blk .cb-t { font-weight: 650; overflow-wrap: anywhere; }
+.cal-blk .cb-r { font: 500 10.5px/1 var(--font-mono); opacity: .7; }
+.cal-blk .cb-s { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; color: var(--muted); font-size: 11px; }
+.cal-blk .cb-s .chip { font-size: 10.5px; padding: 1px 6px; }
+.cal-blk .cb-s .pill { padding: 1px 7px; font-size: 10.5px; }
 </style>
 <style>
 .updbar{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 10px);z-index:60;display:flex;align-items:center;gap:10px;max-width:calc(100vw - 24px);padding:8px 8px 8px 16px;border-radius:999px;background:var(--ink);color:var(--bg);font:500 14px/1.2 var(--font-body,system-ui,sans-serif);box-shadow:0 6px 24px rgba(0,0,0,.25)}
@@ -688,7 +746,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
 .updbar .u-go{padding:0 14px;background:var(--accent);color:var(--accent-ink);font-weight:600}
 .updbar .u-x{width:32px;background:transparent;color:inherit;opacity:.7;font-size:20px;line-height:1}
 </style>
-<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_PUSH={vapid:"BGs1idw37HirnuG0r4KvnmqCJD35UeDL2i35_quTmjEItTwAZWuUl9nTZKOKCngJU3p02opFm5cAdo2PvfMUokc"};window.__DD_BUILD="b1c4937";</script>
+<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_PUSH={vapid:"BGs1idw37HirnuG0r4KvnmqCJD35UeDL2i35_quTmjEItTwAZWuUl9nTZKOKCngJU3p02opFm5cAdo2PvfMUokc"};window.__DD_BUILD="af0838e";</script>
 </head>
 <body>
 
@@ -702,6 +760,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
   <nav class="seg tabs" id="tabs" aria-label="Views">
     <button type="button" data-tab="tasks" aria-pressed="true">Tasks</button>
     <button type="button" data-tab="plan" aria-pressed="false">Plan</button>
+    <button type="button" data-tab="calendar" aria-pressed="false">Calendar</button>
     <button type="button" data-tab="settings" aria-pressed="false">Settings</button>
   </nav>
 
@@ -879,6 +938,21 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     <div><button class="btn" type="button" id="plan-more">Show more days</button></div>
   </section>
 
+  <section class="view" id="view-calendar" hidden aria-label="Calendar">
+    <div class="card cal-card">
+      <div class="cal-bar">
+        <button class="btn sm" type="button" id="cal-prev" aria-label="Previous">&#8249;</button>
+        <h2 id="cal-title">This week</h2>
+        <button class="btn sm" type="button" id="cal-next" aria-label="Next">&#8250;</button>
+      </div>
+      <div class="cal-sub">
+        <div class="seg" id="cal-view" role="group" aria-label="Calendar view"><button type="button" data-v="day" aria-pressed="false">Day</button><button type="button" data-v="week" aria-pressed="false">Week</button></div>
+        <button class="btn sm ghost" type="button" id="cal-today" hidden>Today</button>
+      </div>
+      <div class="cal-strip" id="cal-strip" role="group" aria-label="Day of the week" hidden></div>
+      <div class="cal-scroll" id="cal-grid"></div>
+    </div>
+  </section>
   <section class="view" id="view-settings" hidden aria-label="Settings">
     <details class="card setc" id="set-modules">
       <summary><span class="sico"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="6" cy="6" r="3.2" fill="currentColor" opacity=".9"/><circle cx="14" cy="6" r="3.2" fill="currentColor" opacity=".55"/><circle cx="10" cy="13.5" r="3.2" fill="currentColor" opacity=".3"/></svg></span><span class="stitle">Modules</span><span class="ssum" id="ss-set-modules"></span></summary>
@@ -975,7 +1049,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
         <label class="nobreak full"><input type="checkbox" id="s-mealBuffer" data-set="mealBuffer"> <span>Leave travel time around meals too</span></label>
         <label class="nobreak full"><input type="checkbox" id="s-showBreaks" data-set="showBreaks"> <span>Show total break time under the time bar <small>Includes meals when they are treated as breaks.</small></span></label>
         <label class="nobreak full"><input type="checkbox" id="s-mealsAsBreaks" data-set="mealsAsBreaks"> <span>Treat meals as breaks <small>Meals are not counted as busy time under the time bar, but this does not affect whether they stay visually represented on the bar.</small></span></label>
-        <label class="nobreak full sub-opt"><input type="checkbox" id="s-breakStripes" data-set="breakStripes"> <span>Show breaks and travel times on the time bar with the same grey stripes as meals</span></label>
+        <label class="nobreak full"><input type="checkbox" id="s-breakStripes" data-set="breakStripes"> <span>Show breaks and travel times on the time bar as light grey stripes <small>The same stripes meals use. Works on its own, whether or not meals count as breaks.</small></span></label>
         <label class="nobreak full"><input type="checkbox" id="s-allowOverrun" data-set="allowOverrun"> <span>Let a block run up to 15 minutes past the end of the study day if that finishes the task</span></label>
       </div>
       <div class="field" style="margin-top:14px"><span class="lbl" id="days-lbl">Study days</span><div class="dchips" id="days-chips" role="group" aria-labelledby="days-lbl"></div></div>
@@ -1918,6 +1992,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     hideTip();
     renderHead(); renderControls(); renderList(); renderFoot(); renderKey(); renderNow();
     if (state.tab === 'plan') renderPlan();
+    if (state.tab === 'calendar') renderCalendar();
     if (state.tab === 'settings') { renderSettings(); renderNotifyStatus(); }
   }
 
@@ -2239,7 +2314,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     { label: 'Careers', kind: 'Careers', start: '14:00', end: '15:00', days: [2] },
     { label: 'Social', kind: 'Social', start: '19:00', end: '22:00', days: [5] }
   ];
-  var TABS = ['tasks', 'plan', 'settings'];
+  var TABS = ['tasks', 'plan', 'calendar', 'settings'];
 
   function defaultSched() {
     return {
@@ -2810,7 +2885,6 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     var ao = document.getElementById('s-allowOverrun'); if (ao) ao.checked = !!s.allowOverrun;
     var sm = document.getElementById('s-showMeals'); if (sm) sm.checked = !!s.showMeals;
     [['s-mealBuffer', 'mealBuffer'], ['s-showBreaks', 'showBreaks'], ['s-mealsAsBreaks', 'mealsAsBreaks'], ['s-breakStripes', 'breakStripes']].forEach(function (p) { var el = document.getElementById(p[0]); if (el) el.checked = !!s[p[1]]; });
-    var bs = document.getElementById('s-breakStripes'); if (bs) { bs.disabled = !s.mealsAsBreaks; bs.closest('label').style.opacity = s.mealsAsBreaks ? '' : '.5'; }
     var nf = document.getElementById('s-notify'); if (nf) nf.checked = !!s.notify;
     put('s-notifyMins', s.notifyMins);
     EFF_KEYS.concat(['none']).forEach(function (k) {
@@ -3495,7 +3569,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       return '<i class="bk ' + x.kind + (x.kind === 'fixed' && x.fx.kind === 'Meal' ? ' meal' : '') + (x.kind === 'study' && blockDone(x.b) ? ' done' : '') + '" style="left:' + l.toFixed(2) + '%;width:' + w.toFixed(2) + '%;' + (mod ? modStyle(mod) : '') + '"></i>';
     }).join('');
     var sc = state.sched;
-    if (sc.mealsAsBreaks && sc.breakStripes) {
+    if (sc.breakStripes) {
       var pre = '', studies = all.filter(function (x) { return x.kind === 'study'; });
       function stripe(a, z) { if (z - a < 1) return ''; return '<i class="bk meal pad" style="left:' + ((a - lo) / span * 100).toFixed(2) + '%;width:' + Math.max(0.8, (z - a) / span * 100).toFixed(2) + '%"></i>'; }
       for (var q = 0; q + 1 < studies.length; q++) { var g = studies[q + 1].s - studies[q].e; if (g > 0 && g <= (+sc.gapMins || 0) + 5) pre += stripe(studies[q].e, studies[q + 1].s); }
@@ -3567,6 +3641,155 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     fitCaps();
     $('#plan-more').hidden = state.planDays >= 42;
   }
+
+  /* ---------- calendar: a week of blocks in seven columns ---------- */
+  state.calWeek = 0;
+  state.calDay = '';
+  (function () {
+    var v = lsGet('doanddue.calView');
+    state.calView = v === 'day' || v === 'week' ? v : (window.matchMedia && window.matchMedia('(max-width: 640px)').matches ? 'day' : 'week');
+  })();
+  function mondayOf(d) { var t = parse(d); t.setDate(t.getDate() - ((t.getDay() + 6) % 7)); return iso(t); }
+  function weekStartOf(offset) {
+    var t = parse(todayStr()), back = (t.getDay() + 6) % 7;
+    t.setDate(t.getDate() - back + offset * 7);
+    return iso(t);
+  }
+  var CAL_PPM = 1;   /* pixels per minute */
+  function calEntries(d) {
+    return dayEntries(d).filter(function (x) { return state.sched.showMeals || !(x.kind === 'fixed' && x.fx.kind === 'Meal'); });
+  }
+  /* entries that overlap share the column side by side */
+  function calLanes(list) {
+    var out = [], cluster = [], cEnd = -1;
+    function flushC() {
+      var lanes = [];
+      cluster.forEach(function (x) {
+        var i = 0; while (lanes[i] !== undefined && lanes[i] > x.s) i++;
+        lanes[i] = x.e; x.lane = i;
+      });
+      cluster.forEach(function (x) { x.lanes = lanes.length; out.push(x); });
+      cluster = []; cEnd = -1;
+    }
+    list.forEach(function (x) { if (cluster.length && x.s >= cEnd) flushC(); cluster.push(x); cEnd = Math.max(cEnd, x.e); });
+    flushC();
+    return out;
+  }
+  function calBlockHtml(x, lo) {
+    var h = Math.max(20, (x.e - x.s) * CAL_PPM - 2), top = (x.s - lo) * CAL_PPM + 1;
+    var w = 100 / x.lanes, st = 'top:' + top.toFixed(1) + 'px;height:' + h.toFixed(1) + 'px;left:calc(' + (x.lane * w).toFixed(2) + '% + 2px);width:calc(' + w.toFixed(2) + '% - 4px);';
+    var range = hm(x.s) + '–' + hm(x.e), cls = 'cal-blk ' + x.kind, inner = '', attrs = '';
+    var tall = h >= 40, taller = h >= 64;
+    if (x.kind === 'study') {
+      var b = x.b, t = taskById(b.taskId), info = studyInfo(b), bd = blockDone(b), now = !bd && b.date === todayStr() && x.s <= nowMin() && nowMin() < x.e;
+      cls += ' tint' + (bd ? ' done' : '') + (now ? ' now' : '');
+      st += t ? modStyle(t.module) : '';
+      attrs = ' data-bid="' + esc(b.id) + '" role="button" tabindex="0" aria-label="Edit study block"';
+      inner = '<div class="cb-t">' + esc(info.title) + '</div>' +
+        (tall ? '<div class="cb-s">' + (t ? chipHtml(t.module, true) : '') + '<span>' + range + '</span></div>' : '') +
+        (taller && EFF_N[info.level] ? '<div class="cb-s"><span class="pe-eff">' + barsHtml(EFF_N[info.level]) + EFF_LABEL[info.level] + '</span></div>' : '');
+      if (!tall) inner = '<div class="cb-t">' + esc(info.title) + ' <span class="cb-r">' + hm(x.s) + '</span></div>';
+    } else if (x.kind === 'class') {
+      var ev = x.ev;
+      cls += ev.m ? ' tint' : '';
+      st += ev.m ? modStyle(ev.m) : '';
+      inner = '<div class="cb-t">' + esc(ev.t) + '</div>' +
+        (tall ? '<div class="cb-s">' + (ev.m ? chipHtml(ev.m, true) : '') + '<span class="pill">' + esc(ev.k || 'Class') + '</span></div><div class="cb-s"><span>' + range + '</span></div>' : '') +
+        (taller && ev.l ? '<div class="cb-s"><span>' + esc(ev.l) + '</span></div>' : '');
+      if (!tall) inner = '<div class="cb-t">' + esc(ev.t) + ' <span class="cb-r">' + hm(x.s) + '</span></div>';
+    } else {
+      var fx = x.fx;
+      cls += fx.kind === 'Meal' ? ' meal' : '';
+      inner = '<div class="cb-t">' + esc(fx.label) + '</div>' +
+        (tall ? '<div class="cb-s"><span class="pill">' + esc(kindLabel(fx.kind, fx.kindOther)) + '</span></div><div class="cb-s"><span>' + range + '</span></div>' : '') +
+        (taller && fx.loc ? '<div class="cb-s"><span>' + esc(fx.loc) + '</span></div>' : '');
+      if (!tall) inner = '<div class="cb-t">' + esc(fx.label) + ' <span class="cb-r">' + hm(x.s) + '</span></div>';
+    }
+    return '<div class="' + cls + '" style="' + st + '"' + attrs + '>' + inner + '</div>';
+  }
+  function renderCalendar() {
+    var today = todayStr(), nm = nowMin(), day = state.calView === 'day', days = [], i;
+    if (!state.calDay) state.calDay = today;
+    if (day) days.push(state.calDay);
+    else { var ws = weekStartOf(state.calWeek); for (i = 0; i < 7; i++) days.push(addDays(ws, i)); }
+    document.body.classList.toggle('wide', state.tab === 'calendar' && !day);
+    document.querySelectorAll('#cal-view button').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-v') === state.calView ? 'true' : 'false'); });
+    $('#cal-title').textContent = day ? (state.calDay === today ? 'Today · ' : '') + long(state.calDay) : short(days[0]) + ' – ' + short(days[6]);
+    $('#cal-today').hidden = day ? state.calDay === today : state.calWeek === 0;
+    var strip = $('#cal-strip'); strip.hidden = !day;
+    if (day) {
+      var ms = mondayOf(state.calDay);
+      strip.innerHTML = [0, 1, 2, 3, 4, 5, 6].map(function (k) {
+        var d = addDays(ms, k), dd = parse(d);
+        return '<button type="button" data-d="' + d + '" aria-pressed="' + (d === state.calDay) + '" class="' + (d === today ? 'is-today' : '') + '"><span>' + DAYS[dd.getDay()] + '</span><b>' + dd.getDate() + '</b></button>';
+      }).join('');
+    }
+    /* the visible hours: the study day and anything that falls outside it */
+    var lo = 1440, hi = 0, per = days.map(function (d) {
+      var es = calEntries(d), dh = dayHours(d);
+      if (isStudyDay(d)) { lo = Math.min(lo, tm(dh.start)); hi = Math.max(hi, tm(dh.end)); }
+      es.forEach(function (x) { lo = Math.min(lo, x.s); hi = Math.max(hi, x.e); });
+      return es;
+    });
+    if (hi <= lo) { lo = 540; hi = 1020; }
+    lo = Math.max(0, Math.floor(lo / 60) * 60); hi = Math.min(1440, Math.ceil(hi / 60) * 60);
+    var H = (hi - lo) * CAL_PPM, html = '<div class="cal' + (day ? ' day' : '') + '" style="--calh:' + H + 'px">';
+    if (day) html += ''; else
+    html += '<div class="cal-row cal-headrow"><div class="cal-gut"></div>' + days.map(function (d) {
+      var dd = parse(d);
+      return '<div class="cal-dh' + (d === today ? ' today' : '') + (d < today ? ' past' : '') + '"><span>' + DAYS[dd.getDay()] + '</span><b>' + dd.getDate() + '</b></div>';
+    }).join('') + '</div>';
+    html += '<div class="cal-row cal-bodyrow"><div class="cal-gut" style="height:' + H + 'px">';
+    for (var m = lo; m <= hi; m += 60) html += '<span style="top:' + ((m - lo) * CAL_PPM) + 'px">' + hm(m) + '</span>';
+    html += '</div>';
+    days.forEach(function (d, k) {
+      var dh = dayHours(d), study = isStudyDay(d);
+      html += '<div class="cal-col' + (d === today ? ' today' : '') + (d < today ? ' past' : '') + '" style="height:' + H + 'px" data-date="' + d + '">';
+      if (study) html += '<div class="cal-open" style="top:' + ((tm(dh.start) - lo) * CAL_PPM) + 'px;height:' + ((tm(dh.end) - tm(dh.start)) * CAL_PPM) + 'px"></div>';
+      html += calLanes(per[k]).map(function (x) { return calBlockHtml(x, lo); }).join('');
+      if (d === today && nm >= lo && nm <= hi) html += '<div class="cal-now" style="top:' + ((nm - lo) * CAL_PPM) + 'px"></div>';
+      html += '</div>';
+    });
+    html += '</div></div>';
+    var sc = $('#cal-grid'), keep = sc.scrollLeft;
+    sc.innerHTML = html;
+    sc.scrollLeft = keep;
+    if (!day && state.calWeek === 0 && !sc.getAttribute('data-sc') && sc.scrollWidth > sc.clientWidth) {
+      /* on a narrow screen, start the week at today's column */
+      sc.setAttribute('data-sc', '1');
+      var col = sc.querySelector('.cal-col.today');
+      if (col) sc.scrollLeft = Math.max(0, col.offsetLeft - 48);
+    }
+  }
+  function calStep(n) {
+    if (state.calView === 'day') { state.calDay = addDays(state.calDay || todayStr(), n); state.calWeek = Math.round(diffDays(mondayOf(state.calDay)) / 7); }
+    else state.calWeek += n;
+    $('#cal-grid').removeAttribute('data-sc'); renderCalendar();
+  }
+  $('#cal-prev').addEventListener('click', function () { calStep(-1); });
+  $('#cal-next').addEventListener('click', function () { calStep(1); });
+  $('#cal-today').addEventListener('click', function () { state.calDay = todayStr(); state.calWeek = 0; $('#cal-grid').removeAttribute('data-sc'); renderCalendar(); });
+  $('#cal-view').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-v]'); if (!b || b.getAttribute('data-v') === state.calView) return;
+    var v = b.getAttribute('data-v'), t = todayStr();
+    if (v === 'day') { var ms = weekStartOf(state.calWeek); state.calDay = diffDays(ms) <= 0 && diffDays(addDays(ms, 6)) >= 0 ? t : (state.calDay && mondayOf(state.calDay) === ms ? state.calDay : ms); }
+    else state.calWeek = Math.round(diffDays(mondayOf(state.calDay || t)) / 7);
+    state.calView = v; lsSet('doanddue.calView', v);
+    $('#cal-grid').removeAttribute('data-sc'); renderCalendar();
+  });
+  $('#cal-strip').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-d]'); if (!b) return;
+    state.calDay = b.getAttribute('data-d'); renderCalendar();
+  });
+  $('#cal-grid').addEventListener('click', function (e) {
+    var b = e.target.closest('.cal-blk.study[data-bid]');
+    if (b) openBlockForm(b.getAttribute('data-bid'));
+  });
+  $('#cal-grid').addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var b = e.target.closest && e.target.closest('.cal-blk.study[data-bid]');
+    if (b) { e.preventDefault(); openBlockForm(b.getAttribute('data-bid')); }
+  });
   function nowMin() { var n = new Date(); return n.getHours() * 60 + n.getMinutes(); }
   /* What to call a study block: a step with its own effort is named under its task; one without points at the task and uses the task's effort. */
   function studyInfo(b) {
@@ -3608,13 +3831,13 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     var nn = nowNext(), h = '<div class="nn-h">Now</div>';
     if (nn.cur) {
       var f = entryInfo(nn.cur.x);
-      h += '<div class="cur' + (f.mod ? ' tint' : '') + '"' + (f.mod ? ' style="' + modStyle(f.mod) + '"' : '') + '><div class="tt">' + esc(f.title) + '</div><div class="st">' + (f.mod ? chipHtml(f.mod) : '') + '<span>' + hm(nn.cur.x.s) + '–' + hm(nn.cur.x.e) + ' · ' + Math.max(0, nn.cur.x.e - nn.now) + ' min left</span><span>' + esc(f.tag) + '</span>' + (f.loc ? '<span class="loc">' + esc(f.loc) + '</span>' : '') + '</div></div>';
+      h += '<div class="cur' + (f.mod ? ' tint' : '') + '"' + (f.mod ? ' style="' + modStyle(f.mod) + '"' : '') + '><div class="tt">' + esc(f.title) + '</div><div class="st">' + (f.mod ? chipHtml(f.mod) : '') + '<span>' + hm(nn.cur.x.s) + '–' + hm(nn.cur.x.e) + ' · ' + Math.max(0, nn.cur.x.e - nn.now) + ' min left</span><span class="pill">' + esc(f.tag) + '</span>' + (f.loc ? '<span class="loc">' + esc(f.loc) + '</span>' : '') + '</div></div>';
     } else {
       var n0 = nn.pend[0], lead = state.sched.notifyMins || 5;
       var soon = n0 && state.sched.notify && n0.i === 0 && n0.x.s - nn.now >= 0 && n0.x.s - nn.now <= lead;
       if (soon) {
         var sf = entryInfo(n0.x), mm = n0.x.s - nn.now;
-        h += '<div class="cur soon' + (sf.mod ? ' tint' : '') + '"' + (sf.mod ? ' style="' + modStyle(sf.mod) + '"' : '') + '><div class="tt">Nothing on right now</div><div class="st">' + (sf.mod ? chipHtml(sf.mod) : '') + '<span>' + esc(sf.title) + ' ' + (mm === 0 ? 'starts now' : 'starts in ' + mm + ' min') + ' (' + hm(n0.x.s) + ')</span><span>' + esc(sf.tag) + '</span></div></div>';
+        h += '<div class="cur soon' + (sf.mod ? ' tint' : '') + '"' + (sf.mod ? ' style="' + modStyle(sf.mod) + '"' : '') + '><div class="tt">Nothing on right now</div><div class="st">' + (sf.mod ? chipHtml(sf.mod) : '') + '<span>' + esc(sf.title) + ' ' + (mm === 0 ? 'starts now' : 'starts in ' + mm + ' min') + ' (' + hm(n0.x.s) + ')</span><span class="pill">' + esc(sf.tag) + '</span></div></div>';
       } else
       h += '<div class="cur idle"><div class="tt">Nothing on right now</div><div class="st">' + (n0 ? (n0.i === 0 ? 'Free until ' + hm(n0.x.s) : 'Free for the rest of today') : 'Nothing scheduled in the next two weeks') + '</div></div>';
     }
@@ -3622,7 +3845,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     var show = open ? nn.pend.filter(function (o) { return o.i === 0; }) : nn.pend.slice(0, 2);
     show.forEach(function (o) {
       var f = entryInfo(o.x);
-      h += '<div class="nx"><span class="w">' + esc(whenText(o)) + '</span><span class="n">' + (f.mod ? chipHtml(f.mod) + ' ' : '') + esc(f.title) + ' <span class="loc">' + esc(f.tag) + '</span></span></div>';
+      h += '<div class="nx"><span class="w">' + esc(whenText(o)) + '</span><span class="n">' + (f.mod ? chipHtml(f.mod) + ' ' : '') + esc(f.title) + ' <span class="pill">' + esc(f.tag) + '</span></span></div>';
     });
     if (nn.todayN > 2) {
       var left = nn.todayN - show.filter(function (o) { return o.i === 0; }).length;
@@ -3851,6 +4074,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
   /* ---------- tabs ---------- */
   function applyTab() {
     TABS.forEach(function (n) { $('#view-' + n).hidden = n !== state.tab; });
+    document.body.classList.toggle('wide', state.tab === 'calendar' && state.calView === 'week');
     document.querySelectorAll('[data-tab]').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-tab') === state.tab ? 'true' : 'false'); });
   }
   function setTab(name) {
