@@ -677,6 +677,9 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
 .tlab { position: relative; height: 14px; margin-bottom: -2px; font: 500 11px/1 var(--font-mono); color: var(--muted); }
 .tlab .tk { position: absolute; bottom: 0; width: 1px; height: 4px; background: color-mix(in srgb, var(--ink) 35%, transparent); }
 .tlab .tl { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; }
+
+.xd-date input { width: 100%; height: 38px; padding: 0 10px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; font: inherit; color: var(--ink); }
+.day.passed { opacity: .6; }
 </style>
 <style>
 .updbar{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 10px);z-index:60;display:flex;align-items:center;gap:10px;max-width:calc(100vw - 24px);padding:8px 8px 8px 16px;border-radius:999px;background:var(--ink);color:var(--bg);font:500 14px/1.2 var(--font-body,system-ui,sans-serif);box-shadow:0 6px 24px rgba(0,0,0,.25)}
@@ -685,7 +688,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
 .updbar .u-go{padding:0 14px;background:var(--accent);color:var(--accent-ink);font-weight:600}
 .updbar .u-x{width:32px;background:transparent;color:inherit;opacity:.7;font-size:20px;line-height:1}
 </style>
-<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_PUSH={vapid:"BGs1idw37HirnuG0r4KvnmqCJD35UeDL2i35_quTmjEItTwAZWuUl9nTZKOKCngJU3p02opFm5cAdo2PvfMUokc"};window.__DD_BUILD="5e78fec";</script>
+<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_PUSH={vapid:"BGs1idw37HirnuG0r4KvnmqCJD35UeDL2i35_quTmjEItTwAZWuUl9nTZKOKCngJU3p02opFm5cAdo2PvfMUokc"};window.__DD_BUILD="1a0f9ed";</script>
 </head>
 <body>
 
@@ -849,6 +852,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
         <button class="btn ghost" type="button" id="plan-clear">Clear</button>
         <button class="btn ghost" type="button" id="plan-classes">Classes</button>
       </div>
+      <label class="nobreak" style="margin-top:12px"><input type="checkbox" id="plan-passed"> <span>Show passed days</span></label>
       <p class="note" id="plan-note" role="status" style="margin-top:12px"></p>
     </div>
     <dialog class="dlg" id="blk-dlg" aria-labelledby="blk-title">
@@ -975,6 +979,11 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
         <label class="nobreak full"><input type="checkbox" id="s-allowOverrun" data-set="allowOverrun"> <span>Let a block run up to 15 minutes past the end of the study day if that finishes the task</span></label>
       </div>
       <div class="field" style="margin-top:14px"><span class="lbl" id="days-lbl">Study days</span><div class="dchips" id="days-chips" role="group" aria-labelledby="days-lbl"></div></div>
+      <div class="field" style="margin-top:14px" id="xd-wrap"><span class="lbl">Special study days</span>
+        <p class="hint" style="margin-top:4px">A single date that counts as a study day with its own hours, even if it isn't one of your usual study days, such as one particular Sunday.</p>
+        <div id="xd-list"></div>
+        <div class="actions top"><button class="btn sm" type="button" id="xd-add">Add a special study day</button></div>
+      </div>
       <h3 class="sub-h">Time needed per task</h3>
       <p class="help">Blocks set aside per effort level. Changing the block length rescales them. Subtasks use the same levels.</p>
       <div class="grid-form">
@@ -1022,11 +1031,24 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       </div>
       </div>
     </details>
+    <details class="card setc" id="set-clear">
+      <summary><span class="sico"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M6.8 10.2l2.2 2.2 4.2-4.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="stitle">Completed tasks</span><span class="ssum" id="ss-set-clear"></span></summary>
+      <div class="sbody">
+      <p class="help">Completed tasks are struck out and kept until they are cleared. Choosing once a week lets you see a whole week of finished work before it goes.</p>
+      <div class="grid-form">
+        <div class="field full"><label for="s-clearMode">Clear completed tasks</label><select id="s-clearMode" data-set="clearMode"><option value="deadline">Once their deadline has passed</option><option value="weekly">Once a week</option><option value="off">Never</option></select></div>
+        <div id="clear-weekly" class="full" style="display:contents">
+          <div class="field"><label for="s-clearDay">Clear on</label><select id="s-clearDay" data-set="clearDay"><option value="1">Monday</option><option value="2">Tuesday</option><option value="3">Wednesday</option><option value="4">Thursday</option><option value="5">Friday</option><option value="6">Saturday</option><option value="0">Sunday</option></select></div>
+          <div class="field"><label for="s-clearTime">At</label><input id="s-clearTime" type="time" data-set="clearTime"></div>
+          <p class="hint full" id="clear-next"></p>
+        </div>
+        <p class="hint full" id="clear-note"></p>
+      </div>
+      </div>
+    </details>
     <details class="card setc" id="set-data">
       <summary><span class="sico"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v9.5M6 9l4 4 4-4M4 16.5h12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="stitle">Backup and restore</span><span class="ssum" id="ss-set-data">Keep a copy of your tasks and settings</span></summary>
       <div class="sbody">
-        <label class="nobreak"><input type="checkbox" id="s-autoClear"> <span>Clear completed tasks once their deadline has passed</span></label>
-        <p class="help" style="margin-top:6px">Completed tasks are struck out and kept until then. Ones with no deadline stay until you clear them.</p>
         <p class="help">A backup holds your tasks, modules, timetable and settings. Restoring adds to what you already have: tasks with the same ID are replaced and nothing else is deleted.</p>
         <div class="actions">
           <button class="btn primary" type="button" id="d-download">Download backup</button>
@@ -1799,12 +1821,17 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     state.parked = done.map(function (t) { return t.id; });
     var anyDone = visible.some(function (t) { return t.done; });
     var html = '', groups = [], index = {};
+    var passedG = {}, passedK = [];
     open.forEach(function (t) {
-      var b = bucket(keyDate(t, state.sort));
+      var kd = keyDate(t, state.sort);
+      /* completed tasks from days that have gone sit at the bottom, a group per day */
+      if (t.done && kd && kd < td) { if (!passedG[kd]) { passedG[kd] = []; passedK.push(kd); } passedG[kd].push(t); return; }
+      var b = bucket(kd);
       if (!index[b.k]) { index[b.k] = { label: b.label, bad: b.bad, items: [] }; groups.push(index[b.k]); }
       index[b.k].items.push(t);
     });
     groups.forEach(function (g) { html += groupHtml(g.label, g.items, g.bad && g.items.some(function (t) { return !t.done; })); });
+    passedK.sort().reverse().forEach(function (k) { html += groupHtml(long(k) + ' · passed', passedG[k], false); });
     if (done.length) html += groupHtml('Completed', done, false) + '<div class="grp-foot"><button class="link' + (state.pendingClearDone ? ' confirm' : '') + '" type="button" id="clear-completed">' + (state.pendingClearDone ? 'Confirm: delete these ' + done.length + '?' : 'Clear these') + '</button></div>';
     if (!html) {
       html = '<div class="empty"><strong>' + (anyDone ? 'Everything is done' : 'No tasks for this module') + '</strong>' +
@@ -1843,15 +1870,34 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       if (state.plan.blocks.length !== n) savePref('plan');
     });
   }
-  /* completed tasks whose deadline has passed go; ones with no deadline are never cleared automatically */
+  /* the most recent moment the weekly clear was due */
+  function lastBoundary(now) {
+    var sc = state.sched, p = (sc.clearTime || '00:00').split(':'), d = new Date(now);
+    d.setHours(+p[0] || 0, +p[1] || 0, 0, 0);
+    d.setDate(d.getDate() - ((d.getDay() - sc.clearDay + 7) % 7));
+    if (d > now) d.setDate(d.getDate() - 7);
+    return d;
+  }
+  function clearStamp(d) { return iso(d) + 'T' + pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+  /* completed tasks go after their deadline, or all together once a week; ones with no deadline are never cleared by the deadline rule */
   function clearExpired() {
-    if (clearing || !store || !state.loaded || !state.sched.autoClear || !(state.got && state.got.schedule)) return;
-    var td = todayStr(), ids = state.tasks.filter(function (t) { return t.done && t.due && t.due < td; }).map(function (t) { return t.id; });
+    var sc = state.sched;
+    if (clearing || !store || !state.loaded || !sc.autoClear || !(state.got && state.got.schedule)) return;
+    var td = todayStr(), ids = [], note = '';
+    if (sc.clearMode === 'weekly') {
+      var b = clearStamp(lastBoundary(new Date()));
+      if (!sc.lastClear) { sc.lastClear = b; savePref('schedule'); return; }
+      if (sc.lastClear >= b) return;
+      sc.lastClear = b; savePref('schedule');
+      ids = state.tasks.filter(function (t) { return t.done; }).map(function (t) { return t.id; });
+      note = 'Weekly clear: removed ' + ids.length + (ids.length === 1 ? ' completed task.' : ' completed tasks.');
+    } else {
+      ids = state.tasks.filter(function (t) { return t.done && t.due && t.due < td; }).map(function (t) { return t.id; });
+      note = 'Cleared ' + ids.length + (ids.length === 1 ? ' completed task' : ' completed tasks') + ' past ' + (ids.length === 1 ? 'its' : 'their') + ' deadline.';
+    }
     if (!ids.length) return;
     clearing = true;
-    removeTasks(ids).then(function () {
-      toast('Cleared ' + ids.length + (ids.length === 1 ? ' completed task' : ' completed tasks') + ' past ' + (ids.length === 1 ? 'its' : 'their') + ' deadline.');
-    }).catch(function () {}).then(function () { clearing = false; render(); });
+    removeTasks(ids).then(function () { toast(note); }).catch(function () {}).then(function () { clearing = false; render(); });
   }
   var pendingClearTimer = null;
   $('#groups').addEventListener('click', function (e) {
@@ -1866,7 +1912,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     removeTasks(ids).then(function () { toast('Cleared ' + ids.length + (ids.length === 1 ? ' task' : ' tasks') + '.'); }, saveError).then(render);
   });
   document.addEventListener('visibilitychange', function () { if (!document.hidden) { render(); clearExpired(); } });
-  setInterval(clearExpired, 3600000);
+  setInterval(clearExpired, 60000);
 
   function render() {
     hideTip();
@@ -2199,7 +2245,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     return {
       dayStart: '09:00', dayEnd: '17:00', days: [1, 2, 3, 4, 5],
       hourSets: [],
-      blockMins: 60, gapMins: 10, classBuffer: 10, maxDayHours: 6, maxItemDayHours: 3, fixedBuffer: false, hardFirst: 'off', autoClear: true, allowOverrun: true, showMeals: true, mealBuffer: false, mealsAsBreaks: false, showBreaks: false, breakStripes: false, notify: true, notifyMins: 5,
+      blockMins: 60, gapMins: 10, classBuffer: 10, maxDayHours: 6, maxItemDayHours: 3, fixedBuffer: false, hardFirst: 'off', autoClear: true, clearMode: 'deadline', clearDay: 5, clearTime: '00:00', lastClear: '', extraDays: [], allowOverrun: true, showMeals: true, mealBuffer: false, mealsAsBreaks: false, showBreaks: false, breakStripes: false, notify: true, notifyMins: 5,
       effortBlocks: { trivial: 0.5, light: 1, medium: 3, high: 4.5, heavy: 6, none: 2 },
       fixed: []
     };
@@ -2214,6 +2260,17 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       out.push({ id: typeof x.id === 'string' && x.id ? x.id : uid(), days: days, start: ok ? x.start : s.dayStart, end: ok ? x.end : s.dayEnd });
     });
     return out;
+  }
+  /* single dates that count as study days, each with its own hours */
+  function cleanExtraDays(list, s) {
+    var seen = {}, out = [];
+    (Array.isArray(list) ? list : []).forEach(function (x) {
+      if (!x || typeof x !== 'object' || !/^\d{4}-\d{2}-\d{2}$/.test(x.date || '') || seen[x.date]) return;
+      seen[x.date] = 1;
+      var ok = /^\d{2}:\d{2}$/.test(x.start || '') && /^\d{2}:\d{2}$/.test(x.end || '') && tm(x.end) - tm(x.start) >= 30;
+      out.push({ id: typeof x.id === 'string' && x.id ? x.id : uid(), date: x.date, start: ok ? x.start : s.dayStart, end: ok ? x.end : s.dayEnd });
+    });
+    return out.sort(function (a, b) { return a.date < b.date ? -1 : 1; });
   }
   function normSched(d) {
     var s = defaultSched();
@@ -2233,7 +2290,12 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     if (!Array.isArray(s.fixed)) s.fixed = [];
     if (['off', 'early', 'lunch'].indexOf(s.hardFirst) < 0) s.hardFirst = 'off';
     s.fixedBuffer = !!s.fixedBuffer;
-    s.autoClear = d.autoClear !== false;
+    s.clearMode = ['off', 'deadline', 'weekly'].indexOf(d.clearMode) >= 0 ? d.clearMode : (d.autoClear === false ? 'off' : 'deadline');
+    s.autoClear = s.clearMode !== 'off';
+    s.clearDay = d.clearDay != null && d.clearDay !== '' && +d.clearDay >= 0 && +d.clearDay <= 6 ? Math.floor(+d.clearDay) : 5;
+    s.clearTime = /^\d{2}:\d{2}$/.test(d.clearTime || '') ? d.clearTime : '00:00';
+    s.lastClear = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(d.lastClear || '') ? d.lastClear : '';
+    s.extraDays = cleanExtraDays(d.extraDays, s);
     s.allowOverrun = d.allowOverrun !== false;
     s.showMeals = d.showMeals !== false;
     s.mealBuffer = !!d.mealBuffer;
@@ -2739,7 +2801,12 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     put('s-blockMins', s.blockMins); put('s-gapMins', s.gapMins); put('s-classBuffer', s.classBuffer);
     put('s-maxDayHours', s.maxDayHours); put('s-maxItemDayHours', s.maxItemDayHours); put('s-hardFirst', s.hardFirst);
     var fb = document.getElementById('s-fixedBuffer'); if (fb) fb.checked = !!s.fixedBuffer;
-    var ac = document.getElementById('s-autoClear'); if (ac) ac.checked = !!s.autoClear;
+    put('s-clearMode', s.clearMode); put('s-clearDay', s.clearDay); put('s-clearTime', s.clearTime);
+    var cw = document.getElementById('clear-weekly'); if (cw) cw.style.display = s.clearMode === 'weekly' ? 'contents' : 'none';
+    var cn = document.getElementById('clear-next');
+    if (cn) { var nb = lastBoundary(new Date()); nb.setDate(nb.getDate() + 7); cn.textContent = 'Next clear: ' + short(iso(nb)) + ' at ' + s.clearTime + '.'; }
+    var cm = document.getElementById('clear-note');
+    if (cm) cm.textContent = s.clearMode === 'deadline' ? 'Completed tasks with no deadline stay until you clear them yourself.' : s.clearMode === 'off' ? 'Completed tasks stay until you delete them.' : 'Everything completed is cleared together at that time.';
     var ao = document.getElementById('s-allowOverrun'); if (ao) ao.checked = !!s.allowOverrun;
     var sm = document.getElementById('s-showMeals'); if (sm) sm.checked = !!s.showMeals;
     [['s-mealBuffer', 'mealBuffer'], ['s-showBreaks', 'showBreaks'], ['s-mealsAsBreaks', 'mealsAsBreaks'], ['s-breakStripes', 'breakStripes']].forEach(function (p) { var el = document.getElementById(p[0]); if (el) el.checked = !!s[p[1]]; });
@@ -2752,7 +2819,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       if (h) h.textContent = '= ' + dur(Math.round((+s.effortBlocks[k] || 0) * s.blockMins / 5) * 5);
     });
     var wl = document.getElementById('s-weekday-lbl'); if (wl) wl.textContent = s.hourSets.some(function (x) { return x.days.length; }) ? 'Usual hours' : 'Study hours each day';
-    renderHourSets();
+    renderHourSets(); renderExtraDays();
     document.querySelectorAll('#set-hours [data-day]').forEach(function (c) { c.checked = s.days.indexOf(+c.getAttribute('data-day')) >= 0; });
   }
   var hsSig = null;
@@ -2766,11 +2833,6 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
         '<div class="hset-t"><input type="time" data-hs="start" value="' + esc(x.start) + '" aria-label="Day starts"><span>to</span><input type="time" data-hs="end" value="' + esc(x.end) + '" aria-label="Day ends"><button class="link" type="button" data-act="hs-del">Remove</button></div></div>';
     }).join('');
   }
-  $('#s-autoClear').addEventListener('change', function (e) {
-    state.sched.autoClear = e.target.checked;
-    savePref('schedule'); render();
-    if (state.sched.autoClear) clearExpired();
-  });
   $('#hs-add').addEventListener('click', function () {
     var s = state.sched, used = {};
     s.hourSets.forEach(function (x) { x.days.forEach(function (n) { used[n] = 1; }); });
@@ -2806,6 +2868,53 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     hsSig = JSON.stringify(s.hourSets);
     savePref('schedule'); render();
   });
+  /* special study days: single dates with their own hours */
+  var xdSig = null;
+  function renderExtraDays() {
+    var td = todayStr(), list = state.sched.extraDays.filter(function (x) { return x.date >= td; }), sig = JSON.stringify(list);
+    if (sig === xdSig) return;
+    xdSig = sig;
+    $('#xd-list').innerHTML = list.map(function (x) {
+      return '<div class="hset" data-xid="' + esc(x.id) + '"><div class="xd-date"><input type="date" data-xd="date" value="' + esc(x.date) + '" min="' + td + '" aria-label="Date"></div>' +
+        '<div class="hset-t"><input type="time" data-xd="start" value="' + esc(x.start) + '" aria-label="Day starts"><span>to</span><input type="time" data-xd="end" value="' + esc(x.end) + '" aria-label="Day ends"><button class="link" type="button" data-act="xd-del">Remove</button></div></div>';
+    }).join('');
+  }
+  $('#xd-add').addEventListener('click', function () {
+    var s = state.sched, td = todayStr(), d = '', i;
+    var taken = {}; s.extraDays.forEach(function (x) { taken[x.date] = 1; });
+    for (i = 0; i < 60 && !d; i++) { var c = addDays(td, i); if (!taken[c] && !isStudyDay(c)) d = c; }
+    if (!d) d = addDays(td, 1);
+    var wk = dow(d) === 0 || dow(d) === 6;
+    s.extraDays = s.extraDays.filter(function (x) { return x.date >= td; });
+    s.extraDays.push({ id: uid(), date: d, start: wk ? '10:00' : s.dayStart, end: wk ? '16:00' : s.dayEnd });
+    s.extraDays.sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+    xdSig = null; savePref('schedule'); render();
+  });
+  $('#xd-list').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-act="xd-del"]'), box = e.target.closest('.hset');
+    if (!b || !box) return;
+    state.sched.extraDays = state.sched.extraDays.filter(function (x) { return x.id !== box.getAttribute('data-xid'); });
+    xdSig = null; savePref('schedule'); render();
+  });
+  $('#xd-list').addEventListener('change', function (e) {
+    var box = e.target.closest('.hset'), k = e.target.getAttribute('data-xd');
+    if (!box || !k) return;
+    var s = state.sched, x = s.extraDays.filter(function (o) { return o.id === box.getAttribute('data-xid'); })[0], v = e.target.value;
+    if (!x) return;
+    if (k === 'date') {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(v) || v < todayStr()) { toast('Pick a date from today onward.'); e.target.value = x.date; return; }
+      if (s.extraDays.some(function (o) { return o !== x && o.date === v; })) { toast('That date is already a special study day.'); e.target.value = x.date; return; }
+      x.date = v;
+      s.extraDays.sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+      xdSig = null;
+    } else {
+      var ns = k === 'start' ? v : x.start, ne = k === 'end' ? v : x.end;
+      if (!/^\d{2}:\d{2}$/.test(v) || tm(ne) - tm(ns) < 30) { toast('The study day needs to run for at least 30 minutes.'); e.target.value = x[k]; return; }
+      x[k] = v;
+      xdSig = JSON.stringify(s.extraDays.filter(function (o) { return o.date >= todayStr(); }));
+    }
+    savePref('schedule'); render();
+  });
   function onSchedChange(e) {
     var k = e.target.getAttribute('data-set');
     if (!k) return;
@@ -2820,6 +2929,13 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       s.fixedBuffer = e.target.checked;
     } else if (k === 'showMeals' || k === 'mealBuffer' || k === 'showBreaks' || k === 'mealsAsBreaks' || k === 'breakStripes') {
       s[k] = e.target.checked;
+    } else if (k === 'clearMode' || k === 'clearDay' || k === 'clearTime') {
+      if (k === 'clearTime' && !/^\d{2}:\d{2}$/.test(v)) { toast('Pick a time.'); syncSettingsInputs(true); return; }
+      if (k === 'clearMode') { s.clearMode = ['off', 'deadline', 'weekly'].indexOf(v) >= 0 ? v : 'deadline'; s.autoClear = s.clearMode !== 'off'; }
+      else if (k === 'clearDay') s.clearDay = Math.max(0, Math.min(6, parseInt(v, 10) || 0));
+      else s.clearTime = v;
+      /* changing when the week ends never clears anything straight away */
+      s.lastClear = s.clearMode === 'weekly' ? clearStamp(lastBoundary(new Date())) : '';
     } else if (k === 'allowOverrun') {
       s.allowOverrun = e.target.checked;
     } else if (k === 'notify') {
@@ -2834,8 +2950,10 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       if (k.indexOf('effort.') === 0) s.effortBlocks[k.slice(7)] = n; else s[k] = k === 'notifyMins' ? Math.round(n) : n;
     }
     savePref('schedule'); render();
+    if (/^clear/.test(k)) clearExpired();
   }
   $('#set-hours').addEventListener('change', onSchedChange);
+  $('#set-clear').addEventListener('change', onSchedChange);
   $('#set-remind').addEventListener('change', onSchedChange);
 
   function fixedPad(f) { var s = state.sched; return (f.kind === 'Meal' ? s.mealBuffer : s.fixedBuffer) ? (+s.classBuffer || 0) : 0; }
@@ -2932,8 +3050,10 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     function put(id, t) { var el = document.getElementById(id); if (el) el.textContent = t; }
     put('ss-set-modules', nm ? nm + (nm === 1 ? ' module' : ' modules') : 'None yet');
     put('ss-set-tt', (nc ? nc + (nc === 1 ? ' class' : ' classes') : 'No classes') + (state.tt.term.breaks.length ? ', ' + state.tt.term.breaks.length + (state.tt.term.breaks.length === 1 ? ' break' : ' breaks') : ''));
+    put('ss-set-clear', s.clearMode === 'weekly' ? 'Weekly, ' + LONGDAYS[s.clearDay] + ' ' + s.clearTime : s.clearMode === 'off' ? 'Never' : 'After deadline');
     put('ss-set-remind', s.notify ? s.notifyMins + (s.notifyMins === 1 ? ' minute' : ' minutes') + ' before' : 'Off');
-    put('ss-set-hours', s.dayStart + '–' + s.dayEnd + (s.hourSets.filter(function (x) { return x.days.length; }).length ? ' + ' + s.hourSets.filter(function (x) { return x.days.length; }).length + ' custom' : '') + ', ' + s.days.length + (s.days.length === 1 ? ' day' : ' days'));
+    var nx = s.extraDays.filter(function (x) { return x.date >= todayStr(); }).length;
+    put('ss-set-hours', s.dayStart + '–' + s.dayEnd + (nx ? ' + ' + nx + ' special' : '') + (s.hourSets.filter(function (x) { return x.days.length; }).length ? ' + ' + s.hourSets.filter(function (x) { return x.days.length; }).length + ' custom' : '') + ', ' + s.days.length + (s.days.length === 1 ? ' day' : ' days'));
     if (SYNC && SYNC.on) syncUi();
     put('ss-set-fixed', s.fixed.length ? s.fixed.length + (s.fixed.length === 1 ? ' commitment' : ' commitments') : 'None');
   }
@@ -2951,7 +3071,11 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     var b = state.sched.effortBlocks[EFF_N[level] ? level : 'none'];
     return Math.round((+b || 0) * state.sched.blockMins / 5) * 5;
   }
+  function extraFor(d) { return (state.sched.extraDays || []).filter(function (x) { return x.date === d; })[0] || null; }
+  function isStudyDay(d) { return !!extraFor(d) || state.sched.days.indexOf(dow(d)) >= 0; }
   function dayHours(d) {
+    var ex = extraFor(d);
+    if (ex) return { start: ex.start, end: ex.end };
     var s = state.sched, n = dow(d), set = (s.hourSets || []).filter(function (x) { return x.days.indexOf(n) >= 0; })[0];
     return set ? { start: set.start, end: set.end } : { start: s.dayStart, end: s.dayEnd };
   }
@@ -3043,11 +3167,17 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     if (hi - cur >= 5) out.push([cur, hi]);
     return out;
   }
+  function sigSched() {
+    var c = Object.assign({}, state.sched, { autoClear: 0, notify: 0, notifyMins: 0, showMeals: 0, mealsAsBreaks: 0, showBreaks: 0, breakStripes: 0, mealsBusy: 0, mealBreak: 0 });
+    delete c.clearMode; delete c.clearDay; delete c.clearTime; delete c.lastClear;
+    if (!c.extraDays || !c.extraDays.length) delete c.extraDays;
+    return c;
+  }
   function planSig() {
     var parts = state.tasks.filter(function (t) { return !t.done; }).map(function (t) {
       return [t.id, t.doDate, t.due, t.dueClass || '', t.priority, t.effort, subsOf(t).map(function (s) { return [s.id, s.done ? 1 : 0, s.doDate, s.due, s.effort, (s.children || []).map(function (c) { return [c.id, c.done ? 1 : 0, c.doDate, c.due, c.effort].join('.'); }).join(',')].join('~'); }).join('|')].join('^');
     }).sort().join('\n');
-    return hash(parts + '#' + JSON.stringify(Object.assign({}, state.sched, { autoClear: 0, notify: 0, notifyMins: 0, showMeals: 0, mealsAsBreaks: 0, showBreaks: 0, breakStripes: 0, mealsBusy: 0, mealBreak: 0 })) + '#' + JSON.stringify(state.tt) + '#' + JSON.stringify(state.modsDoc.items));
+    return hash(parts + '#' + JSON.stringify(sigSched()) + '#' + JSON.stringify(state.tt) + '#' + JSON.stringify(state.modsDoc.items));
   }
   function isHardLevel(l) { return l === 'high' || l === 'heavy'; }
   /* a sub-task with no level of its own uses its parent's */
@@ -3116,7 +3246,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     items.forEach(function (it) { if (it.due) hz = Math.max(hz, diffDays(it.due) + 1); });
     hz = Math.min(hz, 42);
     var days = [];
-    for (var i = 0; i < hz; i++) { var dd = addDays(today, i); if (s.days.indexOf(dow(dd)) >= 0) days.push(dd); }
+    for (var i = 0; i < hz; i++) { var dd = addDays(today, i); if (isStudyDay(dd)) days.push(dd); }
     var free = {}, cap = {}, free0 = {}, hiD = {}, OV = s.allowOverrun ? 15 : 0;
     days.forEach(function (d) {
       var dh = dayHours(d), lo = tm(dh.start), hi = tm(dh.end);
@@ -3230,7 +3360,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
   }
   function generatePlan() {
     if (!store) { toast('Still connecting. Try again in a moment.'); return; }
-    if (!state.sched.days.length) { toast('Pick at least one study day under Settings first.'); return; }
+    if (!state.sched.days.length && !state.sched.extraDays.length) { toast('Pick at least one study day under Settings first.'); return; }
     var res = buildPlan();
     var mins = res.made.reduce(function (n, b) { return n + tm(b.end) - tm(b.start); }, 0);
     var dayCount = {};
@@ -3402,7 +3532,10 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     if (lab && mk) mk = mk.replace('style="', 'style="top:14px;');
     return lab + '<div class="track" aria-hidden="true">' + segs + '</div>' + mk;
   }
+  /* where "passed days" begin: the last weekly clear, else a week back */
+  function passedStart() { return state.sched.clearMode === 'weekly' ? iso(lastBoundary(new Date())) : addDays(todayStr(), -7); }
   function renderPlan() {
+    $('#plan-passed').checked = !!state.showPassed;
     var today = todayStr(), html = '';
     var anyBlocks = state.plan.blocks.some(function (b) { return b.auto; });
     var noteEl = $('#plan-note');
@@ -3418,13 +3551,14 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       html += '<div class="freeline"><span>' + esc(a0 === z ? short(a0) : short(a0) + ' to ' + short(z)) + '</span><span>Nothing scheduled</span></div>';
       run = [];
     }
-    for (var i = 0; i < state.planDays; i++) {
+    var startI = state.showPassed ? Math.min(0, diffDays(passedStart())) : 0;
+    for (var i = startI; i < state.planDays; i++) {
       var d = addDays(today, i), all = dayEntries(d);
-      if (!all.length && i > 0) { run.push(d); continue; }
+      if (!all.length && i !== 0) { run.push(d); continue; }
       flush();
-      var rest = state.sched.days.indexOf(dow(d)) < 0, dh = dayHours(d), bR = barRange(d, all);
+      var rest = !isStudyDay(d), dh = dayHours(d), bR = barRange(d, all);
       var dd = parse(d);
-      html += '<section class="day"><div class="dayhead' + (i === 0 ? ' today' : '') + '"><div class="dnum"><b>' + dd.getDate() + '</b><span>' + DAYS[dd.getDay()] + '</span></div>' +
+      html += '<section class="day' + (i < 0 ? ' passed' : '') + '"><div class="dayhead' + (i === 0 ? ' today' : '') + '"><div class="dnum"><b>' + dd.getDate() + '</b><span>' + DAYS[dd.getDay()] + '</span></div>' +
         '<div class="dbar">' + dayBarHtml(d, all, i === 0) + '<div class="dlab"><span>' + (bR.early ? hm(bR.lo) : esc(dh.start)) + '</span>' + capHtml(i, d, all, rest) + '<span>' + (bR.late ? hm(bR.hi) : esc(dh.end)) + '</span></div></div></div>' +
         '<ul class="list">' + (all.length ? all.map(function (x) { return entryHtml(x, all); }).join('') : '<li class="pe none">Nothing scheduled</li>') + '</ul></section>';
     }
@@ -3670,6 +3804,8 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     if (card) card.scrollIntoView({ block: 'start' });
   });
   $('#plan-add').addEventListener('click', function () { openBlockForm(''); });
+  state.showPassed = lsGet('doanddue.showPassed') === '1';
+  $('#plan-passed').addEventListener('change', function (e) { state.showPassed = e.target.checked; lsSet('doanddue.showPassed', state.showPassed ? '1' : '0'); renderPlan(); });
   $('#plan-more').addEventListener('click', function () { state.planDays = Math.min(42, state.planDays + 7); renderPlan(); });
   $('#plan-clear').addEventListener('click', function () {
     var n = state.plan.blocks.filter(function (b) { return b.auto && !b.done; }).length;
