@@ -674,9 +674,9 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
   #mod-form .field:last-child { grid-column: 1 / -1; }
 }
 
-.tlab { position: relative; height: 16px; margin-top: -1px; font: 500 11px/1 var(--font-mono); color: var(--muted); }
-.tlab .tk { position: absolute; top: 0; width: 1px; height: 4px; background: color-mix(in srgb, var(--ink) 35%, transparent); }
-.tlab .tl { position: absolute; top: 3px; transform: translateX(-50%); white-space: nowrap; }
+.tlab { position: relative; height: 14px; margin-bottom: -2px; font: 500 11px/1 var(--font-mono); color: var(--muted); }
+.tlab .tk { position: absolute; bottom: 0; width: 1px; height: 4px; background: color-mix(in srgb, var(--ink) 35%, transparent); }
+.tlab .tl { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; }
 </style>
 <style>
 .updbar{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 10px);z-index:60;display:flex;align-items:center;gap:10px;max-width:calc(100vw - 24px);padding:8px 8px 8px 16px;border-radius:999px;background:var(--ink);color:var(--bg);font:500 14px/1.2 var(--font-body,system-ui,sans-serif);box-shadow:0 6px 24px rgba(0,0,0,.25)}
@@ -685,7 +685,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
 .updbar .u-go{padding:0 14px;background:var(--accent);color:var(--accent-ink);font-weight:600}
 .updbar .u-x{width:32px;background:transparent;color:inherit;opacity:.7;font-size:20px;line-height:1}
 </style>
-<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_PUSH={vapid:"BGs1idw37HirnuG0r4KvnmqCJD35UeDL2i35_quTmjEItTwAZWuUl9nTZKOKCngJU3p02opFm5cAdo2PvfMUokc"};window.__DD_BUILD="18f2927";</script>
+<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_PUSH={vapid:"BGs1idw37HirnuG0r4KvnmqCJD35UeDL2i35_quTmjEItTwAZWuUl9nTZKOKCngJU3p02opFm5cAdo2PvfMUokc"};window.__DD_BUILD="5e78fec";</script>
 </head>
 <body>
 
@@ -3399,7 +3399,8 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
         return '<i class="tk" style="left:' + p0.toFixed(2) + '%"></i><span class="tl" style="left:' + Math.min(93, Math.max(7, p0)).toFixed(2) + '%">' + hm(m) + '</span>';
       }).join('') + '</div>';
     }
-    return '<div class="track" aria-hidden="true">' + segs + '</div>' + mk + lab;
+    if (lab && mk) mk = mk.replace('style="', 'style="top:14px;');
+    return lab + '<div class="track" aria-hidden="true">' + segs + '</div>' + mk;
   }
   function renderPlan() {
     var today = todayStr(), html = '';
