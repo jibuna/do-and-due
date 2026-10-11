@@ -633,6 +633,18 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
 
 .dlab .dcap { transition: opacity .32s ease; }
 .dlab .dcap.out { opacity: 0; }
+
+.subwrap { grid-column: 2; min-width: 0; }
+@media (max-width: 560px) { .subwrap { grid-column: 1 / -1; } }
+.row.p-top { box-shadow: inset 5px 0 0 var(--bad); }
+.mc.pri.p-top { background: var(--bad); color: #fff; }
+.pdot.p-top { background: var(--bad); box-shadow: 0 0 0 2px color-mix(in srgb, var(--bad) 30%, transparent); }
+.nn .nx .n { display: flex; flex-wrap: wrap; gap: 2px 6px; align-items: baseline; }
+.nn-more { margin: 8px 0 0 13px; font-size: 13px; }
+.dbar { position: relative; }
+.nowmk { position: absolute; top: -3px; width: 5px; height: 18px; margin-left: -2.5px; border-radius: 3px; background: var(--surface); box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--ink) 72%, transparent); z-index: 3; pointer-events: none; }
+.nowmk.in { background: hsl(var(--h) var(--s, 65%) var(--l, 52%)); }
+.sub-opt { margin-left: 22px; }
 </style>
 <style>
 .updbar{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 10px);z-index:60;display:flex;align-items:center;gap:10px;max-width:calc(100vw - 24px);padding:8px 8px 8px 16px;border-radius:999px;background:var(--ink);color:var(--bg);font:500 14px/1.2 var(--font-body,system-ui,sans-serif);box-shadow:0 6px 24px rgba(0,0,0,.25)}
@@ -641,7 +653,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
 .updbar .u-go{padding:0 14px;background:var(--accent);color:var(--accent-ink);font-weight:600}
 .updbar .u-x{width:32px;background:transparent;color:inherit;opacity:.7;font-size:20px;line-height:1}
 </style>
-<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_PUSH={vapid:"BGs1idw37HirnuG0r4KvnmqCJD35UeDL2i35_quTmjEItTwAZWuUl9nTZKOKCngJU3p02opFm5cAdo2PvfMUokc"};window.__DD_BUILD="0747846";</script>
+<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_PUSH={vapid:"BGs1idw37HirnuG0r4KvnmqCJD35UeDL2i35_quTmjEItTwAZWuUl9nTZKOKCngJU3p02opFm5cAdo2PvfMUokc"};window.__DD_BUILD="2bb3b10";</script>
 </head>
 <body>
 
@@ -700,6 +712,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
             <label><input type="radio" name="priority" value="low"><span>Low</span></label>
             <label><input type="radio" name="priority" value="medium"><span>Medium</span></label>
             <label><input type="radio" name="priority" value="high"><span>High</span></label>
+            <label><input type="radio" name="priority" value="top"><span>Top</span></label>
           </div>
         </fieldset>
         <p class="eff-note field" id="eff-used" hidden>This effort is used for subtasks that have no effort level of their own.</p>
@@ -744,6 +757,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
               <label><input type="radio" name="e-priority" value="low"><span>Low</span></label>
               <label><input type="radio" name="e-priority" value="medium"><span>Medium</span></label>
               <label><input type="radio" name="e-priority" value="high"><span>High</span></label>
+              <label><input type="radio" name="e-priority" value="top"><span>Top</span></label>
             </div>
           </fieldset>
           <p class="eff-note field full" id="e-eff-used" hidden>This effort is used for subtasks that have no effort level of their own.</p>
@@ -922,6 +936,10 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
         <div class="field full"><label for="s-hardFirst">Do high and heavy tasks first</label><select id="s-hardFirst" data-set="hardFirst"><option value="off">No preference</option><option value="early">Earlier in the day</option><option value="lunch">Before lunch when there is a lunch block</option></select></div>
         <label class="nobreak full"><input type="checkbox" id="s-fixedBuffer" data-set="fixedBuffer"> <span>Leave travel time around commitments too (not meals)</span></label>
         <label class="nobreak full"><input type="checkbox" id="s-showMeals" data-set="showMeals"> <span>Show meals on the day time bars</span></label>
+        <label class="nobreak full"><input type="checkbox" id="s-mealsBusy" data-set="mealsBusy"> <span>Count meals as busy time in the totals under the time bar <small>(they stay on the bar)</small></span></label>
+        <label class="nobreak full"><input type="checkbox" id="s-mealBuffer" data-set="mealBuffer"> <span>Leave travel time around meals too</span></label>
+        <label class="nobreak full"><input type="checkbox" id="s-mealBreak" data-set="mealBreak"> <span>Treat meals as breaks <small>(no extra break is kept next to a meal)</small></span></label>
+        <label class="nobreak full sub-opt"><input type="checkbox" id="s-breakStripes" data-set="breakStripes"> <span>Show breaks and travel times on the time bar with the same grey stripes as meals</span></label>
         <label class="nobreak full"><input type="checkbox" id="s-allowOverrun" data-set="allowOverrun"> <span>Let a block run up to 15 minutes past the end of the study day if that finishes the task</span></label>
       </div>
       <div class="field" style="margin-top:14px"><span class="lbl" id="days-lbl">Study days</span><div class="dchips" id="days-chips" role="group" aria-labelledby="days-lbl"></div></div>
@@ -1020,8 +1038,8 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
   var DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   var LONGDAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   var LOCAL_KEY = 'doanddue.tasks.v1';
-  var PRI = { low: 1, medium: 2, high: 3 };
-  var PRI_LABEL = { low: 'Low', medium: 'Medium', high: 'High' };
+  var PRI = { low: 1, medium: 2, high: 3, top: 4 };
+  var PRI_LABEL = { low: 'Low', medium: 'Medium', high: 'High', top: 'Top' };
   var EFF_N = { trivial: 1, light: 2, medium: 3, high: 4, heavy: 5 };
   var EFF_KEYS = ['trivial', 'light', 'medium', 'high', 'heavy'];
   var EFF_LABEL = { trivial: 'Trivial', light: 'Light', medium: 'Medium', high: 'High', heavy: 'Heavy' };
@@ -1702,13 +1720,13 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
         '<span class="t" data-act="edit" title="Edit">' + esc(t.title) + '</span>' + (t.example ? '<span class="tag">Example</span>' : '') + '</div>' +
         '<div class="meta">' + chips + subBtn + noteBtn + '</div>' +
         notesHtml +
-        (subsOpen ? subPanelHtml(t) : '') +
       '</div>' +
       '<div class="stamp' + stampCls + '">' + stamp +
         '<div class="row-actions">' +
           '<button class="link" type="button" data-act="edit" aria-label="Edit ' + esc(t.title) + '">Edit</button>' +
           '<button class="link' + (confirming ? ' confirm' : '') + '" type="button" data-act="delete" aria-label="Delete ' + esc(t.title) + '">' + (confirming ? 'Confirm?' : 'Delete') + '</button>' +
-        '</div></div></li>';
+        '</div></div>' +
+      (subsOpen ? '<div class="subwrap">' + subPanelHtml(t) + '</div>' : '') + '</li>';
   }
 
   /* the latest planned do date of a task, including its subtasks */
@@ -2147,7 +2165,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     return {
       dayStart: '09:00', dayEnd: '17:00', days: [1, 2, 3, 4, 5],
       hourSets: [],
-      blockMins: 60, gapMins: 10, classBuffer: 10, maxDayHours: 6, maxItemDayHours: 3, fixedBuffer: false, hardFirst: 'off', autoClear: true, allowOverrun: true, showMeals: true, notify: true, notifyMins: 5,
+      blockMins: 60, gapMins: 10, classBuffer: 10, maxDayHours: 6, maxItemDayHours: 3, fixedBuffer: false, hardFirst: 'off', autoClear: true, allowOverrun: true, showMeals: true, mealBuffer: false, mealsBusy: true, mealBreak: true, breakStripes: false, notify: true, notifyMins: 5,
       effortBlocks: { trivial: 0.5, light: 1, medium: 3, high: 4.5, heavy: 6, none: 2 },
       fixed: []
     };
@@ -2184,6 +2202,10 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     s.autoClear = d.autoClear !== false;
     s.allowOverrun = d.allowOverrun !== false;
     s.showMeals = d.showMeals !== false;
+    s.mealBuffer = !!d.mealBuffer;
+    s.mealsBusy = d.mealsBusy !== false;
+    s.mealBreak = d.mealBreak !== false;
+    s.breakStripes = !!d.breakStripes;
     s.notify = d.notify !== false;
     s.notifyMins = Math.min(15, Math.max(1, Math.round(+d.notifyMins) || 5));
     return s;
@@ -2685,6 +2707,8 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     var ac = document.getElementById('s-autoClear'); if (ac) ac.checked = !!s.autoClear;
     var ao = document.getElementById('s-allowOverrun'); if (ao) ao.checked = !!s.allowOverrun;
     var sm = document.getElementById('s-showMeals'); if (sm) sm.checked = !!s.showMeals;
+    [['s-mealsBusy', 'mealsBusy'], ['s-mealBuffer', 'mealBuffer'], ['s-mealBreak', 'mealBreak'], ['s-breakStripes', 'breakStripes']].forEach(function (p) { var el = document.getElementById(p[0]); if (el) el.checked = !!s[p[1]]; });
+    var bs = document.getElementById('s-breakStripes'); if (bs) { bs.disabled = !s.mealBreak; bs.closest('label').style.opacity = s.mealBreak ? '' : '.5'; }
     var nf = document.getElementById('s-notify'); if (nf) nf.checked = !!s.notify;
     put('s-notifyMins', s.notifyMins);
     EFF_KEYS.concat(['none']).forEach(function (k) {
@@ -2759,8 +2783,8 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       s.hardFirst = ['off', 'early', 'lunch'].indexOf(v) >= 0 ? v : 'off';
     } else if (k === 'fixedBuffer') {
       s.fixedBuffer = e.target.checked;
-    } else if (k === 'showMeals') {
-      s.showMeals = e.target.checked;
+    } else if (k === 'showMeals' || k === 'mealsBusy' || k === 'mealBuffer' || k === 'mealBreak' || k === 'breakStripes') {
+      s[k] = e.target.checked;
     } else if (k === 'allowOverrun') {
       s.allowOverrun = e.target.checked;
     } else if (k === 'notify') {
@@ -2779,7 +2803,9 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
   $('#set-hours').addEventListener('change', onSchedChange);
   $('#set-remind').addEventListener('change', onSchedChange);
 
-  function fixedPad(f) { var s = state.sched; return s.fixedBuffer && f.kind !== 'Meal' ? (+s.classBuffer || 0) : 0; }
+  function fixedPad(f) { var s = state.sched; return (f.kind === 'Meal' ? s.mealBuffer : s.fixedBuffer) ? (+s.classBuffer || 0) : 0; }
+  /* when meals do not count as breaks, a normal break is kept either side of one */
+  function fixedBreak(f) { var s = state.sched; return f.kind === 'Meal' && !s.mealBreak ? (+s.gapMins || 0) : 0; }
   function fixedFor(d) {
     return state.sched.fixed.filter(function (f) { return f.date ? f.date === d : (f.days || []).indexOf(dow(d)) >= 0; });
   }
@@ -2979,7 +3005,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     var parts = state.tasks.filter(function (t) { return !t.done; }).map(function (t) {
       return [t.id, t.doDate, t.due, t.dueClass || '', t.priority, t.effort, subsOf(t).map(function (s) { return [s.id, s.done ? 1 : 0, s.doDate, s.due, s.effort, (s.children || []).map(function (c) { return [c.id, c.done ? 1 : 0, c.doDate, c.due, c.effort].join('.'); }).join(',')].join('~'); }).join('|')].join('^');
     }).sort().join('\n');
-    return hash(parts + '#' + JSON.stringify(Object.assign({}, state.sched, { autoClear: 0, notify: 0, notifyMins: 0, showMeals: 0 })) + '#' + JSON.stringify(state.tt) + '#' + JSON.stringify(state.modsDoc.items));
+    return hash(parts + '#' + JSON.stringify(Object.assign({}, state.sched, { autoClear: 0, notify: 0, notifyMins: 0, showMeals: 0, mealsBusy: 0, breakStripes: 0 })) + '#' + JSON.stringify(state.tt) + '#' + JSON.stringify(state.modsDoc.items));
   }
   function isHardLevel(l) { return l === 'high' || l === 'heavy'; }
   /* a sub-task with no level of its own uses its parent's */
@@ -3054,14 +3080,14 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       var dh = dayHours(d), lo = tm(dh.start), hi = tm(dh.end);
       if (d === today) lo = Math.max(lo, nowMin);
       var busy = occurrencesOn(d).map(function (e) { return [tm(e.s) - s.classBuffer, tm(e.e) + s.classBuffer]; }), used = 0;
-      fixedFor(d).forEach(function (f) { var pd = fixedPad(f); busy.push([tm(f.start) - pd, tm(f.end) + pd]); });
+      fixedFor(d).forEach(function (f) { var pd = Math.max(fixedPad(f), fixedBreak(f)); busy.push([tm(f.start) - pd, tm(f.end) + pd]); });
       kept.forEach(function (b) { if (b.date === d) { busy.push([tm(b.start), tm(b.end) + s.gapMins]); used += tm(b.end) - tm(b.start); } });
       hiD[d] = hi;
       free[d] = subtractBusy(lo, hi + OV, busy);
       free0[d] = free[d].map(function (iv) { return iv.slice(); });
       cap[d] = Math.max(0, s.maxDayHours * 60 - used);
     });
-    var bonus = { high: 3, medium: 1 };
+    var bonus = { top: 7, high: 3, medium: 1 };
     function rank(it) { return (it.due ? Math.max(0, diffDays(it.due)) : 60) - (bonus[it.task.priority] || 0) - (it.dueClass ? 0.5 : 0); }
     /* when a task is due by a class, the latest it can run on its deadline day (class start less the travel buffer), or -1 */
     var cutCache = {};
@@ -3232,6 +3258,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     all.forEach(function (x) {
       if (x.kind === 'study') { if (blockDone(x.b)) return; t.study += x.e - x.s; if (x.e > de) t.ov += x.e - Math.max(x.s, de); }
       else if (x.kind === 'class') t.cls += x.e - x.s; else if (x.fx.kind === 'Meal') t.meal += x.e - x.s; else t.fx += x.e - x.s;
+      if (x.kind === 'fixed' && x.fx.kind === 'Meal' && !state.sched.mealsBusy) return;
       ivs.push([x.s, x.e]);
     });
     ivs.sort(function (a, b) { return a[0] - b[0]; });
@@ -3275,7 +3302,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     });
   }, 3000);
   window.addEventListener('resize', function () { if (state.tab === 'plan') renderPlan(); });
-  function dayBarHtml(d, all) {
+  function dayBarHtml(d, all, isToday) {
     var dh = dayHours(d), lo = tm(dh.start), hi = tm(dh.end);
     all.forEach(function (x) { lo = Math.min(lo, x.s); hi = Math.max(hi, x.e); });
     var span = Math.max(30, hi - lo);
@@ -3284,13 +3311,32 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       var mod = x.kind === 'class' ? x.ev.m : x.kind === 'study' ? (taskById(x.b.taskId) || {}).module : '';
       return '<i class="bk ' + x.kind + (x.kind === 'fixed' && x.fx.kind === 'Meal' ? ' meal' : '') + (x.kind === 'study' && blockDone(x.b) ? ' done' : '') + '" style="left:' + l.toFixed(2) + '%;width:' + w.toFixed(2) + '%;' + (mod ? modStyle(mod) : '') + '"></i>';
     }).join('');
+    var sc = state.sched;
+    if (sc.mealBreak && sc.breakStripes) {
+      var pre = '', studies = all.filter(function (x) { return x.kind === 'study'; });
+      function stripe(a, z) { if (z - a < 1) return ''; return '<i class="bk meal pad" style="left:' + ((a - lo) / span * 100).toFixed(2) + '%;width:' + Math.max(0.8, (z - a) / span * 100).toFixed(2) + '%"></i>'; }
+      for (var q = 0; q + 1 < studies.length; q++) { var g = studies[q + 1].s - studies[q].e; if (g > 0 && g <= (+sc.gapMins || 0) + 5) pre += stripe(studies[q].e, studies[q + 1].s); }
+      all.forEach(function (x) {
+        var pad = x.kind === 'class' ? (+sc.classBuffer || 0) : x.kind === 'fixed' ? fixedPad(x.fx) : 0;
+        if (pad) pre += stripe(x.s - pad, x.s) + stripe(x.e, x.e + pad);
+      });
+      segs = pre + segs;
+    }
     var de = tm(dh.end);
     all.forEach(function (x) {
       if (x.kind !== 'study' || blockDone(x.b) || x.e <= de) return;
       var a = Math.max(x.s, de);
       segs += '<i class="bk over" style="left:' + ((a - lo) / span * 100).toFixed(2) + '%;width:' + Math.max(1.2, (x.e - a) / span * 100).toFixed(2) + '%"></i>';
     });
-    return '<div class="track" aria-hidden="true">' + segs + '</div>';
+    var mk = '';
+    if (isToday) {
+      var nm = nowMin();
+      if (nm >= lo && nm <= hi) {
+        var inB = all.filter(function (x) { return x.kind === 'study' && !blockDone(x.b) && x.s <= nm && nm < x.e; })[0], im = inB ? (taskById(inB.b.taskId) || {}).module : '';
+        mk = '<i class="nowmk' + (inB ? ' in' : '') + '" style="left:' + ((nm - lo) / span * 100).toFixed(2) + '%;' + (im ? modStyle(im) : '') + '" title="Now"></i>';
+      }
+    }
+    return '<div class="track" aria-hidden="true">' + segs + '</div>' + mk;
   }
   function renderPlan() {
     var today = todayStr(), html = '';
@@ -3315,7 +3361,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       var rest = state.sched.days.indexOf(dow(d)) < 0, dh = dayHours(d);
       var dd = parse(d);
       html += '<section class="day"><div class="dayhead' + (i === 0 ? ' today' : '') + '"><div class="dnum"><b>' + dd.getDate() + '</b><span>' + DAYS[dd.getDay()] + '</span></div>' +
-        '<div class="dbar">' + dayBarHtml(d, all) + '<div class="dlab"><span>' + esc(dh.start) + '</span>' + capHtml(i, d, all, rest) + '<span>' + esc(dh.end) + '</span></div></div></div>' +
+        '<div class="dbar">' + dayBarHtml(d, all, i === 0) + '<div class="dlab"><span>' + esc(dh.start) + '</span>' + capHtml(i, d, all, rest) + '<span>' + esc(dh.end) + '</span></div></div></div>' +
         '<ul class="list">' + (all.length ? all.map(function (x) { return entryHtml(x, all); }).join('') : '<li class="pe none">Nothing scheduled</li>') + '</ul></section>';
     }
     flush();
@@ -3340,7 +3386,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
   }
   function nowNext() {
     var now = nowMin(), today = todayStr(), list = [];
-    for (var i = 0; i <= 14 && list.length < 8; i++) {
+    function add(i) {
       var d = addDays(today, i);
       dayEntries(d).forEach(function (x) {
         if (x.kind === 'study' && blockDone(x.b)) return;
@@ -3348,14 +3394,18 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
         list.push({ x: x, d: d, i: i });
       });
     }
+    add(0);
     var cur = list.filter(function (o) { return o.i === 0 && o.x.s <= now; })[0] || null;
-    var next = list.filter(function (o) { return o !== cur && !(o.i === 0 && o.x.s <= now); }).slice(0, 2);
-    return { cur: cur, next: next, now: now };
+    function pending() { return list.filter(function (o) { return o !== cur && !(o.i === 0 && o.x.s <= now); }); }
+    for (var i = 1; i <= 14 && pending().length < 2; i++) add(i);
+    var pend = pending();
+    return { cur: cur, pend: pend, todayN: pend.filter(function (o) { return o.i === 0; }).length, now: now };
   }
   function whenText(o) {
     var r = hm(o.x.s) + '–' + hm(o.x.e);
     return o.i === 0 ? r : (o.i === 1 ? 'Tomorrow ' : short(o.d) + ' ') + hm(o.x.s);
   }
+  state.nnOpen = false;
   function nowNextHtml() {
     var nn = nowNext(), h = '<div class="nn-h">Now</div>';
     if (nn.cur) {
@@ -3363,15 +3413,25 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       h += '<div class="cur' + (f.mod ? ' tint' : '') + '"' + (f.mod ? ' style="' + modStyle(f.mod) + '"' : '') + '><div class="tt">' + esc(f.title) + '</div><div class="st"><span>' + hm(nn.cur.x.s) + '–' + hm(nn.cur.x.e) + ' · ' + Math.max(0, nn.cur.x.e - nn.now) + ' min left</span>' +
         (f.mod ? chipHtml(f.mod) : '') + '<span>' + esc(f.tag) + '</span>' + (f.loc ? '<span class="loc">' + esc(f.loc) + '</span>' : '') + '</div></div>';
     } else {
-      var n0 = nn.next[0];
+      var n0 = nn.pend[0];
       h += '<div class="cur idle"><div class="tt">Nothing on right now</div><div class="st">' + (n0 ? (n0.i === 0 ? 'Free until ' + hm(n0.x.s) : 'Free for the rest of today') : 'Nothing scheduled in the next two weeks') + '</div></div>';
     }
-    nn.next.forEach(function (o) {
+    var open = state.nnOpen && nn.todayN > 2;
+    var show = open ? nn.pend.filter(function (o) { return o.i === 0; }) : nn.pend.slice(0, 2);
+    show.forEach(function (o) {
       var f = entryInfo(o.x);
-      h += '<div class="nx"><span class="w">' + esc(whenText(o)) + '</span><span class="n">' + esc(f.title) + ' <span class="loc">' + esc(f.tag) + '</span></span></div>';
+      h += '<div class="nx"><span class="w">' + esc(whenText(o)) + '</span><span class="n">' + (f.mod ? chipHtml(f.mod) + ' ' : '') + esc(f.title) + ' <span class="loc">' + esc(f.tag) + '</span></span></div>';
     });
+    if (nn.todayN > 2) {
+      var left = nn.todayN - show.filter(function (o) { return o.i === 0; }).length;
+      h += '<button class="link nn-more" type="button" data-act="nn-more" aria-expanded="' + open + '">' + (open ? 'Show less' : left + ' more\u2026') + '</button>';
+    }
     return h;
   }
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest || !e.target.closest('[data-act="nn-more"]')) return;
+    state.nnOpen = !state.nnOpen; renderNow();
+  });
   function renderNow() {
     ['#nn-tasks', '#nn-plan'].forEach(function (id) {
       var el = $(id);
