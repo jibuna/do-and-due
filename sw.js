@@ -1,5 +1,5 @@
 /* Do & Due service worker: lets the app open and work offline. */
-const CACHE = 'doanddue-9202b44b01';
+const CACHE = 'doanddue-9de61e09d3';
 const CORE = ['./', 'index.html', 'manifest.webmanifest', 'icon.svg', 'icon-192.png', 'icon-512.png', 'icon-maskable-512.png', 'apple-touch-icon.png', 'favicon-32.png'];
 
 self.addEventListener('install', (e) => {
@@ -11,6 +11,14 @@ self.addEventListener('activate', (e) => {
     caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE && k.startsWith('doanddue-')).map((k) => caches.delete(k))))
       .then(() => self.clients.claim())
   );
+});
+
+self.addEventListener('notificationclick', (e) => {
+  e.notification.close();
+  e.waitUntil(self.clients.matchAll({ type: 'window', includeUncached: true }).then((cs) => {
+    for (const c of cs) { if ('focus' in c) return c.focus(); }
+    return self.clients.openWindow('./');
+  }));
 });
 
 self.addEventListener('fetch', (e) => {

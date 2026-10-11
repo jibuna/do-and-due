@@ -140,6 +140,7 @@ button { cursor: pointer; }
 .row.p-high { box-shadow: inset 3px 0 0 var(--bad); }
 .row.p-medium { box-shadow: inset 3px 0 0 var(--warn); }
 .row.done { box-shadow: none; }
+.grp-foot { margin: -4px 0 14px; text-align: right; }
 .row > input[type="checkbox"] { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--accent); cursor: pointer; }
 .main { min-width: 0; display: grid; gap: 5px; }
 .line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; min-width: 0; }
@@ -184,6 +185,7 @@ button { cursor: pointer; }
 .row.done .bars i.on { background: var(--muted); }
 .prog { display: inline-block; width: 44px; height: 5px; border-radius: 3px; background: var(--line); overflow: hidden; }
 .prog i { display: block; height: 100%; background: var(--accent); }
+.blkprog { display: inline-flex; align-items: center; gap: 5px; }
 .tag { font: 500 11px/1 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 5px; padding: 3px 5px; }
 .notes { font-size: 14px; white-space: pre-wrap; overflow-wrap: anywhere; background: var(--bg); border-radius: 8px; padding: 9px 11px; }
 .row-actions { display: flex; flex-wrap: wrap; gap: 2px; margin-left: -7px; }
@@ -513,7 +515,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
 .dnum b { font: 700 26px/1 var(--font-display); letter-spacing: -.02em; }
 .dnum span { font-size: 12px; color: var(--muted); margin-top: 3px; }
 .dayhead.today .dnum b { color: var(--accent); }
-.dbar { display: grid; gap: 5px; min-width: 0; }
+.dbar { display: grid; grid-template-columns: minmax(0, 1fr); gap: 5px; min-width: 0; }
 .track { position: relative; height: 12px; border-radius: 6px; background: color-mix(in srgb, var(--ink) 7%, transparent); overflow: hidden; }
 .bk { position: absolute; top: 0; bottom: 0; --c: hsl(var(--h, 215) var(--s, 65%) var(--l, 52%)); }
 .bk.study { background: var(--c); border-radius: 3px; box-shadow: 0 0 0 1px var(--bg); }
@@ -606,6 +608,27 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
   .df { padding: 10px 18px calc(14px + env(safe-area-inset-bottom, 0px)); }
   @keyframes dlg-in { from { transform: translateY(40px); opacity: .6; } }
 }
+
+.nn { margin-bottom: 14px; padding: 14px 16px; }
+.nn .nn-h { font: 600 11.5px/1 var(--font-body); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 9px; }
+.nn .cur { --c: var(--accent); display: grid; gap: 3px; padding: 11px 13px; border-radius: 12px; background: color-mix(in srgb, var(--c) 20%, var(--surface)); box-shadow: inset 3px 0 0 var(--c); }
+.nn .cur.tint { --c: hsl(var(--h) var(--s, 65%) var(--l, 52%)); }
+.nn .cur.idle { background: color-mix(in srgb, var(--ink) 4%, transparent); box-shadow: none; color: var(--muted); }
+.nn .cur .tt { font-weight: 650; font-size: 17px; line-height: 1.25; overflow-wrap: anywhere; }
+.nn .cur .st { font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; }
+.nn .nx { display: grid; grid-template-columns: minmax(0, 118px) minmax(0, 1fr); gap: 10px; align-items: baseline; padding: 7px 13px 0; font-size: 13px; opacity: .68; }
+.nn .nx .w { font-family: var(--font-mono); font-size: 12px; }
+.nn .nx .n { overflow-wrap: anywhere; }
+.pe.study.now { background: color-mix(in srgb, var(--c) 30%, var(--surface)); border-color: color-mix(in srgb, var(--c) 55%, transparent); }
+.pe .pe-eff { display: inline-flex; gap: 5px; align-items: center; font-size: 11.5px; color: var(--muted); white-space: nowrap; }
+.pe .pe-eff .bars { transform: scale(.85); transform-origin: left center; }
+
+.dlab .dcap { flex: 1 1 auto; min-width: 0; text-align: center; white-space: nowrap; overflow: hidden; }
+.dlab > span:not(.dcap) { flex: none; }
+.dcap .ov { color: #E5686B; font-weight: 600; }
+.bk.over { background: #E5686B; border-radius: 3px; box-shadow: 0 0 0 1px var(--bg); }
+
+.bk.meal { background: repeating-linear-gradient(135deg, color-mix(in srgb, #E0A030 55%, transparent) 0 2px, transparent 2px 5px); box-shadow: inset 0 0 0 1px color-mix(in srgb, #E0A030 60%, transparent); }
 </style>
 <style>
 .updbar{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 10px);z-index:60;display:flex;align-items:center;gap:10px;max-width:calc(100vw - 24px);padding:8px 8px 8px 16px;border-radius:999px;background:var(--ink);color:var(--bg);font:500 14px/1.2 var(--font-body,system-ui,sans-serif);box-shadow:0 6px 24px rgba(0,0,0,.25)}
@@ -614,7 +637,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
 .updbar .u-go{padding:0 14px;background:var(--accent);color:var(--accent-ink);font-weight:600}
 .updbar .u-x{width:32px;background:transparent;color:inherit;opacity:.7;font-size:20px;line-height:1}
 </style>
-<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_BUILD="17cf37e";</script>
+<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_BUILD="ec5b879";</script>
 </head>
 <body>
 
@@ -632,6 +655,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
   </nav>
 
   <div class="view" id="view-tasks">
+  <section class="card nn" id="nn-tasks" aria-label="Now and next" hidden></section>
   <section class="card qa-card" id="qa-card" aria-labelledby="form-title">
     <h2 id="form-title">New task</h2>
     <form class="form" id="form" autocomplete="off" novalidate>
@@ -674,6 +698,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
             <label><input type="radio" name="priority" value="high"><span>High</span></label>
           </div>
         </fieldset>
+        <p class="eff-note field" id="eff-used" hidden>This effort is used for subtasks that have no effort level of their own.</p>
         <p class="eff-note field" id="eff-note" hidden>Effort for this task comes from its subtasks. Set it on each subtask.</p>
         <fieldset class="field" id="eff-set">
           <legend>Expected effort</legend>
@@ -717,6 +742,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
               <label><input type="radio" name="e-priority" value="high"><span>High</span></label>
             </div>
           </fieldset>
+          <p class="eff-note field full" id="e-eff-used" hidden>This effort is used for subtasks that have no effort level of their own.</p>
           <p class="eff-note field full" id="e-eff-note" hidden>Effort for this task comes from its subtasks. Set it on each subtask.</p>
           <fieldset class="field full" id="e-eff-set">
             <legend>Expected effort</legend>
@@ -763,6 +789,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
   </div>
 
   <section class="view" id="view-plan" hidden aria-label="Study plan">
+    <section class="card nn" id="nn-plan" aria-label="Now and next" hidden></section>
     <div class="card">
       <h2>Study plan</h2>
       <p class="help">Fits study blocks around your classes, by priority and deadline.</p>
@@ -837,6 +864,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
           <label class="nobreak full" id="c-nb-wrap" hidden><input type="checkbox" id="c-nb"> <span id="c-nb-txt">This module runs through breaks</span></label>
         </div>
         <div class="field"><span class="lbl" id="ck-lbl">Type</span><div class="dchips" id="c-kinds" role="radiogroup" aria-labelledby="ck-lbl"></div></div>
+        <div class="field" id="c-kother-wrap" hidden><label for="c-kother">Specify the type</label><input id="c-kother" placeholder="e.g. Workshop" maxlength="30"></div>
         <div class="field"><span class="lbl" id="cr-lbl">Repeats</span>
           <div class="seg" role="radiogroup" aria-labelledby="cr-lbl" style="justify-self:start;margin-top:5px">
             <label><input type="radio" name="c-repeat" value="weekly" id="c-rep-weekly" checked><span>Every week</span></label>
@@ -889,12 +917,14 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
         <div class="field"><label for="s-maxItemDayHours">Most on one task per day (hours)</label><input id="s-maxItemDayHours" type="number" min="0.5" max="12" step="0.5" data-set="maxItemDayHours"></div>
         <div class="field full"><label for="s-hardFirst">Do high and heavy tasks first</label><select id="s-hardFirst" data-set="hardFirst"><option value="off">No preference</option><option value="early">Earlier in the day</option><option value="lunch">Before lunch when there is a lunch block</option></select></div>
         <label class="nobreak full"><input type="checkbox" id="s-fixedBuffer" data-set="fixedBuffer"> <span>Leave travel time around commitments too (not meals)</span></label>
+        <label class="nobreak full"><input type="checkbox" id="s-showMeals" data-set="showMeals"> <span>Show meals on the day time bars</span></label>
+        <label class="nobreak full"><input type="checkbox" id="s-allowOverrun" data-set="allowOverrun"> <span>Let a block run up to 15 minutes past the end of the study day if that finishes the task</span></label>
       </div>
       <div class="field" style="margin-top:14px"><span class="lbl" id="days-lbl">Study days</span><div class="dchips" id="days-chips" role="group" aria-labelledby="days-lbl"></div></div>
       <h3 class="sub-h">Time needed per task</h3>
       <p class="help">Blocks set aside per effort level. Changing the block length rescales them. Subtasks use the same levels.</p>
       <div class="grid-form">
-        <div class="field"><label for="s-eff-trivial">Trivial (blocks)</label><input id="s-eff-trivial" type="number" min="0" max="40" step="0.25" data-set="effort.trivial"><small class="effh" id="s-eff-h-trivial"></small></div>
+        <div class="field"><label for="s-eff-trivial">Trivial (blocks, up to 1)</label><input id="s-eff-trivial" type="number" min="0" max="1" step="0.25" data-set="effort.trivial"><small class="effh" id="s-eff-h-trivial"></small></div>
         <div class="field"><label for="s-eff-light">Light (blocks)</label><input id="s-eff-light" type="number" min="0" max="40" step="0.25" data-set="effort.light"><small class="effh" id="s-eff-h-light"></small></div>
         <div class="field"><label for="s-eff-medium">Medium (blocks)</label><input id="s-eff-medium" type="number" min="0" max="40" step="0.25" data-set="effort.medium"><small class="effh" id="s-eff-h-medium"></small></div>
         <div class="field"><label for="s-eff-high">High (blocks)</label><input id="s-eff-high" type="number" min="0" max="40" step="0.25" data-set="effort.high"><small class="effh" id="s-eff-h-high"></small></div>
@@ -913,6 +943,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
         <div class="field span2"><label for="fx-label">Name</label><input id="fx-label" placeholder="e.g. Lunch" maxlength="100"></div>
         <div class="field span2"><label for="fx-loc">Location (optional)</label><input id="fx-loc" placeholder="e.g. Student Union" maxlength="100"></div>
         <div class="field"><label for="fx-kind">Type</label><select id="fx-kind"></select></div>
+        <div class="field" id="fx-kother-wrap" hidden><label for="fx-kother">Specify the type</label><input id="fx-kother" placeholder="e.g. Gym" maxlength="30"></div>
         <div class="field"><label for="fx-start">Start</label><input id="fx-start" type="time"></div>
         <div class="field"><label for="fx-end">End</label><input id="fx-end" type="time"></div>
         <div class="field"><label for="fx-date">Or a single date</label><input id="fx-date" type="date"></div>
@@ -925,9 +956,21 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       <div class="rows" id="fx-list" style="margin-top:12px"></div>
       </div>
     </details>
+    <details class="card setc" id="set-remind">
+      <summary><h2>Reminders</h2></summary>
+      <p class="help">A heads-up shortly before a study block, class or commitment starts. It appears inside the app, and as a phone notification if you allow them.</p>
+      <div class="grid-form">
+        <label class="nobreak full"><input type="checkbox" id="s-notify" data-set="notify"> <span>Remind me before things start</span></label>
+        <div class="field"><label for="s-notifyMins">Minutes before (1 to 15)</label><input id="s-notifyMins" type="number" min="1" max="15" step="1" data-set="notifyMins"></div>
+        <div class="field full"><button class="btn" type="button" id="n-perm">Turn on phone notifications</button></div>
+        <p class="hint full" id="n-status"></p>
+      </div>
+    </details>
     <details class="card setc" id="set-data">
       <summary><span class="sico"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v9.5M6 9l4 4 4-4M4 16.5h12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="stitle">Backup and restore</span><span class="ssum" id="ss-set-data">Keep a copy of your tasks and settings</span></summary>
       <div class="sbody">
+        <label class="nobreak"><input type="checkbox" id="s-autoClear"> <span>Clear completed tasks once their deadline has passed</span></label>
+        <p class="help" style="margin-top:6px">Completed tasks are struck out and kept until then. Ones with no deadline stay until you clear them.</p>
         <p class="help">A backup holds your tasks, modules, timetable and settings. Restoring adds to what you already have: tasks with the same ID are replaced and nothing else is deleted.</p>
         <div class="actions">
           <button class="btn primary" type="button" id="d-download">Download backup</button>
@@ -1022,7 +1065,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     loaded: false,
     sort: lsGet('doanddue.sort') === 'due' ? 'due' : 'do',
     module: '',
-    showDone: lsGet('doanddue.showDone') === '1',
+    showDone: lsGet('doanddue.showDone') !== '0',
     editing: null,
     pendingDelete: null,
     expanded: {},
@@ -1090,6 +1133,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     });
     render();
     startSync();
+    clearExpired();
   }
   function startDb(db) {
     var col = db.collection('tasks');
@@ -1110,6 +1154,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       state.tasks = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); });
       state.loaded = true;
       render();
+      clearExpired();
     }, function () {
       state.loaded = true;
       toast('Live updates stopped. Reload the page to reconnect.');
@@ -1275,7 +1320,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       return syncPull(tok).then(function (rows) {
         if (!SYNC.meta.backedUp) { lsSet('doanddue.presync.backup', backupText()); SYNC.meta.backedUp = true; }
         var changed = syncMerge(rows);
-        if (changed) render();
+        if (changed) { render(); clearExpired(); }
         return syncPush(tok);
       });
     }).then(function () {
@@ -1418,6 +1463,37 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     return persist(c);
   }
 
+  /* Marks a subtask done or open on a copy of the task, ticking parents and the task itself to match. Returns true if the task just became done. */
+  function applySubDone(c, sid, val) {
+    var f = findSub(c, sid), autoDone = false;
+    if (!f) return false;
+    f.item.done = val;
+    if (f.level === 2) {
+      var par = subsOf(c).filter(function (s) { return s.children === f.list; })[0];
+      if (par) par.done = f.list.every(function (x) { return x.done; });
+    }
+    var tops = subsOf(c);
+    if (tops.length) {
+      var all = tops.every(function (s) { return s.done; });
+      if (all && !c.done) autoDone = true;
+      c.done = all;
+    }
+    return autoDone;
+  }
+  /* Ticked and total study blocks planned for one task or subtask */
+  function blockProgress(taskId, subId) {
+    var tot = 0, dn = 0;
+    state.plan.blocks.forEach(function (b) {
+      if (b.taskId !== taskId || (b.subId || '') !== (subId || '')) return;
+      tot++; if (b.done) dn++;
+    });
+    return { done: dn, total: tot };
+  }
+  function progHtml(pr) {
+    if (!pr.total || !pr.done || pr.done >= pr.total) return '';
+    return '<span class="mc blkprog" title="Study blocks ticked off in the plan"><span class="prog" aria-hidden="true"><i style="width:' + Math.round(pr.done / pr.total * 100) + '%"></i></span>' + pr.done + '/' + pr.total + ' blocks</span>';
+  }
+
   /* Every planned do date for a task: its own, plus those of unfinished subtasks. */
   function planDates(t) {
     var counts = {};
@@ -1507,7 +1583,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       '<div class="f"><label for="sub-due">Deadline</label><input id="sub-due" type="date" value="' + esc(s.due) + '"></div>' +
       (s.hasKids ? '<div class="f t sub-eff-note">Effort is added up from its sub-items.</div>' :
         '<div class="f t"><label for="sub-eff">Effort</label><select id="sub-eff">' +
-        '<option value="">Not set</option>' + EFF_KEYS.map(function (k) { return '<option value="' + k + '"' + (s.effort === k ? ' selected' : '') + '>' + EFF_LABEL[k] + '</option>'; }).join('') + '</select></div>') +
+        '<option value="">Not set (uses the task\'s)</option>' + EFF_KEYS.map(function (k) { return '<option value="' + k + '"' + (s.effort === k ? ' selected' : '') + '>' + EFF_LABEL[k] + '</option>'; }).join('') + '</select></div>') +
       '<div class="acts"><button class="btn primary sm" type="button" data-act="sub-save">' + (s.editId ? 'Save' : 'Add') + '</button>' +
       '<button class="btn sm" type="button" data-act="sub-cancel">Cancel</button></div></div>';
   }
@@ -1529,6 +1605,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
         var kb = kidsOpen.reduce(function (n, c) { return n + leafMinutes(t, c, kidsOpen); }, 0) / state.sched.blockMins;
         if (!done && kb > 0) dh += '<span title="Effort, added up from its sub-items">' + IC.blocks + esc(fmtBlocks(kb)) + '</span>';
       } else if (EFF_N[it.effort]) dh += '<span title="Effort: ' + EFF_LABEL[it.effort] + '">' + barsHtml(EFF_N[it.effort]) + '</span>';
+      if (!done) dh += progHtml(blockProgress(t.id, it.id));
       var confirming = state.pendingSubDelete === it.id;
       head = '<div class="sub-row">' +
         '<input type="checkbox" data-act="sub-toggle" aria-label="Mark done: ' + esc(it.title) + '"' + (done ? ' checked' : '') + '>' +
@@ -1588,6 +1665,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       chips += '<span class="mc do' + (!t.done && doN < 0 ? ' warn' : (!t.done && doN === 0 ? ' now' : '')) + (state.sort === 'do' ? ' key' : '') + '" title="Do date">' + IC.cal + esc(sd(t.doDate)) + '</span>';
     }
     if (PRI[t.priority]) chips += '<span class="mc pri p-' + t.priority + '" title="Priority: ' + PRI_LABEL[t.priority] + '">' + IC.flag + PRI_LABEL[t.priority] + '</span>';
+    if (!t.done && !subs.length) chips += progHtml(blockProgress(t.id, ''));
     var ob = openBlocksOf(t);
     if (ob !== null) {
       if (!t.done && ob > 0) chips += '<span class="mc eff" title="Effort, added up from unfinished subtasks">' + IC.blocks + esc(fmtBlocks(ob)) + '</span>';
@@ -1619,6 +1697,12 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
         '</div></div></li>';
   }
 
+  /* the latest planned do date of a task, including its subtasks */
+  function lastDo(t) {
+    var d = t.doDate || '';
+    allSubs(t).forEach(function (x) { if (x.doDate && x.doDate > d) d = x.doDate; });
+    return d;
+  }
   function groupHtml(label, items, bad) {
     return '<section><div class="group-head' + (bad ? ' bad' : '') + '"><h3>' + esc(label) + '</h3><span class="n">' + items.length + '</span></div>' +
       '<ul class="list">' + items.map(rowHtml).join('') + '</ul></section>';
@@ -1641,19 +1725,24 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     var visible = state.tasks.filter(function (t) {
       return !state.module || (t.module || '').toLowerCase() === state.module.toLowerCase();
     });
-    var open = sortTasks(visible.filter(function (t) { return !t.done; }));
-    var done = sortTasks(visible.filter(function (t) { return t.done; }));
+    var td = todayStr();
+    /* completed tasks stay in their own group, faded and struck out */
+    function parked() { return false; }
+    var open = sortTasks(visible.filter(function (t) { return !t.done || (state.showDone && !parked(t)); }));
+    var done = state.showDone ? sortTasks(visible.filter(parked)) : [];
+    state.parked = done.map(function (t) { return t.id; });
+    var anyDone = visible.some(function (t) { return t.done; });
     var html = '', groups = [], index = {};
     open.forEach(function (t) {
       var b = bucket(keyDate(t, state.sort));
       if (!index[b.k]) { index[b.k] = { label: b.label, bad: b.bad, items: [] }; groups.push(index[b.k]); }
       index[b.k].items.push(t);
     });
-    groups.forEach(function (g) { html += groupHtml(g.label, g.items, g.bad); });
-    if (state.showDone && done.length) html += groupHtml('Done', done, false);
+    groups.forEach(function (g) { html += groupHtml(g.label, g.items, g.bad && g.items.some(function (t) { return !t.done; })); });
+    if (done.length) html += groupHtml('Completed', done, false) + '<div class="grp-foot"><button class="link' + (state.pendingClearDone ? ' confirm' : '') + '" type="button" id="clear-completed">' + (state.pendingClearDone ? 'Confirm: delete these ' + done.length + '?' : 'Clear these') + '</button></div>';
     if (!html) {
-      html = '<div class="empty"><strong>' + (done.length ? 'Everything is done' : 'No tasks for this module') + '</strong>' +
-        (done.length ? 'Turn on Show done to see completed tasks.' : 'Pick another module or add a task above.') + '</div>';
+      html = '<div class="empty"><strong>' + (anyDone ? 'Everything is done' : 'No tasks for this module') + '</strong>' +
+        (anyDone ? 'Turn on Show done to see completed tasks.' : 'Pick another module or add a task above.') + '</div>';
     }
     el.innerHTML = html;
 
@@ -1679,11 +1768,45 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     $('#foot').innerHTML = parts.join('');
   }
 
+  /* ---------- clearing completed tasks ---------- */
+  var clearing = false;
+  function removeTasks(ids) {
+    return ids.reduce(function (p, id) { return p.then(function () { return store.remove(id); }); }, Promise.resolve()).then(function () {
+      var n = state.plan.blocks.length;
+      state.plan.blocks = state.plan.blocks.filter(function (b) { return ids.indexOf(b.taskId) < 0; });
+      if (state.plan.blocks.length !== n) savePref('plan');
+    });
+  }
+  /* completed tasks whose deadline has passed go; ones with no deadline are never cleared automatically */
+  function clearExpired() {
+    if (clearing || !store || !state.loaded || !state.sched.autoClear || !(state.got && state.got.schedule)) return;
+    var td = todayStr(), ids = state.tasks.filter(function (t) { return t.done && t.due && t.due < td; }).map(function (t) { return t.id; });
+    if (!ids.length) return;
+    clearing = true;
+    removeTasks(ids).then(function () {
+      toast('Cleared ' + ids.length + (ids.length === 1 ? ' completed task' : ' completed tasks') + ' past ' + (ids.length === 1 ? 'its' : 'their') + ' deadline.');
+    }).catch(function () {}).then(function () { clearing = false; render(); });
+  }
+  var pendingClearTimer = null;
+  $('#groups').addEventListener('click', function (e) {
+    if (e.target.id !== 'clear-completed') return;
+    if (!state.pendingClearDone) {
+      state.pendingClearDone = true; clearTimeout(pendingClearTimer);
+      pendingClearTimer = setTimeout(function () { state.pendingClearDone = false; renderList(); }, 3500);
+      renderList(); return;
+    }
+    clearTimeout(pendingClearTimer); state.pendingClearDone = false;
+    var ids = (state.parked || []).slice();
+    removeTasks(ids).then(function () { toast('Cleared ' + ids.length + (ids.length === 1 ? ' task' : ' tasks') + '.'); }, saveError).then(render);
+  });
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) { render(); clearExpired(); } });
+  setInterval(clearExpired, 3600000);
+
   function render() {
     hideTip();
-    renderHead(); renderControls(); renderList(); renderFoot(); renderKey();
+    renderHead(); renderControls(); renderList(); renderFoot(); renderKey(); renderNow();
     if (state.tab === 'plan') renderPlan();
-    if (state.tab === 'settings') renderSettings();
+    if (state.tab === 'settings') { renderSettings(); renderNotifyStatus(); }
   }
 
   /* ---------- main form ---------- */
@@ -1703,7 +1826,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     form.reset();
     if (keepModule) F.module.value = m;
     state.editing = null;
-    setMore(false); $('#qa-card').classList.remove('editing');
+    setMore(true); $('#qa-card').classList.remove('editing');
     syncEffortField(null);
     $('#form-title').textContent = 'New task';
     $('#f-submit').textContent = 'Add task';
@@ -1711,10 +1834,13 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     setErr('');
     fillDueClass($('#f-dc'), $('#f-dc-wrap'), F.module.value.trim(), F.due.value, '');
   }
+  /* a task with subtasks still needs its own effort when some open step has none */
+  function needsParentEffort(t) { return !!(t && subsOf(t).length && openLeaves(t).some(function (l) { return !EFF_N[l.effort]; })); }
   function syncEffortField(t) {
-    var has = !!(t && subsOf(t).length);
-    $('#eff-set').hidden = has;
-    var n = $('#eff-note'); if (n) n.hidden = !has;
+    var has = !!(t && subsOf(t).length), need = needsParentEffort(t);
+    $('#eff-set').hidden = has && !need;
+    var n = $('#eff-note'); if (n) n.hidden = !(has && !need);
+    var u = $('#eff-used'); if (u) u.hidden = !need;
   }
   function setMore(open) {
     $('#more').hidden = !open;
@@ -1751,7 +1877,8 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     eSet('e-priority', t.priority);
     eSet('e-effort', t.effort);
     var has = !!subsOf(t).length;
-    $('#e-eff-set').hidden = has; $('#e-eff-note').hidden = !has;
+    var need = needsParentEffort(t);
+    $('#e-eff-set').hidden = has && !need; $('#e-eff-note').hidden = !(has && !need); $('#e-eff-used').hidden = !need;
     $('#e-err').textContent = '';
     $('#e-del').textContent = 'Delete'; $('#e-del').classList.remove('confirm');
     openDlg(edlg);
@@ -1784,7 +1911,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     if (known) module = known;
     var task = Object.assign({}, base, {
       module: module, title: title, doDate: $('#e-do').value || '', due: $('#e-due').value || '',
-      priority: eChoice('e-priority'), effort: subsOf(base).length ? '' : eChoice('e-effort'), notes: $('#e-notes').value.trim(), example: false,
+      priority: eChoice('e-priority'), effort: subsOf(base).length && !needsParentEffort(base) ? '' : eChoice('e-effort'), notes: $('#e-notes').value.trim(), example: false,
       dueClass: $('#e-dc-wrap').hidden ? '' : $('#e-dc').value
     });
     persist(task).then(function () { closeDlg(edlg); toast('Saved'); }, function (er) { saveError(er); });
@@ -1807,11 +1934,11 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     var editing = state.editing;
     var base = editing ? taskById(editing) : null;
     var task = base
-      ? Object.assign({}, base, { module: module, title: title, doDate: doDate, due: due, priority: priority, effort: subsOf(base).length ? '' : effort, notes: notes, example: false, dueClass: $('#f-dc-wrap').hidden ? '' : $('#f-dc').value })
+      ? Object.assign({}, base, { module: module, title: title, doDate: doDate, due: due, priority: priority, effort: subsOf(base).length && !needsParentEffort(base) ? '' : effort, notes: notes, example: false, dueClass: $('#f-dc-wrap').hidden ? '' : $('#f-dc').value })
       : { id: store.newId(), module: module, title: title, doDate: doDate, due: due, priority: priority, effort: effort, notes: notes, subtasks: [], done: false, example: false, created: Date.now(), dueClass: $('#f-dc-wrap').hidden ? '' : $('#f-dc').value };
     persist(task).then(function () {
-      resetForm(!editing);
-      F.title.focus();
+      resetForm(false);
+      F.module.focus();
     }, saveError);
   });
   /* ---------- "due by" a class on the deadline day ---------- */
@@ -1907,22 +2034,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     } else if (act === 'sub-toggle') {
       var sid = subIdFor(e.target), val = e.target.checked;
       var autoDone = false;
-      mutateTask(t.id, function (c) {
-        var f = findSub(c, sid);
-        if (!f) return;
-        f.item.done = val;
-        /* A parent is done when everything beneath it is done, and reopens when something is unticked. */
-        if (f.level === 2) {
-          var par = subsOf(c).filter(function (s) { return s.children === f.list; })[0];
-          if (par) par.done = f.list.every(function (x) { return x.done; });
-        }
-        var tops = subsOf(c);
-        if (tops.length) {
-          var all = tops.every(function (s) { return s.done; });
-          if (all && !c.done) autoDone = true;
-          c.done = all;
-        }
-      }).then(function () {
+      mutateTask(t.id, function (c) { autoDone = applySubDone(c, sid, val); }).then(function () {
         if (autoDone) toast('Every subtask is done, so "' + t.title + '" was ticked off. Turn on Show done to see it.');
       }, function (err) { saveError(err); render(); });
     }
@@ -2008,6 +2120,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
   var SWATCHES = [0, 22, 42, 80, 140, 168, 196, 222, 252, 282, 314, 340];
   var DAY_ORDER = [1, 2, 3, 4, 5, 6, 0];
   var KINDS = ['Meal', 'Social', 'Society', 'Careers', 'Other'];
+  function kindLabel(kind, other) { return kind === 'Other' && other && String(other).trim() ? String(other).trim() : (kind || ''); }
   var PRESETS = [
     { label: 'Lunch', kind: 'Meal', start: '12:30', end: '13:30', days: [1, 2, 3, 4, 5] },
     { label: 'Society', kind: 'Society', start: '18:00', end: '19:30', days: [3] },
@@ -2020,7 +2133,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     return {
       dayStart: '09:00', dayEnd: '17:00', days: [1, 2, 3, 4, 5],
       hourSets: [],
-      blockMins: 60, gapMins: 10, classBuffer: 10, maxDayHours: 6, maxItemDayHours: 3, fixedBuffer: false, hardFirst: 'off',
+      blockMins: 60, gapMins: 10, classBuffer: 10, maxDayHours: 6, maxItemDayHours: 3, fixedBuffer: false, hardFirst: 'off', autoClear: true, allowOverrun: true, showMeals: true, notify: true, notifyMins: 5,
       effortBlocks: { trivial: 0.5, light: 1, medium: 3, high: 4.5, heavy: 6, none: 2 },
       fixed: []
     };
@@ -2046,6 +2159,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       var bm = +d.blockMins > 0 ? +d.blockMins : 60;
       Object.keys(d.effort).forEach(function (k) { var h = +d.effort[k]; if (h >= 0) s.effortBlocks[k] = Math.round(h * 60 / bm * 4) / 4; });
     }
+    s.effortBlocks.trivial = Math.min(1, Math.max(0, +s.effortBlocks.trivial || 0));
     /* groups of days with their own hours; older saves had one weekend setting */
     var sets = Array.isArray(d.hourSets) ? d.hourSets : (d.splitWeekend ? [{ id: 'weekend', days: [6, 0], start: d.weekendStart || '10:00', end: d.weekendEnd || '16:00' }] : []);
     s.hourSets = cleanHourSets(sets, s);
@@ -2053,6 +2167,11 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     if (!Array.isArray(s.fixed)) s.fixed = [];
     if (['off', 'early', 'lunch'].indexOf(s.hardFirst) < 0) s.hardFirst = 'off';
     s.fixedBuffer = !!s.fixedBuffer;
+    s.autoClear = d.autoClear !== false;
+    s.allowOverrun = d.allowOverrun !== false;
+    s.showMeals = d.showMeals !== false;
+    s.notify = d.notify !== false;
+    s.notifyMins = Math.min(15, Math.max(1, Math.round(+d.notifyMins) || 5));
     return s;
   }
   function prefData(name) {
@@ -2064,6 +2183,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
   function applyPref(name, d) {
     /* Data from the shared store arrives read-only, so work on a private copy. */
     d = d && typeof d === 'object' ? JSON.parse(JSON.stringify(d)) : null;
+    (state.got = state.got || {})[name] = true;
     if (name === 'modules') state.modsDoc = { items: d && d.items && typeof d.items === 'object' ? d.items : {} };
     else if (name === 'schedule') state.sched = normSched(d);
     else if (name === 'timetable') state.tt = normTT(d);
@@ -2309,7 +2429,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     return t;
   }
   function weekStart(d) { return addDays(d, -((dow(d) + 6) % 7)); }
-  function classLabel(c) { return c.title || [c.module, c.kind].filter(Boolean).join(' ') || 'Class'; }
+  function classLabel(c) { return c.title || [c.module, kindLabel(c.kind, c.kindOther)].filter(Boolean).join(' ') || 'Class'; }
   function inBreak(d) { return state.tt.term.breaks.some(function (b) { return b.from && b.to && d >= b.from && d <= b.to; }); }
   function classDates(c, from, to, ignoreBreaks) {
     if (c.repeat === 'once') return c.date && c.date >= from && c.date <= to ? [c.date] : [];
@@ -2327,7 +2447,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
   function occurrencesOn(d) {
     var out = [];
     state.tt.classes.forEach(function (c) {
-      if (classDates(c, d, d).length) out.push({ id: c.id, d: d, s: c.start, e: c.end, t: classLabel(c), l: c.loc || '', m: c.module || '', k: c.kind || '' });
+      if (classDates(c, d, d).length) out.push({ id: c.id, d: d, s: c.start, e: c.end, t: classLabel(c), l: c.loc || '', m: c.module || '', k: kindLabel(c.kind, c.kindOther) });
     });
     state.tt.events.forEach(function (e) { if (e.d === d) out.push(e.id ? e : Object.assign({}, e, { id: 'ev:' + e.d + '|' + e.s + '|' + e.t })); });
     return out;
@@ -2346,7 +2466,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     var days = [];
     clsForm.querySelectorAll('[data-cday]').forEach(function (c) { if (c.checked) days.push(+c.getAttribute('data-cday')); });
     return {
-      id: state.clsEdit || '', module: known || module, kind: radioVal('c-kind') || 'Class', title: $('#c-title').value.trim(),
+      id: state.clsEdit || '', module: known || module, kind: radioVal('c-kind') || 'Class', kindOther: radioVal('c-kind') === 'Other' ? $('#c-kother').value.trim().slice(0, 30) : '', title: $('#c-title').value.trim(),
       repeat: radioVal('c-repeat') || 'weekly', days: days, date: $('#c-date').value, start: $('#c-start').value, end: $('#c-end').value,
       loc: $('#c-loc').value.trim(), from: $('#c-from').value, until: $('#c-until').value
     };
@@ -2363,6 +2483,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
   }
   function updateClsForm() {
     var c = readClass();
+    $('#c-kother-wrap').hidden = c.kind !== 'Other';
     $('#c-nb-wrap').hidden = !c.module;
     if (c.module) { if (document.activeElement !== $('#c-nb')) $('#c-nb').checked = modNoBreaks(c.module); $('#c-nb-txt').innerHTML = esc(c.module) + ' runs through breaks <small>(no reading week off)</small>'; }
     $('#c-days-wrap').hidden = c.repeat === 'once';
@@ -2385,11 +2506,11 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
   });
   function resetClsForm(keep) {
     var r = defaultRange();
-    var rep = keep ? radioVal('c-repeat') : 'weekly', kind = keep ? radioVal('c-kind') : 'Lecture';
+    var rep = keep ? radioVal('c-repeat') : 'weekly', kind = keep ? radioVal('c-kind') : 'Lecture', ko = keep ? $('#c-kother').value : '';
     var from = keep ? $('#c-from').value : r.from, until = keep ? $('#c-until').value : r.until;
     state.clsEdit = ''; state.clsDur = 60; state.clsTouched = !!keep;
     clsForm.reset();
-    setRadio('c-repeat', rep || 'weekly'); setRadio('c-kind', kind || 'Lecture');
+    setRadio('c-repeat', rep || 'weekly'); setRadio('c-kind', kind || 'Lecture'); $('#c-kother').value = ko;
     $('#c-from').value = from; $('#c-until').value = until;
     $('#c-save').textContent = 'Add class'; $('#c-cancel').hidden = true; $('#c-err').textContent = '';
     $('#cls-title').textContent = 'Add a class';
@@ -2399,7 +2520,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     clsForm.reset();
     state.clsEdit = asNew ? '' : c.id; state.clsTouched = true;
     $('#c-module').value = c.module || ''; $('#c-title').value = c.title || ''; $('#c-loc').value = c.loc || '';
-    setRadio('c-kind', c.kind || 'Class'); setRadio('c-repeat', c.repeat || 'weekly');
+    setRadio('c-kind', c.kind || 'Class'); $('#c-kother').value = c.kindOther || ''; setRadio('c-repeat', c.repeat || 'weekly');
     clsForm.querySelectorAll('[data-cday]').forEach(function (x) { x.checked = (c.days || []).indexOf(+x.getAttribute('data-cday')) >= 0; });
     $('#c-date').value = c.date || ''; $('#c-start').value = c.start || ''; $('#c-end').value = c.end || '';
     $('#c-from').value = c.from || ''; $('#c-until').value = c.until || '';
@@ -2547,6 +2668,11 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     put('s-blockMins', s.blockMins); put('s-gapMins', s.gapMins); put('s-classBuffer', s.classBuffer);
     put('s-maxDayHours', s.maxDayHours); put('s-maxItemDayHours', s.maxItemDayHours); put('s-hardFirst', s.hardFirst);
     var fb = document.getElementById('s-fixedBuffer'); if (fb) fb.checked = !!s.fixedBuffer;
+    var ac = document.getElementById('s-autoClear'); if (ac) ac.checked = !!s.autoClear;
+    var ao = document.getElementById('s-allowOverrun'); if (ao) ao.checked = !!s.allowOverrun;
+    var sm = document.getElementById('s-showMeals'); if (sm) sm.checked = !!s.showMeals;
+    var nf = document.getElementById('s-notify'); if (nf) nf.checked = !!s.notify;
+    put('s-notifyMins', s.notifyMins);
     EFF_KEYS.concat(['none']).forEach(function (k) {
       put('s-eff-' + k, s.effortBlocks[k]);
       var h = document.getElementById('s-eff-h-' + k);
@@ -2567,6 +2693,11 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
         '<div class="hset-t"><input type="time" data-hs="start" value="' + esc(x.start) + '" aria-label="Day starts"><span>to</span><input type="time" data-hs="end" value="' + esc(x.end) + '" aria-label="Day ends"><button class="link" type="button" data-act="hs-del">Remove</button></div></div>';
     }).join('');
   }
+  $('#s-autoClear').addEventListener('change', function (e) {
+    state.sched.autoClear = e.target.checked;
+    savePref('schedule'); render();
+    if (state.sched.autoClear) clearExpired();
+  });
   $('#hs-add').addEventListener('click', function () {
     var s = state.sched, used = {};
     s.hourSets.forEach(function (x) { x.days.forEach(function (n) { used[n] = 1; }); });
@@ -2602,7 +2733,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     hsSig = JSON.stringify(s.hourSets);
     savePref('schedule'); render();
   });
-  $('#set-hours').addEventListener('change', function (e) {
+  function onSchedChange(e) {
     var k = e.target.getAttribute('data-set');
     if (!k) return;
     var s = state.sched, v = e.target.value;
@@ -2614,17 +2745,25 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       s.hardFirst = ['off', 'early', 'lunch'].indexOf(v) >= 0 ? v : 'off';
     } else if (k === 'fixedBuffer') {
       s.fixedBuffer = e.target.checked;
+    } else if (k === 'showMeals') {
+      s.showMeals = e.target.checked;
+    } else if (k === 'allowOverrun') {
+      s.allowOverrun = e.target.checked;
+    } else if (k === 'notify') {
+      s.notify = e.target.checked;
     } else if (k === 'day') {
       var d = +e.target.getAttribute('data-day'), i = s.days.indexOf(d);
       if (e.target.checked && i < 0) s.days.push(d);
       if (!e.target.checked && i >= 0) s.days.splice(i, 1);
     } else {
-      var n = parseFloat(v), lim = { blockMins: [15, 240], gapMins: [0, 60], classBuffer: [0, 60], maxDayHours: [1, 16], maxItemDayHours: [0.5, 12], 'effort.trivial': [0, 40], 'effort.light': [0, 40], 'effort.medium': [0, 40], 'effort.high': [0, 40], 'effort.heavy': [0, 60], 'effort.none': [0, 40] }[k];
+      var n = parseFloat(v), lim = { blockMins: [15, 240], gapMins: [0, 60], classBuffer: [0, 60], maxDayHours: [1, 16], maxItemDayHours: [0.5, 12], notifyMins: [1, 15], 'effort.trivial': [0, 1], 'effort.light': [0, 40], 'effort.medium': [0, 40], 'effort.high': [0, 40], 'effort.heavy': [0, 60], 'effort.none': [0, 40] }[k];
       if (!lim || !(n >= lim[0] && n <= lim[1])) { toast('Enter a number between ' + (lim ? lim[0] + ' and ' + lim[1] : 'the allowed range') + '.'); syncSettingsInputs(true); return; }
-      if (k.indexOf('effort.') === 0) s.effortBlocks[k.slice(7)] = n; else s[k] = n;
+      if (k.indexOf('effort.') === 0) s.effortBlocks[k.slice(7)] = n; else s[k] = k === 'notifyMins' ? Math.round(n) : n;
     }
     savePref('schedule'); render();
-  });
+  }
+  $('#set-hours').addEventListener('change', onSchedChange);
+  $('#set-remind').addEventListener('change', onSchedChange);
 
   function fixedPad(f) { var s = state.sched; return s.fixedBuffer && f.kind !== 'Meal' ? (+s.classBuffer || 0) : 0; }
   function fixedFor(d) {
@@ -2641,6 +2780,8 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     $('#fx-label').value = f.label || '';
     $('#fx-loc').value = f.loc || '';
     $('#fx-kind').value = f.kind || 'Other';
+    $('#fx-kother').value = f.kindOther || '';
+    $('#fx-kother-wrap').hidden = $('#fx-kind').value !== 'Other';
     $('#fx-start').value = f.start || '';
     $('#fx-end').value = f.end || '';
     $('#fx-date').value = f.date || '';
@@ -2656,7 +2797,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     var list = state.sched.fixed;
     $('#fx-list').innerHTML = list.length ? list.map(function (f) {
       var confirming = state.fxDelete === f.id;
-      return '<div class="lrow" data-fid="' + esc(f.id) + '"><div class="grow"><span>' + esc(f.label) + '</span><span class="kind">' + esc(f.kind) + '</span>' +
+      return '<div class="lrow" data-fid="' + esc(f.id) + '"><div class="grow"><span>' + esc(f.label) + '</span><span class="kind">' + esc(kindLabel(f.kind, f.kindOther)) + '</span>' +
         '<span class="when">' + esc(fixedWhen(f)) + ' · ' + esc(f.start) + '–' + esc(f.end) + '</span>' + (f.loc ? '<span class="loc">' + esc(f.loc) + '</span>' : '') + '</div>' +
         '<button class="link" type="button" data-act="fx-edit">Edit</button>' +
         '<button class="link' + (confirming ? ' confirm' : '') + '" type="button" data-act="fx-del">' + (confirming ? 'Confirm?' : 'Delete') + '</button></div>';
@@ -2679,7 +2820,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     document.querySelectorAll('#fx-form [data-fxday]').forEach(function (c) { if (c.checked) days.push(+c.getAttribute('data-fxday')); });
     var err = !label ? 'Add a name, such as Lunch.' : (!st || !en) ? 'Add start and end times.' : tm(en) <= tm(st) ? 'The end time must be after the start time.' : (!date && !days.length) ? 'Pick the days it repeats on, or a single date.' : '';
     if (err) { toast(err); return; }
-    var item = { id: state.fxEdit || uid(), label: label, kind: $('#fx-kind').value, start: st, end: en, days: date ? [] : days, date: date || '', loc: $('#fx-loc').value.trim().slice(0, 100) };
+    var item = { id: state.fxEdit || uid(), label: label, kind: $('#fx-kind').value, kindOther: $('#fx-kind').value === 'Other' ? $('#fx-kother').value.trim().slice(0, 30) : '', start: st, end: en, days: date ? [] : days, date: date || '', loc: $('#fx-loc').value.trim().slice(0, 100) };
     var i = state.sched.fixed.findIndex(function (f) { return f.id === item.id; });
     if (i >= 0) state.sched.fixed[i] = item; else state.sched.fixed.push(item);
     savePref('schedule');
@@ -2687,6 +2828,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     render();
   });
   $('#fx-cancel').addEventListener('click', resetFixedForm);
+  $('#fx-kind').addEventListener('change', function () { $('#fx-kother-wrap').hidden = $('#fx-kind').value !== 'Other'; if (!$('#fx-kother-wrap').hidden) $('#fx-kother').focus(); });
   $('#fx-list').addEventListener('click', function (e) {
     var b = e.target.closest('[data-act]');
     if (!b) return;
@@ -2751,7 +2893,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
   }
   function leafMinutes(t, leaf, leaves) {
     if (EFF_N[leaf.effort]) return levelMinutes(leaf.effort);
-    if (EFF_N[t.effort]) return Math.max(15, Math.round(levelMinutes(t.effort) / Math.max(1, leaves.length) / 5) * 5); /* older tasks: parent effort shared across steps */
+    if (EFF_N[t.effort]) return Math.max(15, Math.round(levelMinutes(t.effort) / Math.max(1, leaves.filter(function (l) { return !EFF_N[l.effort]; }).length) / 5) * 5); /* older tasks: parent effort shared across steps */
     return levelMinutes('none');
   }
   function openBlocksOf(t) {
@@ -2769,7 +2911,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
   function planItems(kept) {
     var items = [];
     function mk(t, s, minutes, full) {
-      return { task: t, sub: s, minutes: minutes, full: full, start: (s && s.doDate) || t.doDate || '', due: (s && s.due) || t.due || '', dueClass: (s && s.due) ? '' : (t.dueClass || '') };
+      return { task: t, sub: s, level: effortOf(t, s), minutes: minutes, full: full, start: (s && s.doDate) || t.doDate || '', due: (s && s.due) || t.due || '', dueClass: (s && s.due) ? '' : (t.dueClass || '') };
     }
     state.tasks.forEach(function (t) {
       if (t.done) return;
@@ -2803,14 +2945,16 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     var parts = state.tasks.filter(function (t) { return !t.done; }).map(function (t) {
       return [t.id, t.doDate, t.due, t.dueClass || '', t.priority, t.effort, subsOf(t).map(function (s) { return [s.id, s.done ? 1 : 0, s.doDate, s.due, s.effort, (s.children || []).map(function (c) { return [c.id, c.done ? 1 : 0, c.doDate, c.due, c.effort].join('.'); }).join(',')].join('~'); }).join('|')].join('^');
     }).sort().join('\n');
-    return hash(parts + '#' + JSON.stringify(state.sched) + '#' + JSON.stringify(state.tt) + '#' + JSON.stringify(state.modsDoc.items));
+    return hash(parts + '#' + JSON.stringify(Object.assign({}, state.sched, { autoClear: 0, notify: 0, notifyMins: 0, showMeals: 0 })) + '#' + JSON.stringify(state.tt) + '#' + JSON.stringify(state.modsDoc.items));
   }
   function isHardLevel(l) { return l === 'high' || l === 'heavy'; }
+  /* a sub-task with no level of its own uses its parent's */
+  function effortOf(t, leaf) { return leaf && EFF_N[leaf.effort] ? leaf.effort : (t && t.effort) || ''; }
   function levelOfBlock(b) {
     var t = taskById(b.taskId);
     if (!t) return '';
     var sf = b.subId ? findSub(t, b.subId) : null;
-    return sf ? sf.item.effort : t.effort;
+    return effortOf(t, sf ? sf.item : null);
   }
   /* the start of the earliest meal block that looks like lunch, or -1 */
   function lunchStartOn(d) {
@@ -2821,24 +2965,40 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     });
     return best;
   }
-  /* inside each day, hard blocks take the earliest slots; easier ones follow. Keeps the old order if anything would not fit. */
-  function hardFirstRepack(days, made, free0) {
-    var mode = state.sched.hardFirst;
-    if (mode !== 'early' && mode !== 'lunch') return;
+  function isOverrunBlock(b) { return tm(b.end) > tm(dayHours(b.date).end); }
+  /* Re-lay each day's study blocks. Hard blocks can go first, and trivial blocks are bundled: a bundle never runs longer than
+     one block, has no break inside it or before it, and is followed by the usual break. Keeps the old layout if anything would not fit. */
+  function repackDays(days, made, free0) {
+    var s = state.sched, mode = s.hardFirst;
     days.forEach(function (d) {
-      var mine = made.filter(function (b) { return b.date === d; });
+      var mine = made.filter(function (b) { return b.date === d && !isOverrunBlock(b); });
       function hard(b) { return isHardLevel(levelOfBlock(b)); }
-      if (mine.length < 2 || !mine.some(hard) || mine.every(hard)) return;
-      var order = mine.slice().sort(function (a, b) { return (hard(b) ? 1 : 0) - (hard(a) ? 1 : 0) || tm(a.start) - tm(b.start); });
-      var ivs = free0[d].map(function (iv) { return iv.slice(); }), lunch = mode === 'lunch' ? lunchStartOn(d) : -1, out = [];
-      for (var i = 0; i < order.length; i++) {
-        var b = order[i], len = tm(b.end) - tm(b.start), idx = -1, k;
-        if (lunch >= 0 && hard(b)) { for (k = 0; k < ivs.length; k++) { if (ivs[k][1] - ivs[k][0] >= len && ivs[k][0] + len <= lunch) { idx = k; break; } } }
-        if (idx < 0) { for (k = 0; k < ivs.length; k++) { if (ivs[k][1] - ivs[k][0] >= len) { idx = k; break; } } }
-        if (idx < 0) return;
-        out.push([b, hm(ivs[idx][0]), hm(ivs[idx][0] + len)]);
-        ivs[idx][0] += len + state.sched.gapMins;
-        if (ivs[idx][1] - ivs[idx][0] < 5) ivs.splice(idx, 1);
+      function triv(b) { return levelOfBlock(b) === 'trivial'; }
+      var trivs = mine.filter(triv);
+      var reorder = (mode === 'early' || mode === 'lunch') && mine.length >= 2 && mine.some(hard) && !mine.every(hard);
+      if (!trivs.length && !reorder) return;
+      var units = mine.filter(function (b) { return !triv(b); }).map(function (b) { return { blocks: [b], len: tm(b.end) - tm(b.start), pos: tm(b.start), bundle: false, hard: hard(b) }; });
+      var bins = [];
+      trivs.slice().sort(function (a, b) { return (tm(b.end) - tm(b.start)) - (tm(a.end) - tm(a.start)) || tm(a.start) - tm(b.start); }).forEach(function (b) {
+        var L = tm(b.end) - tm(b.start), bin = bins.filter(function (x) { return x.len + L <= s.blockMins; })[0];
+        if (!bin) { bin = { blocks: [], len: 0, pos: 1e9, bundle: true, hard: false }; bins.push(bin); }
+        bin.blocks.push(b); bin.len += L; bin.pos = Math.min(bin.pos, tm(b.start));
+      });
+      bins.forEach(function (x) { x.blocks.sort(function (a, b) { return tm(a.start) - tm(b.start); }); units.push(x); });
+      units.sort(function (a, b) { return (reorder ? (b.hard ? 1 : 0) - (a.hard ? 1 : 0) : 0) || a.pos - b.pos; });
+      var dend = tm(dayHours(d).end), ovs = made.filter(function (b) { return b.date === d && isOverrunBlock(b); });
+      var cutAtD = ovs.reduce(function (m, b) { return Math.min(m, tm(b.start) - s.gapMins); }, dend);
+      var ivs = (free0[d] || []).map(function (iv) { return { a: iv[0], b: Math.min(iv[1], cutAtD), tail: -1 }; }).filter(function (v) { return v.b - v.a >= 5; }), lunch = mode === 'lunch' ? lunchStartOn(d) : -1, out = [];
+      for (var i = 0; i < units.length; i++) {
+        var u = units[i], pick = -1, pickAt = 0, k, at;
+        function startOf(iv) { return u.bundle && iv.tail >= 0 ? iv.tail : iv.a; }   /* a bundle may follow a block with no break */
+        if (lunch >= 0 && u.hard) { for (k = 0; k < ivs.length; k++) { at = startOf(ivs[k]); if (ivs[k].b - at >= u.len && at + u.len <= lunch) { pick = k; pickAt = at; break; } } }
+        if (pick < 0) { for (k = 0; k < ivs.length; k++) { at = startOf(ivs[k]); if (ivs[k].b - at >= u.len) { pick = k; pickAt = at; break; } } }
+        if (pick < 0) return;
+        var cur = pickAt;
+        u.blocks.forEach(function (b) { var L = tm(b.end) - tm(b.start); out.push([b, hm(cur), hm(cur + L)]); cur += L; });
+        ivs[pick].a = pickAt + u.len + s.gapMins;
+        ivs[pick].tail = u.bundle ? -1 : pickAt + u.len;
       }
       out.forEach(function (o) { o[0].start = o[1]; o[0].end = o[2]; });
     });
@@ -2855,14 +3015,15 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     hz = Math.min(hz, 42);
     var days = [];
     for (var i = 0; i < hz; i++) { var dd = addDays(today, i); if (s.days.indexOf(dow(dd)) >= 0) days.push(dd); }
-    var free = {}, cap = {}, free0 = {};
+    var free = {}, cap = {}, free0 = {}, hiD = {}, OV = s.allowOverrun ? 15 : 0;
     days.forEach(function (d) {
       var dh = dayHours(d), lo = tm(dh.start), hi = tm(dh.end);
       if (d === today) lo = Math.max(lo, nowMin);
       var busy = occurrencesOn(d).map(function (e) { return [tm(e.s) - s.classBuffer, tm(e.e) + s.classBuffer]; }), used = 0;
       fixedFor(d).forEach(function (f) { var pd = fixedPad(f); busy.push([tm(f.start) - pd, tm(f.end) + pd]); });
       kept.forEach(function (b) { if (b.date === d) { busy.push([tm(b.start), tm(b.end) + s.gapMins]); used += tm(b.end) - tm(b.start); } });
-      free[d] = subtractBusy(lo, hi, busy);
+      hiD[d] = hi;
+      free[d] = subtractBusy(lo, hi + OV, busy);
       free0[d] = free[d].map(function (iv) { return iv.slice(); });
       cap[d] = Math.max(0, s.maxDayHours * 60 - used);
     });
@@ -2883,17 +3044,49 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     /* "small" = 20% of a block. A slot this size never stands alone unless the task itself is that small. */
     var small = Math.max(5, Math.round(s.blockMins * 0.2));
     items.forEach(function (it) { it.rem = it.minutes; it.isLate = false; it.usedD = {}; });
+    var trivBins = {};
+    function addTriv(d, len) {
+      var bins = trivBins[d] = trivBins[d] || [], i = bins.findIndex(function (x) { return x + len <= s.blockMins; });
+      if (i >= 0) bins[i] += len; else bins.push(len);
+    }
     function place(it, strict, cut) {
-      var firstDay = it.start && it.start > today ? it.start : today, alone = it.full <= small;
+      var firstDay = it.start && it.start > today ? it.start : today, alone = it.full <= small || it.level === 'trivial';
       if (firstDay > lastDay) return;
-      for (var di = 0; di < days.length && it.rem > 0; di++) {
-        var d = days[di];
+      var order = days.map(function (_, i) { return i; });
+      if (it.level === 'trivial') {
+        /* prefer a day close to the earliest one that already has a bundle with room, so quick tasks cluster */
+        var first = days.filter(function (x) { return x >= firstDay; })[0], pref = [], rest = [];
+        order.forEach(function (i) {
+          var dd = days[i], bins = trivBins[dd] || [];
+          if (dd >= firstDay && first && daysBetween(first, dd) <= 2 && (!it.due || dd <= it.due) && bins.some(function (x) { return x + it.rem <= s.blockMins; })) pref.push(i); else rest.push(i);
+        });
+        order = pref.concat(rest);
+      }
+      for (var oi = 0; oi < order.length && it.rem > 0; oi++) {
+        var d = days[order[oi]];
         if (d < firstDay) continue;
-        if ((strict || cut) && it.due && d > it.due) break;
+        if ((strict || cut) && it.due && d > it.due) continue;
         var lunchAt = strict ? lunchStartOn(d) : -1, cutAt = cut ? classCutoff(it, d) : -1;
-        var endOf = function (iv) { var e = iv[1]; if (lunchAt >= 0) e = Math.min(e, lunchAt); if (cutAt >= 0) e = Math.min(e, cutAt); return e; };
+        var endOf = function (iv) { var e = Math.min(iv[1], hiD[d]); if (lunchAt >= 0) e = Math.min(e, lunchAt); if (cutAt >= 0) e = Math.min(e, cutAt); return e; };
         var used = it.usedD[d] || 0, ivs = free[d];
         while (it.rem > 0 && used < perItemCap && cap[d] > 0) {
+          /* overrun: a block may spill up to 15 minutes past the end of the day when that finishes the task in one go */
+          if (OV && lunchAt < 0 && cutAt < 0 && it.rem >= 5 && it.rem <= s.blockMins && it.rem <= perItemCap - used && it.rem <= cap[d] &&
+              !ivs.some(function (v) { return endOf(v) - v[0] >= it.rem; })) {
+            var oi2 = -1;
+            for (var k2 = 0; k2 < ivs.length; k2++) { var v2 = ivs[k2], en2 = v2[0] + it.rem; if (v2[0] < hiD[d] && en2 > hiD[d] && en2 <= v2[1] && en2 - hiD[d] <= OV) { oi2 = k2; break; } }
+            if (oi2 >= 0) {
+              var ivo = ivs[oi2], lenO = it.rem, ccO = classCutoff(it, d);
+              if (ccO >= 0 && ivo[0] >= ccO) it.isLate = true;
+              made.push({ id: uid(), date: d, start: hm(ivo[0]), end: hm(ivo[0] + lenO), taskId: it.task.id, subId: it.sub ? it.sub.id : '', auto: true, done: false });
+              ivo[0] += lenO + s.gapMins;
+              if (ivo[1] - ivo[0] < 5) ivs.splice(oi2, 1);
+              it.rem = 0; used += lenO; cap[d] -= lenO;
+              if (it.level === 'trivial') addTriv(d, lenO);
+              if (it.due && d > it.due) it.isLate = true;
+              continue;
+            }
+          }
           /* a slot that will not finish the task has to be longer than 20% of a block; otherwise it waits for a later gap */
           var need = (alone || it.rem <= small) ? it.rem : Math.min(it.rem, small + 1);
           var idx = -1;
@@ -2914,6 +3107,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
           iv[0] += len + s.gapMins;
           if (iv[1] - iv[0] < 5) ivs.splice(idx, 1);
           it.rem -= len; used += len; cap[d] -= len;
+          if (it.level === 'trivial') addTriv(d, len);
           if (it.due && d > it.due) it.isLate = true;
         }
         it.usedD[d] = used;
@@ -2929,7 +3123,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       if (it.rem > 0) short_.push(name + ' (' + dur(it.rem) + ')');
       else if (it.isLate) late.push(name);
     });
-    hardFirstRepack(days, made, free0);
+    repackDays(days, made, free0);
     return { blocks: kept.concat(made), made: made, short: short_, late: late, items: items.length };
   }
   function generatePlan() {
@@ -2958,6 +3152,15 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     out.sort(function (a, b) { return a.s - b.s || a.e - b.e; });
     return out;
   }
+  /* a block counts as done when it is ticked or its task (or subtask) is complete */
+  function blockDone(b) {
+    if (b.done) return true;
+    var t = taskById(b.taskId);
+    if (!t) return false;
+    if (t.done) return true;
+    var sf = b.subId ? findSub(t, b.subId) : null;
+    return !!(sf && sf.item.done);
+  }
   function entryHtml(x, all) {
     var range = hm(x.s) + '–' + hm(x.e);
     if (x.kind === 'class') {
@@ -2966,9 +3169,12 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
         '<span class="pl"><span>' + esc(ev.t) + '</span>' + (ev.l ? '<span class="loc">' + esc(ev.l) + '</span>' : '') + '</span><span class="kind">' + esc(ev.k || 'Class') + '</span></li>';
     }
     if (x.kind === 'fixed') {
-      return '<li class="pe fixed"><span></span><span class="pt">' + range + '</span><span class="pl"><span>' + esc(x.fx.label) + '</span>' + (x.fx.loc ? '<span class="loc">' + esc(x.fx.loc) + '</span>' : '') + '</span><span class="kind">' + esc(x.fx.kind) + '</span></li>';
+      return '<li class="pe fixed"><span></span><span class="pt">' + range + '</span><span class="pl"><span>' + esc(x.fx.label) + '</span>' + (x.fx.loc ? '<span class="loc">' + esc(x.fx.loc) + '</span>' : '') + '</span><span class="kind">' + esc(kindLabel(x.fx.kind, x.fx.kindOther)) + '</span></li>';
     }
     var b = x.b, t = taskById(b.taskId), sf = t && b.subId ? findSub(t, b.subId) : null, sub = sf ? sf.item : null;
+    var info = studyInfo(b);
+    var bdone = blockDone(b), taskDone = bdone && !b.done;
+    var isNow = !bdone && b.date === todayStr() && x.s <= nowMin() && nowMin() < x.e;
     var bf = state.sched.classBuffer || 0;
     function nameOf(o) { return o.kind === 'class' ? o.ev.t : o.kind === 'fixed' ? o.fx.label : 'another study block'; }
     var overlaps = all.filter(function (o) { return o !== x && o.s < x.e && o.e > x.s; }).map(nameOf);
@@ -2976,25 +3182,74 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     var warn = [];
     if (overlaps.length) warn.push('Overlaps ' + overlaps.join(', '));
     if (tooClose.length) warn.push('Under ' + bf + ' min from ' + tooClose.join(', '));
-    if (t && t.due && b.date > t.due && !b.done) warn.push('After the deadline (' + short(t.due) + ')');
-    var dcO = t && !(sub && sub.due) && b.date === t.due && !b.done ? dueClassOcc(t) : null;
+    if (t && t.due && b.date > t.due && !bdone) warn.push('After the deadline (' + short(t.due) + ')');
+    var dcO = t && !(sub && sub.due) && b.date === t.due && !bdone ? dueClassOcc(t) : null;
     if (dcO && tm(b.start) >= tm(dcO.s)) warn.push('After the ' + (dcO.k || 'class').toLowerCase() + ' it is due by (' + dcO.s + ')');
-    return '<li class="pe study tint' + (b.done ? ' done' : '') + '"' + (t ? ' style="' + modStyle(t.module) + '"' : '') + ' data-bid="' + esc(b.id) + '">' +
-      '<input type="checkbox" data-act="blk-done" aria-label="Mark block done"' + (b.done ? ' checked' : '') + '>' +
+    var prg = blockProgress(b.taskId, b.subId);
+    return '<li class="pe study tint' + (bdone ? ' done' : '') + (isNow ? ' now' : '') + '"' + (t ? ' style="' + modStyle(t.module) + '"' : '') + ' data-bid="' + esc(b.id) + '">' +
+      '<input type="checkbox" data-act="blk-done" aria-label="Mark block done"' + (bdone ? ' checked' : '') + (taskDone ? ' disabled title="The task is complete"' : '') + '>' +
       '<span class="pt">' + range + '</span>' +
-      '<span class="pl">' + (t ? chipHtml(t.module) + '<span>' + esc(t.title) + (sub ? ' · ' + esc(sub.title) : '') + '</span>' : '<span>Removed task</span>') + '</span>' +
+      '<span class="pl">' + (t ? chipHtml(t.module) + '<span>' + esc(info.title) + '</span>' + (EFF_N[info.level] ? '<span class="pe-eff" title="Effort: ' + EFF_LABEL[info.level] + (info.inherited ? ' (the task\'s)' : '') + '">' + barsHtml(EFF_N[info.level]) + EFF_LABEL[info.level] + '</span>' : '') + (prg.total > 1 ? '<span class="pe-eff" title="Blocks ticked off for this step">' + prg.done + '/' + prg.total + '</span>' : '') : '<span>Removed task</span>') + '</span>' +
       '<button class="link" type="button" data-act="blk-edit">Edit</button>' +
-      (warn.length ? '<span class="pwarn">' + IC.flag + esc(warn.join('. ')) + '</span>' : '') + '</li>';
+      (warn.length && !bdone ? '<span class="pwarn">' + IC.flag + esc(warn.join('. ')) + '</span>' : '') + '</li>';
   }
+  function dayTotals(d, all) {
+    var t = { study: 0, cls: 0, fx: 0, meal: 0, ov: 0, busy: 0 }, de = tm(dayHours(d).end), ivs = [];
+    all.forEach(function (x) {
+      if (x.kind === 'study') { if (blockDone(x.b)) return; t.study += x.e - x.s; if (x.e > de) t.ov += x.e - Math.max(x.s, de); }
+      else if (x.kind === 'class') t.cls += x.e - x.s; else if (x.fx.kind === 'Meal') t.meal += x.e - x.s; else t.fx += x.e - x.s;
+      ivs.push([x.s, x.e]);
+    });
+    ivs.sort(function (a, b) { return a[0] - b[0]; });
+    var cur = -1;
+    ivs.forEach(function (v) { var a = Math.max(v[0], cur); if (v[1] > a) { t.busy += v[1] - a; cur = v[1]; } });
+    return t;
+  }
+  /* the caption under a day bar: a single line when it fits, otherwise it cycles through each total */
+  function capHtml(i, d, all, rest) {
+    var t = dayTotals(d, all), lead = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : '', parts = [];
+    if (t.study) parts.push(['study', dur(t.study) + ' study']);
+    if (t.cls) parts.push(['class', dur(t.cls) + ' class']);
+    if (t.fx) parts.push(['fx', dur(t.fx) + ' commitments']);
+    if (t.meal && state.sched.showMeals) parts.push(['meal', dur(t.meal) + (t.meal > 0 ? ' meals' : '')]);
+    var cyc = parts.slice();
+    if (parts.length > 1) cyc.push(['busy', dur(t.busy) + ' busy']);
+    if (t.ov) { parts.push(['ov', '+' + dur(t.ov) + ' overrun']); cyc.push(['ov', '+' + dur(t.ov) + ' overrun']); }
+    if (!parts.length && rest) parts.push(['', 'Rest day']);
+    var items = parts.map(function (p) { return '<span' + (p[0] === 'ov' ? ' class="ov"' : '') + '>' + esc(p[1]) + '</span>'; });
+    if (lead) items.unshift('<span>' + lead + '</span>');
+    return '<span class="dcap" data-cyc="' + esc(JSON.stringify(cyc)) + '">' + items.join(' · ') + '</span>';
+  }
+  var capIdx = 0;
+  function cycText(el) {
+    var c; try { c = JSON.parse(el.getAttribute('data-cyc')); } catch (e) { c = []; }
+    if (!c.length) return;
+    var p = c[capIdx % c.length];
+    el.innerHTML = '<span' + (p[0] === 'ov' ? ' class="ov"' : '') + '>' + esc(p[1]) + '</span>';
+  }
+  function fitCaps() {
+    document.querySelectorAll('#plan-days .dcap').forEach(function (el) {
+      el.removeAttribute('data-cycle');
+      if (el.clientWidth && el.scrollWidth > el.clientWidth + 1) { el.setAttribute('data-cycle', '1'); cycText(el); }
+    });
+  }
+  setInterval(function () { capIdx++; document.querySelectorAll('#plan-days .dcap[data-cycle]').forEach(cycText); }, 2500);
+  window.addEventListener('resize', function () { if (state.tab === 'plan') renderPlan(); });
   function dayBarHtml(d, all) {
     var dh = dayHours(d), lo = tm(dh.start), hi = tm(dh.end);
     all.forEach(function (x) { lo = Math.min(lo, x.s); hi = Math.max(hi, x.e); });
     var span = Math.max(30, hi - lo);
-    var segs = all.map(function (x) {
+    var segs = all.filter(function (x) { return state.sched.showMeals || !(x.kind === 'fixed' && x.fx.kind === 'Meal'); }).map(function (x) {
       var l = (x.s - lo) / span * 100, w = Math.max(1.2, (x.e - x.s) / span * 100);
       var mod = x.kind === 'class' ? x.ev.m : x.kind === 'study' ? (taskById(x.b.taskId) || {}).module : '';
-      return '<i class="bk ' + x.kind + (x.kind === 'study' && x.b.done ? ' done' : '') + '" style="left:' + l.toFixed(2) + '%;width:' + w.toFixed(2) + '%;' + (mod ? modStyle(mod) : '') + '"></i>';
+      return '<i class="bk ' + x.kind + (x.kind === 'fixed' && x.fx.kind === 'Meal' ? ' meal' : '') + (x.kind === 'study' && blockDone(x.b) ? ' done' : '') + '" style="left:' + l.toFixed(2) + '%;width:' + w.toFixed(2) + '%;' + (mod ? modStyle(mod) : '') + '"></i>';
     }).join('');
+    var de = tm(dh.end);
+    all.forEach(function (x) {
+      if (x.kind !== 'study' || blockDone(x.b) || x.e <= de) return;
+      var a = Math.max(x.s, de);
+      segs += '<i class="bk over" style="left:' + ((a - lo) / span * 100).toFixed(2) + '%;width:' + Math.max(1.2, (x.e - a) / span * 100).toFixed(2) + '%"></i>';
+    });
     return '<div class="track" aria-hidden="true">' + segs + '</div>';
   }
   function renderPlan() {
@@ -3017,18 +3272,125 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       var d = addDays(today, i), all = dayEntries(d);
       if (!all.length && i > 0) { run.push(d); continue; }
       flush();
-      var studyMin = all.reduce(function (n, x) { return x.kind === 'study' && !x.b.done ? n + x.e - x.s : n; }, 0);
       var rest = state.sched.days.indexOf(dow(d)) < 0, dh = dayHours(d);
       var dd = parse(d);
-      var cap = (i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : '') + (studyMin ? (i < 2 ? ' · ' : '') + dur(studyMin) + ' study' : '') + (rest && !studyMin ? (i < 2 ? ' · ' : '') + 'Rest day' : '');
       html += '<section class="day"><div class="dayhead' + (i === 0 ? ' today' : '') + '"><div class="dnum"><b>' + dd.getDate() + '</b><span>' + DAYS[dd.getDay()] + '</span></div>' +
-        '<div class="dbar">' + dayBarHtml(d, all) + '<div class="dlab"><span>' + esc(dh.start) + '</span><span class="dcap">' + esc(cap) + '</span><span>' + esc(dh.end) + '</span></div></div></div>' +
+        '<div class="dbar">' + dayBarHtml(d, all) + '<div class="dlab"><span>' + esc(dh.start) + '</span>' + capHtml(i, d, all, rest) + '<span>' + esc(dh.end) + '</span></div></div></div>' +
         '<ul class="list">' + (all.length ? all.map(function (x) { return entryHtml(x, all); }).join('') : '<li class="pe none">Nothing scheduled</li>') + '</ul></section>';
     }
     flush();
     $('#plan-days').innerHTML = html;
+    fitCaps();
     $('#plan-more').hidden = state.planDays >= 42;
   }
+  function nowMin() { var n = new Date(); return n.getHours() * 60 + n.getMinutes(); }
+  /* What to call a study block: a step with its own effort is named under its task; one without points at the task and uses the task's effort. */
+  function studyInfo(b) {
+    var t = taskById(b.taskId);
+    if (!t) return { title: 'Removed task', mod: '', level: '', inherited: false };
+    var sf = b.subId ? findSub(t, b.subId) : null, sub = sf ? sf.item : null;
+    var own = !!(sub && EFF_N[sub.effort]);
+    return { title: own ? t.title + ' · ' + sub.title : t.title, mod: t.module, level: effortOf(t, sub), inherited: !!sub && !own };
+  }
+  function entryInfo(x) {
+    if (x.kind === 'class') return { title: x.ev.t, mod: x.ev.m || '', tag: x.ev.k || 'Class', loc: x.ev.l || '' };
+    if (x.kind === 'fixed') return { title: x.fx.label, mod: '', tag: kindLabel(x.fx.kind, x.fx.kindOther), loc: x.fx.loc || '' };
+    var i = studyInfo(x.b);
+    return { title: i.title, mod: i.mod, tag: 'Study', loc: '', level: i.level };
+  }
+  function nowNext() {
+    var now = nowMin(), today = todayStr(), list = [];
+    for (var i = 0; i <= 14 && list.length < 8; i++) {
+      var d = addDays(today, i);
+      dayEntries(d).forEach(function (x) {
+        if (x.kind === 'study' && blockDone(x.b)) return;
+        if (i === 0 && x.e <= now) return;
+        list.push({ x: x, d: d, i: i });
+      });
+    }
+    var cur = list.filter(function (o) { return o.i === 0 && o.x.s <= now; })[0] || null;
+    var next = list.filter(function (o) { return o !== cur && !(o.i === 0 && o.x.s <= now); }).slice(0, 2);
+    return { cur: cur, next: next, now: now };
+  }
+  function whenText(o) {
+    var r = hm(o.x.s) + '–' + hm(o.x.e);
+    return o.i === 0 ? r : (o.i === 1 ? 'Tomorrow ' : short(o.d) + ' ') + hm(o.x.s);
+  }
+  function nowNextHtml() {
+    var nn = nowNext(), h = '<div class="nn-h">Now</div>';
+    if (nn.cur) {
+      var f = entryInfo(nn.cur.x);
+      h += '<div class="cur' + (f.mod ? ' tint' : '') + '"' + (f.mod ? ' style="' + modStyle(f.mod) + '"' : '') + '><div class="tt">' + esc(f.title) + '</div><div class="st"><span>' + hm(nn.cur.x.s) + '–' + hm(nn.cur.x.e) + ' · ' + Math.max(0, nn.cur.x.e - nn.now) + ' min left</span>' +
+        (f.mod ? chipHtml(f.mod) : '') + '<span>' + esc(f.tag) + '</span>' + (f.loc ? '<span class="loc">' + esc(f.loc) + '</span>' : '') + '</div></div>';
+    } else {
+      var n0 = nn.next[0];
+      h += '<div class="cur idle"><div class="tt">Nothing on right now</div><div class="st">' + (n0 ? (n0.i === 0 ? 'Free until ' + hm(n0.x.s) : 'Free for the rest of today') : 'Nothing scheduled in the next two weeks') + '</div></div>';
+    }
+    nn.next.forEach(function (o) {
+      var f = entryInfo(o.x);
+      h += '<div class="nx"><span class="w">' + esc(whenText(o)) + '</span><span class="n">' + esc(f.title) + ' <span class="loc">' + esc(f.tag) + '</span></span></div>';
+    });
+    return h;
+  }
+  function renderNow() {
+    ['#nn-tasks', '#nn-plan'].forEach(function (id) {
+      var el = $(id);
+      if (el.offsetParent === null && el.hidden === false) return;
+      el.innerHTML = nowNextHtml(); el.hidden = false;
+    });
+  }
+  /* reminders: a toast, and a system notification when allowed, shortly before something starts */
+  function sendSystemNote(title, body, tag) {
+    try {
+      if (!('Notification' in window) || Notification.permission !== 'granted') return;
+      var opts = { body: body, tag: tag, icon: 'icon-192.png' };
+      if (navigator.serviceWorker && navigator.serviceWorker.getRegistration) {
+        navigator.serviceWorker.getRegistration().then(function (reg) { if (reg && reg.showNotification) reg.showNotification(title, opts); else new Notification(title, opts); }).catch(function () {});
+      } else new Notification(title, opts);
+    } catch (e) {}
+  }
+  function checkReminders() {
+    var sc = state.sched;
+    if (!sc || !sc.notify || !state.loaded) return;
+    var lead = sc.notifyMins || 5, now = nowMin(), today = todayStr(), sent = {}, changed = false;
+    try { sent = JSON.parse(lsGet('doanddue.notified') || '{}') || {}; } catch (e) { sent = {}; }
+    Object.keys(sent).forEach(function (k) { if (k.indexOf(today) !== 0) { delete sent[k]; changed = true; } });
+    dayEntries(today).forEach(function (x) {
+      if (x.kind === 'study' && blockDone(x.b)) return;
+      var diff = x.s - now;
+      if (diff < 0 || diff > lead) return;
+      var id = x.kind === 'study' ? x.b.id : x.kind === 'class' ? x.ev.id : x.fx.id, key = today + '|' + x.kind + '|' + id + '|' + x.s;
+      if (sent[key]) return;
+      sent[key] = 1; changed = true;
+      var f = entryInfo(x), title = (diff === 0 ? 'Starting now: ' : 'In ' + diff + ' min: ') + f.title, body = hm(x.s) + '–' + hm(x.e) + (f.loc ? ' · ' + f.loc : '');
+      toast(title + ' (' + hm(x.s) + ')');
+      sendSystemNote(title, body, key);
+    });
+    if (changed) lsSet('doanddue.notified', JSON.stringify(sent));
+  }
+  function renderNotifyStatus() {
+    var el = $('#n-status'), btn = $('#n-perm');
+    if (!el || !btn) return;
+    if (!('Notification' in window)) { btn.hidden = true; el.textContent = 'Phone notifications are not available in this browser. On an iPhone, add the app to your Home Screen first. In-app reminders still work.'; return; }
+    var p = Notification.permission;
+    btn.hidden = p === 'granted';
+    el.textContent = p === 'granted' ? 'Phone notifications are on. They show while the app is open or was recently open in the background.' : p === 'denied' ? 'Notifications are blocked for this site. Allow them in your browser or phone settings.' : 'Reminders appear inside the app. Turn on phone notifications to get them outside the app too.';
+  }
+  $('#n-perm').addEventListener('click', function () {
+    if (!('Notification' in window)) { renderNotifyStatus(); return; }
+    Promise.resolve(Notification.requestPermission()).then(renderNotifyStatus, renderNotifyStatus);
+  });
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) { checkReminders(); renderNow(); } });
+  var tickMin = -1;
+  setInterval(function () {
+    checkReminders();
+    var m = Math.floor(Date.now() / 60000);
+    if (m === tickMin) return;
+    tickMin = m;
+    renderNow();
+    var open = document.querySelector('dialog[open]'), ae = document.activeElement;
+    if (state.tab === 'plan' && !open && !(ae && ae.closest && ae.closest('#plan-days'))) renderPlan();
+  }, 15000);
   var blkForm = $('#blk-form');
   $('#b-x').addEventListener('click', function () { closeBlockForm(); });
   $('#blk-dlg').addEventListener('close', function () { state.editBlock = ''; });
@@ -3099,7 +3461,21 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     var b = state.plan.blocks.filter(function (x) { return x.id === id; })[0];
     if (!b) return;
     b.done = e.target.checked;
-    savePref('plan'); render();
+    savePref('plan');
+    /* Ticking the last block of a task or subtask completes it on the Tasks tab, and unticking reopens it. */
+    var pr = blockProgress(b.taskId, b.subId), tk = taskById(b.taskId);
+    if (tk) {
+      var sf = b.subId ? findSub(tk, b.subId) : null;
+      var cur = b.subId ? !!(sf && sf.item.done) : !!tk.done;
+      var want = pr.done === pr.total;
+      if ((b.subId && !sf) || (!b.subId && subsOf(tk).length)) { /* nothing to sync */ }
+      else if (want !== cur) {
+        var ttl = b.subId ? sf.item.title : tk.title;
+        var p = b.subId ? mutateTask(tk.id, function (c) { applySubDone(c, b.subId, want); }) : persist(Object.assign({}, tk, { done: want }));
+        p.then(function () { toast(want ? '"' + ttl + '" was ticked off on the Tasks tab.' : '"' + ttl + '" was reopened.'); }, function (err) { saveError(err); render(); });
+      }
+    }
+    render();
   });
 
   /* ---------- tabs ---------- */
@@ -3120,8 +3496,8 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     if (b) setTab(b.getAttribute('data-tab'));
   });
   function initUi() {
-    var saved = lsGet('doanddue.tab');
-    state.tab = TABS.indexOf(saved) >= 0 ? saved : 'tasks';
+    state.tab = 'plan';
+    setMore(true);
     applyTab();
     var fxd = $('#fx-days');
     fxd.innerHTML = DAY_ORDER.map(function (d) {
