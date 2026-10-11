@@ -628,7 +628,8 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
 .dcap .ov { color: #E5686B; font-weight: 600; }
 .bk.over { background: #E5686B; border-radius: 3px; box-shadow: 0 0 0 1px var(--bg); }
 
-.bk.meal { background: repeating-linear-gradient(135deg, color-mix(in srgb, #E0A030 55%, transparent) 0 2px, transparent 2px 5px); box-shadow: inset 0 0 0 1px color-mix(in srgb, #E0A030 60%, transparent); }
+
+.bk.meal { background: #EFEBDD; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 28%, transparent); }
 </style>
 <style>
 .updbar{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 10px);z-index:60;display:flex;align-items:center;gap:10px;max-width:calc(100vw - 24px);padding:8px 8px 8px 16px;border-radius:999px;background:var(--ink);color:var(--bg);font:500 14px/1.2 var(--font-body,system-ui,sans-serif);box-shadow:0 6px 24px rgba(0,0,0,.25)}
@@ -637,7 +638,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
 .updbar .u-go{padding:0 14px;background:var(--accent);color:var(--accent-ink);font-weight:600}
 .updbar .u-x{width:32px;background:transparent;color:inherit;opacity:.7;font-size:20px;line-height:1}
 </style>
-<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_BUILD="ec5b879";</script>
+<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_PUSH={vapid:"BGs1idw37HirnuG0r4KvnmqCJD35UeDL2i35_quTmjEItTwAZWuUl9nTZKOKCngJU3p02opFm5cAdo2PvfMUokc"};window.__DD_BUILD="1573983";</script>
 </head>
 <body>
 
@@ -1325,6 +1326,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       });
     }).then(function () {
       SYNC.meta.last = Date.now(); syncSaveMeta();
+      pushAfterSync();
     }, function (e) {
       SYNC.err = syncErrText(e);
       if (e && e.code === 'signedout') toast('Signed out of sync. Sign in again in Settings.');
@@ -1602,7 +1604,7 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       if (it.due) dh += '<span class="' + (!done ? (dueN < 0 ? 'bad' : (dueN <= 2 ? 'warn' : '')) : '') + '" title="Deadline">' + IC.clock + esc(sd(it.due)) + '</span>';
       var kidsOpen = (it.children || []).filter(function (c) { return !c.done; });
       if (level === 1 && (it.children || []).length) {
-        var kb = kidsOpen.reduce(function (n, c) { return n + leafMinutes(t, c, kidsOpen); }, 0) / state.sched.blockMins;
+        var kb = leavesMinutes(t, kidsOpen) / state.sched.blockMins;
         if (!done && kb > 0) dh += '<span title="Effort, added up from its sub-items">' + IC.blocks + esc(fmtBlocks(kb)) + '</span>';
       } else if (EFF_N[it.effort]) dh += '<span title="Effort: ' + EFF_LABEL[it.effort] + '">' + barsHtml(EFF_N[it.effort]) + '</span>';
       if (!done) dh += progHtml(blockProgress(t.id, it.id));
@@ -2891,16 +2893,26 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     });
     return out;
   }
-  function leafMinutes(t, leaf, leaves) {
-    if (EFF_N[leaf.effort]) return levelMinutes(leaf.effort);
-    if (EFF_N[t.effort]) return Math.max(15, Math.round(levelMinutes(t.effort) / Math.max(1, leaves.filter(function (l) { return !EFF_N[l.effort]; }).length) / 5) * 5); /* older tasks: parent effort shared across steps */
-    return levelMinutes('none');
+  /* steps with their own effort count separately; all steps without one count once, as the task itself, at the task's effort */
+  function leavesMinutes(t, leaves) {
+    var n = 0, bare = false;
+    leaves.forEach(function (l) { if (EFF_N[l.effort]) n += levelMinutes(l.effort); else bare = true; });
+    return n + (bare ? levelMinutes(t.effort) : 0);
+  }
+  function effortlessLeaves(t) {
+    var out = [];
+    subsOf(t).forEach(function (s) {
+      var ch = s.children || [];
+      if (ch.length) ch.forEach(function (c) { if (!EFF_N[c.effort]) out.push(c); });
+      else if (!EFF_N[s.effort]) out.push(s);
+    });
+    return out;
   }
   function openBlocksOf(t) {
     var subs = subsOf(t);
     if (!subs.length) return null;
     var lv = openLeaves(t);
-    return lv.reduce(function (n, l) { return n + leafMinutes(t, l, lv); }, 0) / state.sched.blockMins;
+    return leavesMinutes(t, lv) / state.sched.blockMins;
   }
   function fmtBlocks(n) { n = Math.round(n * 4) / 4; return n + (n === 1 ? ' block' : ' blocks'); }
   function keptMinutes(kept, taskId, subId) {
@@ -2918,10 +2930,20 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       var subs = subsOf(t);
       if (subs.length) {
         var lv = openLeaves(t);
+        var bare = [];
         lv.forEach(function (s) {
-          var fm = leafMinutes(t, s, lv), m = fm - keptMinutes(kept, t.id, s.id);
+          if (!EFF_N[s.effort]) { bare.push(s); return; }
+          var fm = levelMinutes(s.effort), m = fm - keptMinutes(kept, t.id, s.id);
           if (m >= 5) items.push(mk(t, s, m, fm));
         });
+        /* steps with no effort of their own are planned as the task itself */
+        if (bare.length) {
+          var fb = levelMinutes(t.effort), mb = fb - keptMinutes(kept, t.id, ''), it0 = mk(t, null, mb, fb);
+          var dues = bare.map(function (x) { return x.due; }).concat([t.due]).filter(Boolean).sort();
+          var starts = bare.map(function (x) { return x.doDate; }).concat([t.doDate]).filter(Boolean).sort();
+          it0.due = dues[0] || ''; it0.start = starts[0] || '';
+          if (mb >= 5) items.push(it0);
+        }
       } else {
         var f2 = levelMinutes(t.effort), m2 = f2 - keptMinutes(kept, t.id, '');
         if (m2 >= 5) items.push(mk(t, null, m2, f2));
@@ -3368,17 +3390,75 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
     });
     if (changed) lsSet('doanddue.notified', JSON.stringify(sent));
   }
+  /* push: reminders are uploaded to the server, which sends them to this device even when the app is closed */
+  var PUSH = { subbed: false };
+  function pushOn() { return !!(window.__DD_PUSH && window.__DD_PUSH.vapid && 'PushManager' in window && 'serviceWorker' in navigator && SYNC && SYNC.on && SYNC.meta.sess); }
+  function b64u8(b) {
+    var p = '='.repeat((4 - b.length % 4) % 4), r = atob((b + p).replace(/-/g, '+').replace(/_/g, '/')), o = new Uint8Array(r.length);
+    for (var i = 0; i < r.length; i++) o[i] = r.charCodeAt(i);
+    return o;
+  }
+  function pushSubscribe() {
+    return navigator.serviceWorker.getRegistration().then(function (reg) {
+      if (!reg) return Promise.reject({ code: 'nosw' });
+      return reg.pushManager.getSubscription().then(function (sub) { return sub || reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64u8(window.__DD_PUSH.vapid) }); });
+    }).then(function (sub) {
+      var j = sub.toJSON();
+      return syncToken().then(function (tok) {
+        return sbCall('/rest/v1/push_subs?on_conflict=endpoint', { method: 'POST', headers: { Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify({ endpoint: j.endpoint, p256dh: j.keys.p256dh, auth: j.keys.auth }) }, tok);
+      }).then(function (r) { if (!r.ok) return Promise.reject({ code: 'http', status: r.status }); });
+    });
+  }
+  /* everything due to start in the next week, as reminders with the time each should fire */
+  function buildReminders() {
+    var sc = state.sched, out = [];
+    if (!sc.notify) return out;
+    var lead = sc.notifyMins || 5, now = Date.now(), today = todayStr();
+    for (var i = 0; i <= 7 && out.length < 300; i++) {
+      var d = addDays(today, i);
+      dayEntries(d).forEach(function (x) {
+        if (x.kind === 'study' && blockDone(x.b)) return;
+        var dt = parse(d); dt.setHours(0, x.s, 0, 0);
+        var fire = dt.getTime() - lead * 60000;
+        if (fire <= now) return;
+        var f = entryInfo(x);
+        out.push({ fire_at: new Date(fire).toISOString(), title: 'In ' + lead + ' min: ' + f.title, body: hm(x.s) + '–' + hm(x.e) + (f.loc ? ' · ' + f.loc : ''), tag: d + '|' + x.kind + '|' + x.s });
+      });
+    }
+    return out;
+  }
+  function pushUpload() {
+    if (!pushOn() || PUSH.up) return Promise.resolve();
+    var list = buildReminders(), sig = hash(JSON.stringify(list));
+    if (lsGet('doanddue.push.sig') === sig) return Promise.resolve();
+    PUSH.up = true;
+    return syncToken().then(function (tok) {
+      return sbCall('/rest/v1/reminders?sent=eq.false', { method: 'DELETE', headers: { Prefer: 'return=minimal' } }, tok).then(function (r) {
+        if (!r.ok) return Promise.reject({ code: 'http', status: r.status });
+        return list.length ? sbCall('/rest/v1/reminders', { method: 'POST', headers: { Prefer: 'return=minimal' }, body: JSON.stringify(list) }, tok) : { ok: true };
+      });
+    }).then(function (r) { if (r && r.ok) lsSet('doanddue.push.sig', sig); }).catch(function () {}).then(function () { PUSH.up = false; });
+  }
+  function pushEnsure() {
+    if (!pushOn() || !('Notification' in window) || Notification.permission !== 'granted') return Promise.resolve();
+    if (PUSH.subbed) return Promise.resolve();
+    return pushSubscribe().then(function () { PUSH.subbed = true; }).catch(function () {});
+  }
+  function pushAfterSync() {
+    if (!pushOn() || !('Notification' in window) || Notification.permission !== 'granted') return;
+    pushEnsure().then(function () { return PUSH.subbed ? pushUpload() : null; }).catch(function () {});
+  }
   function renderNotifyStatus() {
     var el = $('#n-status'), btn = $('#n-perm');
     if (!el || !btn) return;
     if (!('Notification' in window)) { btn.hidden = true; el.textContent = 'Phone notifications are not available in this browser. On an iPhone, add the app to your Home Screen first. In-app reminders still work.'; return; }
     var p = Notification.permission;
     btn.hidden = p === 'granted';
-    el.textContent = p === 'granted' ? 'Phone notifications are on. They show while the app is open or was recently open in the background.' : p === 'denied' ? 'Notifications are blocked for this site. Allow them in your browser or phone settings.' : 'Reminders appear inside the app. Turn on phone notifications to get them outside the app too.';
+    el.textContent = p === 'granted' ? (window.__DD_PUSH && !pushOn() ? 'Phone notifications are on while the app is open. To get reminders when it is closed, sign in to sync in Settings.' : 'Phone notifications are on.') : p === 'denied' ? 'Notifications are blocked for this site. Allow them in your browser or phone settings.' : 'Reminders appear inside the app. Turn on phone notifications to get them outside the app too.';
   }
   $('#n-perm').addEventListener('click', function () {
     if (!('Notification' in window)) { renderNotifyStatus(); return; }
-    Promise.resolve(Notification.requestPermission()).then(renderNotifyStatus, renderNotifyStatus);
+    Promise.resolve(Notification.requestPermission()).then(function () { renderNotifyStatus(); pushAfterSync(); }, renderNotifyStatus);
   });
   document.addEventListener('visibilitychange', function () { if (!document.hidden) { checkReminders(); renderNow(); } });
   var tickMin = -1;
@@ -3468,7 +3548,15 @@ h1 { font-size: 34px; letter-spacing: -.025em; }
       var sf = b.subId ? findSub(tk, b.subId) : null;
       var cur = b.subId ? !!(sf && sf.item.done) : !!tk.done;
       var want = pr.done === pr.total;
-      if ((b.subId && !sf) || (!b.subId && subsOf(tk).length)) { /* nothing to sync */ }
+      if (b.subId && !sf) { /* nothing to sync */ }
+      else if (!b.subId && subsOf(tk).length) {
+        /* blocks for the task itself stand in for its steps without an effort level */
+        var bareN = effortlessLeaves(tk), allBare = bareN.length && bareN.every(function (x) { return x.done; }), anyOpen = bareN.some(function (x) { return !x.done; });
+        if (bareN.length && ((want && anyOpen) || (!want && allBare))) {
+          mutateTask(tk.id, function (c) { effortlessLeaves(c).forEach(function (x) { applySubDone(c, x.id, want); }); })
+            .then(function () { toast(want ? 'The steps without an effort level were ticked off.' : 'Those steps were reopened.'); }, function (err) { saveError(err); render(); });
+        }
+      }
       else if (want !== cur) {
         var ttl = b.subId ? sf.item.title : tk.title;
         var p = b.subId ? mutateTask(tk.id, function (c) { applySubDone(c, b.subId, want); }) : persist(Object.assign({}, tk, { done: want }));

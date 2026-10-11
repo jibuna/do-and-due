@@ -1,5 +1,5 @@
 /* Do & Due service worker: lets the app open and work offline. */
-const CACHE = 'doanddue-9de61e09d3';
+const CACHE = 'doanddue-2bfe38de3a';
 const CORE = ['./', 'index.html', 'manifest.webmanifest', 'icon.svg', 'icon-192.png', 'icon-512.png', 'icon-maskable-512.png', 'apple-touch-icon.png', 'favicon-32.png'];
 
 self.addEventListener('install', (e) => {
@@ -11,6 +11,15 @@ self.addEventListener('activate', (e) => {
     caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE && k.startsWith('doanddue-')).map((k) => caches.delete(k))))
       .then(() => self.clients.claim())
   );
+});
+
+self.addEventListener('push', (e) => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; } catch (x) { d = { title: 'Do & Due', body: e.data ? e.data.text() : '' }; }
+  e.waitUntil(self.clients.matchAll({ type: 'window', includeUncached: true }).then((cs) => {
+    if (cs.some((c) => c.visibilityState === 'visible')) return;   /* the open app already shows its own toast */
+    return self.registration.showNotification(d.title || 'Do & Due', { body: d.body || '', tag: d.tag || 'doanddue', icon: 'icon-192.png', badge: 'favicon-32.png' });
+  }));
 });
 
 self.addEventListener('notificationclick', (e) => {
