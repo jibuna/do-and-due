@@ -721,6 +721,8 @@ body.wide .app { max-width: 1180px; }
 .cal-col { position: relative; border-radius: 10px; overflow: hidden; background: color-mix(in srgb, var(--ink) 5%, transparent); }
 .cal-col::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, transparent 0 calc(var(--hr, 60px) - 1px), color-mix(in srgb, var(--ink) 9%, transparent) calc(var(--hr, 60px) - 1px) var(--hr, 60px)); pointer-events: none; z-index: 1; }
 .cal-col.past { opacity: .72; }
+.cal-cut { position: absolute; left: 0; right: 0; background: color-mix(in srgb, var(--ink) 5%, transparent); border-top: 1px dashed var(--muted); border-bottom: 1px dashed var(--muted); pointer-events: none; }
+.cal-gut .cal-cutl { right: 4px; font-size: 14px; }
 .cal-open { position: absolute; left: 0; right: 0; background: var(--surface); }
 .cal-col.today .cal-open { background: color-mix(in srgb, var(--accent) 5%, var(--surface)); }
 .cal-now { position: absolute; left: 0; right: 0; height: 2px; background: var(--bad); z-index: 3; }
@@ -768,7 +770,7 @@ body.wide .app { max-width: 1180px; }
 .updbar .u-go{padding:0 14px;background:var(--accent);color:var(--accent-ink);font-weight:600}
 .updbar .u-x{width:32px;background:transparent;color:inherit;opacity:.7;font-size:20px;line-height:1}
 </style>
-<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_PUSH={vapid:"BGs1idw37HirnuG0r4KvnmqCJD35UeDL2i35_quTmjEItTwAZWuUl9nTZKOKCngJU3p02opFm5cAdo2PvfMUokc"};window.__DD_BUILD="5d19cb2";</script>
+<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_PUSH={vapid:"BGs1idw37HirnuG0r4KvnmqCJD35UeDL2i35_quTmjEItTwAZWuUl9nTZKOKCngJU3p02opFm5cAdo2PvfMUokc"};window.__DD_BUILD="535552c";</script>
 </head>
 <body>
 
@@ -3794,8 +3796,22 @@ body.wide .app { max-width: 1180px; }
     if (PRI[t.priority] && room()) out.push('<div class="cb-x">' + esc(PRI_LABEL[t.priority]) + ' priority</div>');
     return out.join('');
   }
-  function calBlockHtml(x, lo) {
-    var h = Math.max(20, (x.e - x.s) * CAL_PPM - 2), top = (x.s - lo) * CAL_PPM + 1;
+  /* the calendar's hours: stretches of the day that nothing in the visible days touches are squeezed to a small cut, like the plan's time bars */
+  var CAL_SEGS = [];
+  function calPos(m) {
+    var out = 0;
+    for (var q = 0; q < CAL_SEGS.length; q++) {
+      var g = CAL_SEGS[q];
+      if (m <= g.a) return g.v;
+      if (m < g.z) return g.v + (m - g.a);
+      out = g.v + (g.z - g.a);
+      if (q + 1 < CAL_SEGS.length && m < CAL_SEGS[q + 1].a) return out;
+    }
+    return out;
+  }
+  function calIn(m) { return CAL_SEGS.some(function (g) { return m >= g.a && m <= g.z; }); }
+  function calBlockHtml(x) {
+    var h = Math.max(20, (x.e - x.s) * CAL_PPM - 2), top = calPos(x.s) * CAL_PPM + 1;
     var w = 100 / x.lanes, st = 'top:' + top.toFixed(1) + 'px;height:' + h.toFixed(1) + 'px;left:calc(' + (x.lane * w).toFixed(2) + '% + 2px);width:calc(' + w.toFixed(2) + '% - 4px);';
     var range = hm(x.s) + '–' + hm(x.e), cls = 'cal-blk ' + x.kind, inner = '', attrs = '';
     var tall = h >= 40, taller = h >= 64;
@@ -3845,32 +3861,41 @@ body.wide .app { max-width: 1180px; }
       }).join('');
     }
     /* the visible hours: the study day and anything that falls outside it */
-    var lo = 1440, hi = 0, per = days.map(function (d) {
+    var ivs = [], per = days.map(function (d) {
       var es = calEntries(d), dh = dayHours(d);
-      if (isStudyDay(d)) { lo = Math.min(lo, tm(dh.start)); hi = Math.max(hi, tm(dh.end)); }
-      es.forEach(function (x) { lo = Math.min(lo, x.s); hi = Math.max(hi, x.e); });
+      if (isStudyDay(d)) ivs.push([tm(dh.start), tm(dh.end)]);
+      es.forEach(function (x) { ivs.push([x.s, x.e]); });
       return es;
     });
-    if (hi <= lo) { lo = 540; hi = 1020; }
-    lo = Math.max(0, Math.floor(lo / 60) * 60); hi = Math.min(1440, Math.ceil(hi / 60) * 60);
-    var H = (hi - lo) * CAL_PPM, html = '<div class="cal' + (day ? ' day' : '') + '" style="--calh:' + H + 'px;--hr:' + (60 * CAL_PPM) + 'px">';
+    if (!ivs.length) ivs.push([540, 1020]);
+    ivs = ivs.map(function (v) { return [Math.max(0, Math.floor(v[0] / 60) * 60), Math.min(1440, Math.ceil(v[1] / 60) * 60)]; }).sort(function (p, q) { return p[0] - q[0]; });
+    var CUT = 30, merged = [];
+    ivs.forEach(function (v) { var l = merged[merged.length - 1]; if (l && v[0] - l[1] <= 120) l[1] = Math.max(l[1], v[1]); else merged.push([v[0], v[1]]); });
+    var vis = 0, cuts = [];
+    CAL_SEGS = merged.map(function (v, q) {
+      if (q) { cuts.push(vis); vis += CUT; }
+      var g = { a: v[0], z: v[1], v: vis }; vis += v[1] - v[0]; return g;
+    });
+    var H = vis * CAL_PPM, html = '<div class="cal' + (day ? ' day' : '') + '" style="--calh:' + H + 'px;--hr:' + (60 * CAL_PPM) + 'px">';
     if (day) html += ''; else
     html += '<div class="cal-row cal-headrow"><div class="cal-gut"></div>' + days.map(function (d) {
       var dd = parse(d);
       return '<div class="cal-dh' + (d === today ? ' today' : '') + (d < today ? ' past' : '') + '"><span>' + DAYS[dd.getDay()] + '</span><b>' + dd.getDate() + '</b></div>';
     }).join('') + '</div>';
     html += '<div class="cal-row cal-bodyrow"><div class="cal-gut" style="height:' + H + 'px">';
-    for (var m = lo; m <= hi; m += 60) html += '<span style="top:' + ((m - lo) * CAL_PPM) + 'px">' + hm(m) + '</span>';
+    CAL_SEGS.forEach(function (g) { for (var m = g.a; m <= g.z; m += 60) html += '<span style="top:' + (calPos(m) * CAL_PPM) + 'px">' + hm(m) + '</span>'; });
+    cuts.forEach(function (c) { html += '<span class="cal-cutl" style="top:' + ((c + CUT / 2) * CAL_PPM) + 'px" title="Quiet hours left out">\u22EE</span>'; });
     html += '</div>';
     days.forEach(function (d, k) {
       var dh = dayHours(d), study = isStudyDay(d);
       html += '<div class="cal-col' + (d === today ? ' today' : '') + (d < today ? ' past' : '') + '" style="height:' + H + 'px" data-date="' + d + '">';
-      if (study) html += '<div class="cal-open" style="top:' + ((tm(dh.start) - lo) * CAL_PPM) + 'px;height:' + ((tm(dh.end) - tm(dh.start)) * CAL_PPM) + 'px"></div>';
+      if (study) html += '<div class="cal-open" style="top:' + (calPos(tm(dh.start)) * CAL_PPM) + 'px;height:' + ((tm(dh.end) - tm(dh.start)) * CAL_PPM) + 'px"></div>';
       if (state.sched.calBreaks) html += breakSpans(dayEntries(d)).map(function (r) {
-        return '<div class="cal-brk" style="top:' + ((r[0] - lo) * CAL_PPM).toFixed(1) + 'px;height:' + Math.max(3, (r[1] - r[0]) * CAL_PPM - 1).toFixed(1) + 'px"></div>';
+        return '<div class="cal-brk" style="top:' + (calPos(r[0]) * CAL_PPM).toFixed(1) + 'px;height:' + Math.max(3, (calPos(r[1]) - calPos(r[0])) * CAL_PPM - 1).toFixed(1) + 'px"></div>';
       }).join('');
-      html += calLanes(per[k]).map(function (x) { return calBlockHtml(x, lo); }).join('');
-      if (d === today && nm >= lo && nm <= hi) html += '<div class="cal-now" style="top:' + ((nm - lo) * CAL_PPM) + 'px"></div>';
+      html += cuts.map(function (c) { return '<div class="cal-cut" style="top:' + (c * CAL_PPM) + 'px;height:' + (CUT * CAL_PPM) + 'px"></div>'; }).join('');
+      html += calLanes(per[k]).map(function (x) { return calBlockHtml(x); }).join('');
+      if (d === today && calIn(nm)) html += '<div class="cal-now" style="top:' + (calPos(nm) * CAL_PPM) + 'px"></div>';
       html += '</div>';
     });
     html += '</div></div>';
