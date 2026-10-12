@@ -770,7 +770,7 @@ body.wide .app { max-width: 1180px; }
 .updbar .u-go{padding:0 14px;background:var(--accent);color:var(--accent-ink);font-weight:600}
 .updbar .u-x{width:32px;background:transparent;color:inherit;opacity:.7;font-size:20px;line-height:1}
 </style>
-<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_PUSH={vapid:"BGs1idw37HirnuG0r4KvnmqCJD35UeDL2i35_quTmjEItTwAZWuUl9nTZKOKCngJU3p02opFm5cAdo2PvfMUokc"};window.__DD_BUILD="aeecde6";</script>
+<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_PUSH={vapid:"BGs1idw37HirnuG0r4KvnmqCJD35UeDL2i35_quTmjEItTwAZWuUl9nTZKOKCngJU3p02opFm5cAdo2PvfMUokc"};window.__DD_BUILD="8d97ee5";</script>
 </head>
 <body>
 
@@ -833,10 +833,10 @@ body.wide .app { max-width: 1180px; }
             <label><input type="radio" name="priority" value="top"><span>Top</span></label>
           </div>
         </fieldset>
-        <p class="eff-note field" id="eff-used" hidden>This effort is used for subtasks that have no effort level of their own.</p>
-        <p class="eff-note field" id="eff-note" hidden>Effort for this task comes from its subtasks. Set it on each subtask.</p>
+        <p class="eff-note field" id="eff-used" hidden>This time is used for subtasks that have no time of their own.</p>
+        <p class="eff-note field" id="eff-note" hidden>Time for this task comes from its subtasks. Set it on each subtask.</p>
         <fieldset class="field" id="eff-set">
-          <legend>Expected effort</legend>
+          <legend>Expected time</legend>
           <div class="seg eff">
             <label><input type="radio" name="effort" value="" checked><span>Not set</span></label>
             <label><input type="radio" name="effort" value="trivial"><span>Trivial</span></label>
@@ -844,6 +844,18 @@ body.wide .app { max-width: 1180px; }
             <label><input type="radio" name="effort" value="medium"><span>Medium</span></label>
             <label><input type="radio" name="effort" value="high"><span>High</span></label>
             <label><input type="radio" name="effort" value="heavy"><span>Heavy</span></label>
+          </div>
+        </fieldset>
+        <fieldset class="field" id="ex-set" hidden>
+          <legend>Expected effort</legend>
+          <div class="seg eff">
+            <label><input type="radio" name="exert" value="" checked><span>Not set</span></label>
+            <label><input type="radio" name="exert" value="effortless"><span>Effortless</span></label>
+            <label><input type="radio" name="exert" value="low"><span>Low</span></label>
+            <label><input type="radio" name="exert" value="medium"><span>Medium</span></label>
+            <label><input type="radio" name="exert" value="high"><span>High</span></label>
+            <label><input type="radio" name="exert" value="taxing"><span>Taxing</span></label>
+            <label><input type="radio" name="exert" value="arduous"><span>Arduous</span></label>
           </div>
         </fieldset>
       </div>
@@ -878,10 +890,10 @@ body.wide .app { max-width: 1180px; }
               <label><input type="radio" name="e-priority" value="top"><span>Top</span></label>
             </div>
           </fieldset>
-          <p class="eff-note field full" id="e-eff-used" hidden>This effort is used for subtasks that have no effort level of their own.</p>
-          <p class="eff-note field full" id="e-eff-note" hidden>Effort for this task comes from its subtasks. Set it on each subtask.</p>
+          <p class="eff-note field full" id="e-eff-used" hidden>This time is used for subtasks that have no time of their own.</p>
+          <p class="eff-note field full" id="e-eff-note" hidden>Time for this task comes from its subtasks. Set it on each subtask.</p>
           <fieldset class="field full" id="e-eff-set">
-            <legend>Expected effort</legend>
+            <legend>Expected time</legend>
             <div class="seg eff">
               <label><input type="radio" name="e-effort" value="" checked><span>Not set</span></label>
               <label><input type="radio" name="e-effort" value="trivial"><span>Trivial</span></label>
@@ -889,6 +901,18 @@ body.wide .app { max-width: 1180px; }
               <label><input type="radio" name="e-effort" value="medium"><span>Medium</span></label>
               <label><input type="radio" name="e-effort" value="high"><span>High</span></label>
               <label><input type="radio" name="e-effort" value="heavy"><span>Heavy</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="field full" id="e-ex-set" hidden>
+            <legend>Expected effort</legend>
+            <div class="seg eff">
+              <label><input type="radio" name="e-exert" value="" checked><span>Not set</span></label>
+              <label><input type="radio" name="e-exert" value="effortless"><span>Effortless</span></label>
+              <label><input type="radio" name="e-exert" value="low"><span>Low</span></label>
+              <label><input type="radio" name="e-exert" value="medium"><span>Medium</span></label>
+              <label><input type="radio" name="e-exert" value="high"><span>High</span></label>
+              <label><input type="radio" name="e-exert" value="taxing"><span>Taxing</span></label>
+              <label><input type="radio" name="e-exert" value="arduous"><span>Arduous</span></label>
             </div>
           </fieldset>
           <div class="field full"><label for="e-notes">Notes</label><textarea id="e-notes" rows="4" maxlength="2000" placeholder="Links, page numbers, questions for the seminar."></textarea></div>
@@ -1061,18 +1085,54 @@ body.wide .app { max-width: 1180px; }
       </div>
       <div class="field" style="margin-top:14px"><span class="lbl" id="days-lbl">Study days</span><div class="dchips" id="days-chips" role="group" aria-labelledby="days-lbl"></div></div>
       <h3 class="sub-h">Time needed per task</h3>
-      <p class="help">Blocks set aside per effort level. Changing the block length rescales them. Subtasks use the same levels.</p>
+      <p class="help">Blocks set aside per time level. Changing the block length rescales them. Subtasks use the same levels.</p>
       <div class="grid-form">
         <div class="field"><label for="s-eff-trivial">Trivial (blocks, up to 1)</label><input id="s-eff-trivial" type="number" min="0" max="1" step="0.25" data-set="effort.trivial"><small class="effh" id="s-eff-h-trivial"></small></div>
         <div class="field"><label for="s-eff-light">Light (blocks)</label><input id="s-eff-light" type="number" min="0" max="40" step="0.25" data-set="effort.light"><small class="effh" id="s-eff-h-light"></small></div>
         <div class="field"><label for="s-eff-medium">Medium (blocks)</label><input id="s-eff-medium" type="number" min="0" max="40" step="0.25" data-set="effort.medium"><small class="effh" id="s-eff-h-medium"></small></div>
         <div class="field"><label for="s-eff-high">High (blocks)</label><input id="s-eff-high" type="number" min="0" max="40" step="0.25" data-set="effort.high"><small class="effh" id="s-eff-h-high"></small></div>
         <div class="field"><label for="s-eff-heavy">Heavy (blocks)</label><input id="s-eff-heavy" type="number" min="0" max="60" step="0.25" data-set="effort.heavy"><small class="effh" id="s-eff-h-heavy"></small></div>
-        <div class="field"><label for="s-eff-none">Effort not set (blocks)</label><input id="s-eff-none" type="number" min="0" max="40" step="0.25" data-set="effort.none"><small class="effh" id="s-eff-h-none"></small></div>
+        <div class="field"><label for="s-eff-none">Time not set (blocks)</label><input id="s-eff-none" type="number" min="0" max="40" step="0.25" data-set="effort.none"><small class="effh" id="s-eff-h-none"></small></div>
       </div>
       </div>
     </details>
 
+    <details class="card setc" id="set-effort">
+      <summary><span class="sico"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 14.5 7.2 9l3 3.2L13 6l4 8.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="stitle">Effort</span><span class="ssum" id="ss-set-effort"></span></summary>
+      <div class="sbody">
+      <p class="help">Time is how long a task takes. Effort is how draining it is. Switch this on to give each task an effort level and cap how much effort a day can hold.</p>
+      <div class="grid-form">
+        <label class="nobreak full"><input type="checkbox" id="s-effortOn" data-set="effortOn"> <span>Plan by effort as well as time <small>Off: effort is ignored and only time counts.</small></span></label>
+      </div>
+      <div id="ef-body">
+      <h3 class="sub-h">What each level is worth</h3>
+      <p class="help">Points per level. A task adds its points to each day it has study blocks on, once per day however many blocks it has.</p>
+      <div class="grid-form">
+        <div class="field"><label for="s-pts-effortless">Effortless</label><input id="s-pts-effortless" type="number" min="0" max="100" step="0.5" data-set="effortPts.effortless"></div>
+        <div class="field"><label for="s-pts-low">Low</label><input id="s-pts-low" type="number" min="0" max="100" step="0.5" data-set="effortPts.low"></div>
+        <div class="field"><label for="s-pts-medium">Medium</label><input id="s-pts-medium" type="number" min="0" max="100" step="0.5" data-set="effortPts.medium"></div>
+        <div class="field"><label for="s-pts-high">High</label><input id="s-pts-high" type="number" min="0" max="100" step="0.5" data-set="effortPts.high"></div>
+        <div class="field"><label for="s-pts-taxing">Taxing</label><input id="s-pts-taxing" type="number" min="0" max="100" step="0.5" data-set="effortPts.taxing"></div>
+        <div class="field"><label for="s-pts-arduous">Arduous</label><input id="s-pts-arduous" type="number" min="0" max="100" step="0.5" data-set="effortPts.arduous"></div>
+      </div>
+      <h3 class="sub-h">How much effort a day can hold</h3>
+      <div class="grid-form">
+        <div class="field full"><label for="s-effortCap">Usual effort total per day (points)</label><input id="s-effortCap" type="number" min="0" max="200" step="0.5" data-set="effortCap"></div>
+        <div class="field full" id="ef-wrap"><span class="lbl">Different totals on certain days</span>
+          <p class="hint" style="margin-top:4px">Group days that share a total, such as a lighter Friday. Any other day uses the usual total.</p>
+          <div id="ef-list"></div>
+          <div class="actions top"><button class="btn sm" type="button" id="ef-add">Add a set of days</button></div>
+        </div>
+        <div class="field full" id="ed-wrap"><span class="lbl">Special effort days</span>
+          <p class="hint" style="margin-top:4px">A single date with its own effort total, such as the day before a deadline.</p>
+          <div id="ed-list"></div>
+          <div class="actions top"><button class="btn sm" type="button" id="ed-add">Add a special effort day</button></div>
+        </div>
+        <label class="nobreak full"><input type="checkbox" id="s-effortStrict" data-set="effortStrict"> <span>Treat the total as a strict rule <small>Off: a day stays under its total when it can, but goes over rather than miss a deadline, and is flagged. On: a task that would push a day over is moved to another day or left unplanned.</small></span></label>
+      </div>
+      </div>
+      </div>
+    </details>
     <details class="card setc" id="set-fixed">
       <summary><span class="sico"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="14" height="14" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M6.5 10h7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="stitle">Fixed commitments</span><span class="ssum" id="ss-set-fixed"></span></summary>
       <div class="sbody">
@@ -1209,6 +1269,9 @@ body.wide .app { max-width: 1180px; }
   var PRI_LABEL = { low: 'Low', medium: 'Medium', high: 'High', top: 'Top' };
   var EFF_N = { trivial: 1, light: 2, medium: 3, high: 4, heavy: 5 };
   var EFF_KEYS = ['trivial', 'light', 'medium', 'high', 'heavy'];
+  /* effort: how draining a task is, separate from how long it takes. Only used when it is switched on in Settings. */
+  var EX_KEYS = ['effortless', 'low', 'medium', 'high', 'taxing', 'arduous'];
+  var EX_LABEL = { effortless: 'Effortless', low: 'Low', medium: 'Medium', high: 'High', taxing: 'Taxing', arduous: 'Arduous' };
   var EFF_LABEL = { trivial: 'Trivial', light: 'Light', medium: 'Medium', high: 'High', heavy: 'Heavy' };
 
   var $ = function (s) { return document.querySelector(s); };
@@ -1780,9 +1843,10 @@ body.wide .app { max-width: 1180px; }
         '<input id="sub-title" maxlength="200" value="' + esc(s.title) + '" placeholder="What is the step?"></div>' +
       '<div class="f"><label for="sub-do">Do date</label><input id="sub-do" type="date" value="' + esc(s.doDate) + '"></div>' +
       '<div class="f"><label for="sub-due">Deadline</label><input id="sub-due" type="date" value="' + esc(s.due) + '"></div>' +
-      (s.hasKids ? '<div class="f t sub-eff-note">Effort is added up from its sub-items.</div>' :
-        '<div class="f t"><label for="sub-eff">Effort</label><select id="sub-eff">' +
+      (s.hasKids ? '<div class="f t sub-eff-note">Time is added up from its sub-items.</div>' :
+        '<div class="f t"><label for="sub-eff">Time</label><select id="sub-eff">' +
         '<option value="">Not set (uses the task\'s)</option>' + EFF_KEYS.map(function (k) { return '<option value="' + k + '"' + (s.effort === k ? ' selected' : '') + '>' + EFF_LABEL[k] + '</option>'; }).join('') + '</select></div>') +
+      (state.sched && state.sched.effortOn ? '<div class="f t"><label for="sub-ex">Effort</label><select id="sub-ex"><option value="">Not set (uses the task\'s)</option>' + EX_KEYS.map(function (k) { return '<option value="' + k + '"' + (s.exert === k ? ' selected' : '') + '>' + EX_LABEL[k] + '</option>'; }).join('') + '</select></div>' : '') +
       '<div class="acts"><button class="btn primary sm" type="button" data-act="sub-save">' + (s.editId ? 'Save' : 'Add') + '</button>' +
       '<button class="btn sm" type="button" data-act="sub-cancel">Cancel</button></div></div>';
   }
@@ -1802,8 +1866,9 @@ body.wide .app { max-width: 1180px; }
       var kidsOpen = (it.children || []).filter(function (c) { return !c.done; });
       if (level === 1 && (it.children || []).length) {
         var kb = leavesMinutes(t, kidsOpen) / state.sched.blockMins;
-        if (!done && kb > 0) dh += '<span title="Effort, added up from its sub-items">' + IC.blocks + esc(fmtBlocks(kb)) + '</span>';
-      } else if (EFF_N[it.effort]) dh += '<span title="Effort: ' + EFF_LABEL[it.effort] + '">' + barsHtml(EFF_N[it.effort]) + '</span>';
+        if (!done && kb > 0) dh += '<span title="Time, added up from its sub-items">' + IC.blocks + esc(fmtBlocks(kb)) + '</span>';
+      } else if (EFF_N[it.effort]) dh += '<span title="Time: ' + EFF_LABEL[it.effort] + '">' + barsHtml(EFF_N[it.effort]) + '</span>';
+      if (state.sched.effortOn && EX_LABEL[it.exert] && !done) dh += '<span title="Effort: ' + EX_LABEL[it.exert] + '">' + esc(EX_LABEL[it.exert]) + ' effort</span>';
       if (!done) dh += progHtml(blockProgress(t.id, it.id));
       var confirming = state.pendingSubDelete === it.id;
       head = '<div class="sub-row">' +
@@ -1867,10 +1932,11 @@ body.wide .app { max-width: 1180px; }
     if (!t.done && !subs.length) chips += progHtml(blockProgress(t.id, ''));
     var ob = openBlocksOf(t);
     if (ob !== null) {
-      if (!t.done && ob > 0) chips += '<span class="mc eff" title="Effort, added up from unfinished subtasks">' + IC.blocks + esc(fmtBlocks(ob)) + '</span>';
+      if (!t.done && ob > 0) chips += '<span class="mc eff" title="Time, added up from unfinished subtasks">' + IC.blocks + esc(fmtBlocks(ob)) + '</span>';
     } else if (EFF_N[t.effort]) {
-      chips += '<span class="mc eff" title="Effort: ' + EFF_LABEL[t.effort] + '">' + barsHtml(EFF_N[t.effort]) + EFF_LABEL[t.effort] + '</span>';
+      chips += '<span class="mc eff" title="Time: ' + EFF_LABEL[t.effort] + '">' + barsHtml(EFF_N[t.effort]) + EFF_LABEL[t.effort] + '</span>';
     }
+    if (state.sched.effortOn && EX_LABEL[t.exert] && !t.done) chips += '<span class="mc eff" title="Effort: ' + EX_LABEL[t.exert] + '">' + esc(EX_LABEL[t.exert]) + ' effort</span>';
 
     var confirming = state.pendingDelete === t.id;
     var notesOpen = !!state.expanded[t.id];
@@ -2065,7 +2131,7 @@ body.wide .app { max-width: 1180px; }
     if (keepModule) F.module.value = m;
     state.editing = null;
     setMore(true); $('#qa-card').classList.remove('editing');
-    syncEffortField(null);
+    syncEffortField(null); syncExertFields();
     $('#form-title').textContent = 'New task';
     $('#f-submit').textContent = 'Add task';
     $('#f-cancel').hidden = true;
@@ -2074,6 +2140,7 @@ body.wide .app { max-width: 1180px; }
   }
   /* a task with subtasks still needs its own effort when some open step has none */
   function needsParentEffort(t) { return !!(t && subsOf(t).length && openLeaves(t).some(function (l) { return !EFF_N[l.effort]; })); }
+  function syncExertFields() { var on = !!(state.sched && state.sched.effortOn); ['#ex-set', '#e-ex-set'].forEach(function (q) { var el = $(q); if (el) el.hidden = !on; }); }
   function syncEffortField(t) {
     var has = !!(t && subsOf(t).length), need = needsParentEffort(t);
     $('#eff-set').hidden = has && !need;
@@ -2115,6 +2182,8 @@ body.wide .app { max-width: 1180px; }
     $('#e-notes').value = t.notes || '';
     eSet('e-priority', t.priority);
     eSet('e-effort', t.effort);
+    eSet('e-exert', t.exert);
+    syncExertFields();
     var has = !!subsOf(t).length;
     var need = needsParentEffort(t);
     $('#e-eff-set').hidden = has && !need; $('#e-eff-note').hidden = !(has && !need); $('#e-eff-used').hidden = !need;
@@ -2150,7 +2219,7 @@ body.wide .app { max-width: 1180px; }
     if (known) module = known;
     var task = Object.assign({}, base, {
       module: module, title: title, doDate: $('#e-do').value || '', due: $('#e-due').value || '',
-      priority: eChoice('e-priority'), effort: subsOf(base).length && !needsParentEffort(base) ? '' : eChoice('e-effort'), notes: $('#e-notes').value.trim(), example: false,
+      priority: eChoice('e-priority'), exert: eChoice('e-exert'), effort: subsOf(base).length && !needsParentEffort(base) ? '' : eChoice('e-effort'), notes: $('#e-notes').value.trim(), example: false,
       dueClass: $('#e-dc-wrap').hidden ? '' : $('#e-dc').value
     });
     persist(task).then(function () { closeDlg(edlg); toast('Saved'); }, function (er) { saveError(er); });
@@ -2168,13 +2237,13 @@ body.wide .app { max-width: 1180px; }
     var doDate = F.doDate.value || '';
     var due = F.due.value || '';
     var priority = getChoice('priority');
-    var effort = getChoice('effort');
+    var effort = getChoice('effort'), exert = getChoice('exert');
     var notes = F.notes.value.trim();
     var editing = state.editing;
     var base = editing ? taskById(editing) : null;
     var task = base
-      ? Object.assign({}, base, { module: module, title: title, doDate: doDate, due: due, priority: priority, effort: subsOf(base).length && !needsParentEffort(base) ? '' : effort, notes: notes, example: false, dueClass: $('#f-dc-wrap').hidden ? '' : $('#f-dc').value })
-      : { id: store.newId(), module: module, title: title, doDate: doDate, due: due, priority: priority, effort: effort, notes: notes, subtasks: [], done: false, example: false, created: Date.now(), dueClass: $('#f-dc-wrap').hidden ? '' : $('#f-dc').value };
+      ? Object.assign({}, base, { module: module, title: title, doDate: doDate, due: due, priority: priority, exert: exert, effort: subsOf(base).length && !needsParentEffort(base) ? '' : effort, notes: notes, example: false, dueClass: $('#f-dc-wrap').hidden ? '' : $('#f-dc').value })
+      : { id: store.newId(), module: module, title: title, doDate: doDate, due: due, priority: priority, exert: exert, effort: effort, notes: notes, subtasks: [], done: false, example: false, created: Date.now(), dueClass: $('#f-dc-wrap').hidden ? '' : $('#f-dc').value };
     persist(task).then(function () {
       resetForm(false);
       F.module.focus();
@@ -2212,7 +2281,7 @@ body.wide .app { max-width: 1180px; }
     state.sub = {
       taskId: taskId, parentId: parentId || null, editId: editId || null,
       title: item ? item.title || '' : '', doDate: item ? item.doDate || '' : '', due: item ? item.due || '' : '',
-      effort: item ? item.effort || '' : '', hasKids: !!(item && (item.children || []).length)
+      effort: item ? item.effort || '' : '', exert: item ? item.exert || '' : '', hasKids: !!(item && (item.children || []).length)
     };
     state.focusSub = true;
     renderList();
@@ -2225,9 +2294,9 @@ body.wide .app { max-width: 1180px; }
     var p = mutateTask(d.taskId, function (c) {
       if (d.editId) {
         var found = findSub(c, d.editId);
-        if (found) { found.item.title = title; found.item.doDate = d.doDate || ''; found.item.due = d.due || ''; if (!d.hasKids) found.item.effort = d.effort || ''; }
+        if (found) { found.item.title = title; found.item.doDate = d.doDate || ''; found.item.due = d.due || ''; found.item.exert = d.exert || ''; if (!d.hasKids) found.item.effort = d.effort || ''; }
       } else {
-        var item = { id: uid(), title: title, doDate: d.doDate || '', due: d.due || '', effort: d.effort || '', done: false };
+        var item = { id: uid(), title: title, doDate: d.doDate || '', due: d.due || '', effort: d.effort || '', exert: d.exert || '', done: false };
         if (d.parentId) {
           var par = findSub(c, d.parentId);
           if (par && par.level === 1) { par.item.children = par.item.children || []; par.item.children.push(item); }
@@ -2248,6 +2317,7 @@ body.wide .app { max-width: 1180px; }
     else if (id === 'sub-do') state.sub.doDate = e.target.value;
     else if (id === 'sub-due') state.sub.due = e.target.value;
     else if (id === 'sub-eff') state.sub.effort = e.target.value;
+    else if (id === 'sub-ex') state.sub.exert = e.target.value;
   }
 
   /* ---------- list and control events ---------- */
@@ -2374,6 +2444,7 @@ body.wide .app { max-width: 1180px; }
       hourSets: [],
       blockMins: 60, gapMins: 10, classBuffer: 10, maxDayHours: 6, maxItemDayHours: 3, fixedBuffer: false, hardFirst: 'off', autoClear: true, clearMode: 'deadline', clearDay: 5, clearTime: '00:00', lastClear: '', extraDays: [], allowOverrun: true, showMeals: true, mealBuffer: false, mealsAsBreaks: false, showBreaks: false, breakStripes: false, calBreaks: false, calHour: 90, notify: true, notifyMins: 5,
       effortBlocks: { trivial: 0.5, light: 1, medium: 3, high: 4.5, heavy: 6, none: 2 },
+      effortOn: false, effortPts: { effortless: 0, low: 1, medium: 2, high: 3, taxing: 5, arduous: 8 }, effortCap: 8, effortSets: [], effortDays: [], effortStrict: false,
       fixed: []
     };
   }
@@ -2396,6 +2467,25 @@ body.wide .app { max-width: 1180px; }
       seen[x.date] = 1;
       var ok = /^\d{2}:\d{2}$/.test(x.start || '') && /^\d{2}:\d{2}$/.test(x.end || '') && tm(x.end) - tm(x.start) >= 30;
       out.push({ id: typeof x.id === 'string' && x.id ? x.id : uid(), date: x.date, start: ok ? x.start : s.dayStart, end: ok ? x.end : s.dayEnd });
+    });
+    return out.sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+  }
+  function cleanEffortSets(list) {
+    var seen = {}, out = [];
+    (Array.isArray(list) ? list : []).forEach(function (x) {
+      if (!x || typeof x !== 'object') return;
+      var days = [];
+      (Array.isArray(x.days) ? x.days : []).forEach(function (n) { n = +n; if (n >= 0 && n <= 6 && n === Math.floor(n) && !seen[n]) { seen[n] = 1; days.push(n); } });
+      out.push({ id: typeof x.id === 'string' && x.id ? x.id : uid(), days: days, cap: Math.max(0, Math.min(200, +x.cap >= 0 ? +x.cap : 0)) });
+    });
+    return out;
+  }
+  function cleanEffortDays(list) {
+    var seen = {}, out = [];
+    (Array.isArray(list) ? list : []).forEach(function (x) {
+      if (!x || typeof x !== 'object' || !/^\d{4}-\d{2}-\d{2}$/.test(x.date || '') || seen[x.date]) return;
+      seen[x.date] = 1;
+      out.push({ id: typeof x.id === 'string' && x.id ? x.id : uid(), date: x.date, cap: Math.max(0, Math.min(200, +x.cap >= 0 ? +x.cap : 0)) });
     });
     return out.sort(function (a, b) { return a.date < b.date ? -1 : 1; });
   }
@@ -2423,6 +2513,14 @@ body.wide .app { max-width: 1180px; }
     s.clearTime = /^\d{2}:\d{2}$/.test(d.clearTime || '') ? d.clearTime : '00:00';
     s.lastClear = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(d.lastClear || '') ? d.lastClear : '';
     s.extraDays = cleanExtraDays(d.extraDays, s);
+    s.effortOn = d.effortOn === true;
+    s.effortStrict = d.effortStrict === true;
+    var ep = defaultSched().effortPts;
+    if (d.effortPts && typeof d.effortPts === 'object') Object.keys(ep).forEach(function (k) { if (+d.effortPts[k] >= 0) ep[k] = Math.min(100, +d.effortPts[k]); });
+    s.effortPts = ep;
+    s.effortCap = +d.effortCap >= 0 && d.effortCap !== '' && d.effortCap != null ? Math.min(200, +d.effortCap) : 8;
+    s.effortSets = cleanEffortSets(d.effortSets);
+    s.effortDays = cleanEffortDays(d.effortDays);
     s.allowOverrun = d.allowOverrun !== false;
     s.showMeals = d.showMeals !== false;
     s.mealBuffer = !!d.mealBuffer;
@@ -2953,6 +3051,12 @@ body.wide .app { max-width: 1180px; }
     });
     var wl = document.getElementById('s-weekday-lbl'); if (wl) wl.textContent = s.hourSets.some(function (x) { return x.days.length; }) ? 'Usual hours' : 'Study hours each day';
     renderHourSets(); renderExtraDays();
+    var eo = document.getElementById('s-effortOn'); if (eo) eo.checked = !!s.effortOn;
+    var es = document.getElementById('s-effortStrict'); if (es) es.checked = !!s.effortStrict;
+    var eb = document.getElementById('ef-body'); if (eb) eb.hidden = !s.effortOn;
+    EX_KEYS.forEach(function (k) { put('s-pts-' + k, s.effortPts[k]); });
+    put('s-effortCap', s.effortCap);
+    renderEffortSets(); renderEffortDays(); syncExertFields();
     document.querySelectorAll('#set-hours [data-day]').forEach(function (c) { c.checked = s.days.indexOf(+c.getAttribute('data-day')) >= 0; });
   }
   var hsSig = null;
@@ -3000,6 +3104,89 @@ body.wide .app { max-width: 1180px; }
     } else return;
     hsSig = JSON.stringify(s.hourSets);
     savePref('schedule'); render();
+  });
+  /* effort totals: groups of weekdays, and single dates, with their own daily total */
+  var efSig = null, edSig = null;
+  function renderEffortSets() {
+    var sets = state.sched.effortSets, sig = JSON.stringify(sets);
+    if (sig === efSig) return;
+    efSig = sig;
+    $('#ef-list').innerHTML = sets.map(function (x) {
+      return '<div class="hset" data-eid="' + esc(x.id) + '"><div class="dchips" role="group" aria-label="Days with this total">' +
+        DAY_ORDER.map(function (d) { return '<label><input type="checkbox" data-efday="' + d + '"' + (x.days.indexOf(d) >= 0 ? ' checked' : '') + '><span>' + DAYS[d] + '</span></label>'; }).join('') + '</div>' +
+        '<div class="hset-t"><input type="number" min="0" max="200" step="0.5" data-ef="cap" value="' + esc(String(x.cap)) + '" aria-label="Effort total"><span>points</span><button class="link" type="button" data-act="ef-del">Remove</button></div></div>';
+    }).join('');
+  }
+  function renderEffortDays() {
+    var td = todayStr(), list = state.sched.effortDays.filter(function (x) { return x.date >= td; }), sig = JSON.stringify(list);
+    if (sig === edSig) return;
+    edSig = sig;
+    $('#ed-list').innerHTML = list.map(function (x) {
+      return '<div class="hset" data-edid="' + esc(x.id) + '"><div class="xd-date"><input type="date" data-ed="date" value="' + esc(x.date) + '" min="' + td + '" aria-label="Date"></div>' +
+        '<div class="hset-t"><input type="number" min="0" max="200" step="0.5" data-ed="cap" value="' + esc(String(x.cap)) + '" aria-label="Effort total"><span>points</span><button class="link" type="button" data-act="ed-del">Remove</button></div></div>';
+    }).join('');
+  }
+  $('#ef-add').addEventListener('click', function () {
+    var s = state.sched, used = {};
+    s.effortSets.forEach(function (x) { x.days.forEach(function (n) { used[n] = 1; }); });
+    s.effortSets.push({ id: uid(), days: [6, 0].filter(function (n) { return !used[n]; }), cap: Math.max(0, Math.round(s.effortCap / 2)) });
+    efSig = null; savePref('schedule'); render();
+  });
+  $('#ef-list').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-act="ef-del"]'), box = e.target.closest('.hset');
+    if (!b || !box) return;
+    state.sched.effortSets = state.sched.effortSets.filter(function (x) { return x.id !== box.getAttribute('data-eid'); });
+    efSig = null; savePref('schedule'); render();
+  });
+  $('#ef-list').addEventListener('change', function (e) {
+    var box = e.target.closest('.hset');
+    if (!box) return;
+    var s = state.sched, set = s.effortSets.filter(function (x) { return x.id === box.getAttribute('data-eid'); })[0];
+    if (!set) return;
+    if (e.target.hasAttribute('data-efday')) {
+      var d = +e.target.getAttribute('data-efday');
+      if (e.target.checked) {
+        s.effortSets.forEach(function (o) { if (o !== set) o.days = o.days.filter(function (x) { return x !== d; }); });
+        if (set.days.indexOf(d) < 0) set.days.push(d);
+        document.querySelectorAll('#ef-list .hset').forEach(function (b) { if (b !== box) { var c = b.querySelector('[data-efday="' + d + '"]'); if (c) c.checked = false; } });
+      } else set.days = set.days.filter(function (x) { return x !== d; });
+    } else if (e.target.getAttribute('data-ef') === 'cap') {
+      var n = parseFloat(e.target.value);
+      if (!(n >= 0 && n <= 200)) { toast('Enter a number between 0 and 200.'); e.target.value = set.cap; return; }
+      set.cap = n;
+    } else return;
+    efSig = JSON.stringify(s.effortSets); savePref('schedule'); render();
+  });
+  $('#ed-add').addEventListener('click', function () {
+    var s = state.sched, td = todayStr(), taken = {}, d = '', i;
+    s.effortDays.forEach(function (x) { taken[x.date] = 1; });
+    for (i = 1; i < 60 && !d; i++) { var c = addDays(td, i); if (!taken[c]) d = c; }
+    s.effortDays = s.effortDays.filter(function (x) { return x.date >= td; });
+    s.effortDays.push({ id: uid(), date: d, cap: Math.max(0, Math.round(s.effortCap / 2)) });
+    s.effortDays.sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+    edSig = null; savePref('schedule'); render();
+  });
+  $('#ed-list').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-act="ed-del"]'), box = e.target.closest('.hset');
+    if (!b || !box) return;
+    state.sched.effortDays = state.sched.effortDays.filter(function (x) { return x.id !== box.getAttribute('data-edid'); });
+    edSig = null; savePref('schedule'); render();
+  });
+  $('#ed-list').addEventListener('change', function (e) {
+    var box = e.target.closest('.hset'), k = e.target.getAttribute('data-ed');
+    if (!box || !k) return;
+    var s = state.sched, x = s.effortDays.filter(function (o) { return o.id === box.getAttribute('data-edid'); })[0], v = e.target.value;
+    if (!x) return;
+    if (k === 'date') {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(v) || v < todayStr()) { toast('Pick a date from today onward.'); e.target.value = x.date; return; }
+      if (s.effortDays.some(function (o) { return o !== x && o.date === v; })) { toast('That date already has its own effort total.'); e.target.value = x.date; return; }
+      x.date = v; s.effortDays.sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+    } else {
+      var n = parseFloat(v);
+      if (!(n >= 0 && n <= 200)) { toast('Enter a number between 0 and 200.'); e.target.value = x.cap; return; }
+      x.cap = n;
+    }
+    edSig = null; savePref('schedule'); render();
   });
   /* special study days: single dates with their own hours */
   var xdSig = null;
@@ -3069,6 +3256,12 @@ body.wide .app { max-width: 1180px; }
       else s.clearTime = v;
       /* changing when the week ends never clears anything straight away */
       s.lastClear = s.clearMode === 'weekly' ? clearStamp(lastBoundary(new Date())) : '';
+    } else if (k === 'effortOn' || k === 'effortStrict') {
+      s[k] = e.target.checked;
+    } else if (k === 'effortCap' || k.indexOf('effortPts.') === 0) {
+      var en = parseFloat(v);
+      if (!(en >= 0 && en <= (k === 'effortCap' ? 200 : 100))) { toast('Enter a number between 0 and ' + (k === 'effortCap' ? 200 : 100) + '.'); syncSettingsInputs(true); return; }
+      if (k === 'effortCap') s.effortCap = en; else s.effortPts[k.slice(10)] = en;
     } else if (k === 'allowOverrun') {
       s.allowOverrun = e.target.checked;
     } else if (k === 'notify') {
@@ -3086,6 +3279,7 @@ body.wide .app { max-width: 1180px; }
     if (/^clear/.test(k)) clearExpired();
   }
   $('#set-hours').addEventListener('change', onSchedChange);
+  $('#set-effort').addEventListener('change', onSchedChange);
   $('#set-clear').addEventListener('change', onSchedChange);
   $('#set-layout').addEventListener('change', onSchedChange);
   $('#s-calHour').addEventListener('input', function (e) { $('#s-calHour-v').textContent = e.target.value + 'px'; });
@@ -3187,6 +3381,7 @@ body.wide .app { max-width: 1180px; }
     put('ss-set-tt', (nc ? nc + (nc === 1 ? ' class' : ' classes') : 'No classes') + (state.tt.term.breaks.length ? ', ' + state.tt.term.breaks.length + (state.tt.term.breaks.length === 1 ? ' break' : ' breaks') : ''));
     put('ss-set-layout', 'Calendar ' + s.calHour + 'px per hour');
     put('ss-set-clear', s.clearMode === 'weekly' ? 'Weekly, ' + LONGDAYS[s.clearDay] + ' ' + s.clearTime : s.clearMode === 'off' ? 'Never' : 'After deadline');
+    put('ss-set-effort', s.effortOn ? s.effortCap + ' points a day' + (s.effortStrict ? ', strict' : '') : 'Off');
     put('ss-set-remind', s.notify ? s.notifyMins + (s.notifyMins === 1 ? ' minute' : ' minutes') + ' before' : 'Off');
     var nx = s.extraDays.filter(function (x) { return x.date >= todayStr(); }).length;
     put('ss-set-hours', s.dayStart + '–' + s.dayEnd + (nx ? ' + ' + nx + ' special' : '') + (s.hourSets.filter(function (x) { return x.days.length; }).length ? ' + ' + s.hourSets.filter(function (x) { return x.days.length; }).length + ' custom' : '') + ', ' + s.days.length + (s.days.length === 1 ? ' day' : ' days'));
@@ -3214,6 +3409,27 @@ body.wide .app { max-width: 1180px; }
     if (ex) return { start: ex.start, end: ex.end };
     var s = state.sched, n = dow(d), set = (s.hourSets || []).filter(function (x) { return x.days.indexOf(n) >= 0; })[0];
     return set ? { start: set.start, end: set.end } : { start: s.dayStart, end: s.dayEnd };
+  }
+  /* effort: a step without a level of its own uses its task's. Unset counts as nothing. */
+  function exertOf(t, leaf) { return leaf && EX_LABEL[leaf.exert] ? leaf.exert : (t && EX_LABEL[t.exert] ? t.exert : ''); }
+  function exertPts(level) { return level ? (+state.sched.effortPts[level] || 0) : 0; }
+  function effortCapFor(d) {
+    var s = state.sched, x = (s.effortDays || []).filter(function (o) { return o.date === d; })[0];
+    if (x) return x.cap;
+    var set = (s.effortSets || []).filter(function (o) { return o.days.indexOf(dow(d)) >= 0; })[0];
+    return set ? set.cap : s.effortCap;
+  }
+  /* the effort a day holds: each task or step counts once, however many blocks it has that day */
+  function dayEffort(d, blocks) {
+    var seen = {}, tot = 0;
+    (blocks || state.plan.blocks).forEach(function (b) {
+      var k = b.taskId + '|' + (b.subId || '');
+      if (seen[k] || !(b.date === d || (isWrap(b) && addDays(b.date, 1) === d))) return;
+      seen[k] = 1;
+      var t = taskById(b.taskId), sf = t && b.subId ? findSub(t, b.subId) : null;
+      tot += exertPts(exertOf(t, sf ? sf.item : null));
+    });
+    return tot;
   }
   /* open steps that carry their own effort: top-level steps without sub-items, and open sub-items */
   function openLeaves(t) {
@@ -3309,11 +3525,13 @@ body.wide .app { max-width: 1180px; }
     var c = Object.assign({}, state.sched, { autoClear: 0, notify: 0, notifyMins: 0, showMeals: 0, mealsAsBreaks: 0, showBreaks: 0, breakStripes: 0, mealsBusy: 0, mealBreak: 0 });
     delete c.calBreaks; delete c.calHour; delete c.clearMode; delete c.clearDay; delete c.clearTime; delete c.lastClear;
     if (!c.extraDays || !c.extraDays.length) delete c.extraDays;
+    if (!c.effortOn) { delete c.effortPts; delete c.effortCap; delete c.effortSets; delete c.effortDays; delete c.effortStrict; }
+    else if (!c.effortDays.length) delete c.effortDays;
     return c;
   }
   function planSig() {
     var parts = state.tasks.filter(function (t) { return !t.done; }).map(function (t) {
-      return [t.id, t.doDate, t.due, t.dueClass || '', t.priority, t.effort, subsOf(t).map(function (s) { return [s.id, s.done ? 1 : 0, s.doDate, s.due, s.effort, (s.children || []).map(function (c) { return [c.id, c.done ? 1 : 0, c.doDate, c.due, c.effort].join('.'); }).join(',')].join('~'); }).join('|')].join('^');
+      return [t.id, t.doDate, t.due, t.dueClass || '', t.priority, t.effort, state.sched.effortOn ? t.exert || '' : '', subsOf(t).map(function (s) { return [s.id, s.done ? 1 : 0, s.doDate, s.due, s.effort, state.sched.effortOn ? s.exert || '' : '', (s.children || []).map(function (c) { return [c.id, c.done ? 1 : 0, c.doDate, c.due, c.effort, state.sched.effortOn ? c.exert || '' : ''].join('.'); }).join(',')].join('~'); }).join('|')].join('^');
     }).sort().join('\n');
     return hash(parts + '#' + JSON.stringify(sigSched()) + '#' + JSON.stringify(state.tt) + '#' + JSON.stringify(state.modsDoc.items));
   }
@@ -3385,7 +3603,7 @@ body.wide .app { max-width: 1180px; }
     hz = Math.min(hz, 42);
     var days = [];
     for (var i = 0; i < hz; i++) { var dd = addDays(today, i); if (isStudyDay(dd)) days.push(dd); }
-    var free = {}, cap = {}, free0 = {}, hiD = {}, OV = s.allowOverrun ? 15 : 0;
+    var free = {}, cap = {}, free0 = {}, hiD = {}, OV = s.allowOverrun ? 15 : 0, EO = !!s.effortOn, ecap = {}, eUse = {}, eKeys = {};
     days.forEach(function (d) {
       var dh = dayHours(d), lo = tm(dh.start), hi = tm(dh.end);
       if (d === today) lo = Math.max(lo, nowMin);
@@ -3396,6 +3614,8 @@ body.wide .app { max-width: 1180px; }
         else if (isWrap(b) && addDays(b.date, 1) === d) { busy.push([0, tm(b.end) + s.gapMins]); used += tm(b.end); }
       });
       hiD[d] = hi;
+      ecap[d] = effortCapFor(d); eUse[d] = dayEffort(d, kept); eKeys[d] = {};
+      kept.forEach(function (b) { if (b.date === d || (isWrap(b) && addDays(b.date, 1) === d)) eKeys[d][b.taskId + '|' + (b.subId || '')] = 1; });
       free[d] = subtractBusy(lo, hi + OV, busy);
       free0[d] = free[d].map(function (iv) { return iv.slice(); });
       cap[d] = Math.max(0, s.maxDayHours * 60 - used);
@@ -3422,7 +3642,7 @@ body.wide .app { max-width: 1180px; }
       var bins = trivBins[d] = trivBins[d] || [], i = bins.findIndex(function (x) { return x + len <= s.blockMins; });
       if (i >= 0) bins[i] += len; else bins.push(len);
     }
-    function place(it, strict, cut) {
+    function place(it, strict, cut, enf, dueOnly) {
       var firstDay = it.start && it.start > today ? it.start : today, alone = it.full <= small || it.level === 'trivial';
       if (firstDay > lastDay) return;
       var order = days.map(function (_, i) { return i; });
@@ -3438,7 +3658,10 @@ body.wide .app { max-width: 1180px; }
       for (var oi = 0; oi < order.length && it.rem > 0; oi++) {
         var d = days[order[oi]];
         if (d < firstDay) continue;
-        if ((strict || cut) && it.due && d > it.due) continue;
+        if ((strict || cut || dueOnly) && it.due && d > it.due) continue;
+        var ek = it.task.id + '|' + (it.sub ? it.sub.id : ''), ep = EO ? exertPts(exertOf(it.task, it.sub)) : 0;
+        /* a day already holding effort will not take a task that would push it past the day's total (a lone task bigger than the total still goes in) */
+        if (EO && enf && ep > 0 && !eKeys[d][ek] && eUse[d] > 0 && eUse[d] + ep > ecap[d]) continue;
         var lunchAt = strict ? lunchStartOn(d) : -1, cutAt = cut ? classCutoff(it, d) : -1;
         var endOf = function (iv) { var e = Math.min(iv[1], hiD[d]); if (lunchAt >= 0) e = Math.min(e, lunchAt); if (cutAt >= 0) e = Math.min(e, cutAt); return e; };
         var used = it.usedD[d] || 0, ivs = free[d];
@@ -3484,14 +3707,24 @@ body.wide .app { max-width: 1180px; }
           if (it.due && d > it.due) it.isLate = true;
         }
         it.usedD[d] = used;
+        if (EO && used > 0 && !eKeys[d][ek]) { eKeys[d][ek] = 1; eUse[d] += ep; }
       }
     }
     /* "before lunch": hard tasks get first call on the pre-lunch windows, up to their deadline */
-    if (s.hardFirst === 'lunch') items.forEach(function (it) { if (isHardLevel(it.sub ? it.sub.effort : it.task.effort)) place(it, true, !!it.dueClass); });
+    if (s.hardFirst === 'lunch') items.forEach(function (it) { if (isHardLevel(it.sub ? it.sub.effort : it.task.effort)) place(it, true, !!it.dueClass, EO); });
     items.forEach(function (it) {
       if ((it.start && it.start > today ? it.start : today) > lastDay) return;
-      if (it.dueClass) place(it, false, true);   /* first try to finish before the class */
-      place(it, false, false);
+      if (EO) {
+        /* stay within each day's effort total and meet the deadline; then, unless the total is strict, go over it rather than miss the deadline; only then run late */
+        if (it.dueClass) place(it, false, true, true);
+        place(it, false, false, true, !!it.due);
+        if (it.rem > 0 && !s.effortStrict && it.due) place(it, false, false, false, true);
+        if (it.rem > 0) place(it, false, false, true, false);
+        if (it.rem > 0 && !s.effortStrict) place(it, false, false, false, false);
+      } else {
+        if (it.dueClass) place(it, false, true);   /* first try to finish before the class */
+        place(it, false, false);
+      }
       var name = it.task.module + ' ' + it.task.title + (it.sub ? ' (' + it.sub.title + ')' : '');
       if (it.rem > 0) short_.push(name + ' (' + dur(it.rem) + ')');
       else if (it.isLate) late.push(name);
@@ -3566,7 +3799,7 @@ body.wide .app { max-width: 1180px; }
     return '<li class="pe study tint' + (bdone ? ' done' : '') + (isNow ? ' now' : '') + '"' + (t ? ' style="' + modStyle(t.module) + '"' : '') + ' data-bid="' + esc(b.id) + '">' +
       '<input type="checkbox" data-act="blk-done" aria-label="Mark block done"' + (bdone ? ' checked' : '') + (taskDone ? ' disabled title="The task is complete"' : '') + '>' +
       '<span class="pt">' + range + '</span>' +
-      '<span class="pl">' + (t ? chipHtml(t.module) + '<span>' + esc(info.title) + '</span>' + (x.cont ? '<span class="pe-eff" title="The second half of a block that began the evening before">continued</span>' : x.wrap ? '<span class="pe-eff" title="This block carries on after midnight">to ' + esc(b.end) + ' next day</span>' : '') + (EFF_N[info.level] ? '<span class="pe-eff" title="Effort: ' + EFF_LABEL[info.level] + (info.inherited ? ' (the task\'s)' : '') + '">' + barsHtml(EFF_N[info.level]) + EFF_LABEL[info.level] + '</span>' : '') + (prg.total > 1 ? '<span class="pe-eff" title="Blocks ticked off for this step">' + prg.done + '/' + prg.total + '</span>' : '') : '<span>Removed task</span>') + '</span>' +
+      '<span class="pl">' + (t ? chipHtml(t.module) + '<span>' + esc(info.title) + '</span>' + (x.cont ? '<span class="pe-eff" title="The second half of a block that began the evening before">continued</span>' : x.wrap ? '<span class="pe-eff" title="This block carries on after midnight">to ' + esc(b.end) + ' next day</span>' : '') + (EFF_N[info.level] ? '<span class="pe-eff" title="Time: ' + EFF_LABEL[info.level] + (info.inherited ? ' (the task\'s)' : '') + '">' + barsHtml(EFF_N[info.level]) + EFF_LABEL[info.level] + '</span>' : '') + (state.sched.effortOn && exertOf(t, sub) ? '<span class="pe-eff" title="Effort: ' + EX_LABEL[exertOf(t, sub)] + '">' + EX_LABEL[exertOf(t, sub)] + ' effort</span>' : '') + (prg.total > 1 ? '<span class="pe-eff" title="Blocks ticked off for this step">' + prg.done + '/' + prg.total + '</span>' : '') : '<span>Removed task</span>') + '</span>' +
       '<button class="link" type="button" data-act="blk-edit">Edit</button>' +
       (warn.length && !bdone ? '<span class="pwarn">' + IC.flag + esc(warn.join('. ')) + '</span>' : '') + '</li>';
   }
@@ -3591,6 +3824,10 @@ body.wide .app { max-width: 1180px; }
   function capHtml(i, d, all, rest) {
     var t = dayTotals(d, all), lead = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : '', parts = [];
     if (t.study) parts.push(['study', dur(t.study) + ' study']);
+    if (state.sched.effortOn) {
+      var ef = dayEffort(d), ecp = effortCapFor(d);
+      if (ef || t.study) parts.push([ef > ecp ? 'ov' : 'ef', 'Effort ' + (Math.round(ef * 10) / 10) + '/' + (Math.round(ecp * 10) / 10) + (ef > ecp ? ' (over)' : '')]);
+    }
     if (t.cls) parts.push(['class', dur(t.cls) + ' class']);
     if (t.fx) parts.push(['fx', dur(t.fx) + ' commitments']);
     /* when meals count as breaks and break time is shown, meal time is already inside that total */
@@ -3721,7 +3958,7 @@ body.wide .app { max-width: 1180px; }
     var noteEl = $('#plan-note');
     if (state.planNote) { noteEl.textContent = state.planNote.text; noteEl.className = 'note' + (state.planNote.warn ? ' warn' : ''); }
     else if (anyBlocks && state.plan.sig && state.plan.sig !== planSig()) { noteEl.textContent = 'Your tasks or settings have changed since this plan was made. Plan again to update it. Blocks you edited or ticked stay as they are.'; noteEl.className = 'note warn'; }
-    else if (!anyBlocks && !state.plan.blocks.length) { noteEl.textContent = 'No plan yet. Add tasks with effort and priority, then press Plan my study time.'; noteEl.className = 'note'; }
+    else if (!anyBlocks && !state.plan.blocks.length) { noteEl.textContent = 'No plan yet. Add tasks with time and priority, then press Plan my study time.'; noteEl.className = 'note'; }
     else { noteEl.textContent = ''; noteEl.className = 'note'; }
     $('#plan-gen').textContent = state.plan.blocks.length ? 'Plan again' : 'Plan my study time';
     var run = [];
@@ -4213,7 +4450,7 @@ body.wide .app { max-width: 1180px; }
         var bareN = effortlessLeaves(tk), allBare = bareN.length && bareN.every(function (x) { return x.done; }), anyOpen = bareN.some(function (x) { return !x.done; });
         if (bareN.length && ((want && anyOpen) || (!want && allBare))) {
           mutateTask(tk.id, function (c) { effortlessLeaves(c).forEach(function (x) { applySubDone(c, x.id, want); }); })
-            .then(function () { toast(want ? 'The steps without an effort level were ticked off.' : 'Those steps were reopened.'); }, function (err) { saveError(err); render(); });
+            .then(function () { toast(want ? 'The steps without a time were ticked off.' : 'Those steps were reopened.'); }, function (err) { saveError(err); render(); });
         }
       }
       else if (want !== cur) {
