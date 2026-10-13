@@ -217,6 +217,8 @@ button { cursor: pointer; }
 .subform .f.t { grid-column: 1 / -1; }
 .subform label { font-size: 12px; color: var(--muted); }
 .subform input { height: 36px; padding: 0 9px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; width: 100%; min-width: 0; }
+.subform .nobreak { display: flex; font-size: 13px; color: var(--ink); }
+.subform .nobreak input { width: 16px; height: 16px; padding: 0; }
 .subform .acts { grid-column: 1 / -1; display: flex; gap: 8px; }
 .link.add { color: var(--accent); padding-left: 0; }
 .link.add:hover { background: transparent; text-decoration: underline; }
@@ -770,7 +772,7 @@ body.wide .app { max-width: 1180px; }
 .updbar .u-go{padding:0 14px;background:var(--accent);color:var(--accent-ink);font-weight:600}
 .updbar .u-x{width:32px;background:transparent;color:inherit;opacity:.7;font-size:20px;line-height:1}
 </style>
-<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_PUSH={vapid:"BGs1idw37HirnuG0r4KvnmqCJD35UeDL2i35_quTmjEItTwAZWuUl9nTZKOKCngJU3p02opFm5cAdo2PvfMUokc"};window.__DD_BUILD="8d97ee5";</script>
+<script>window.__DD_SYNC={"url": "https://lliaslfztyxxentdycfa.supabase.co", "key": "sb_publishable_zfE31ZdPLriVkt6_M9WVXg_OPLGDhoM"};window.__DD_PUSH={vapid:"BGs1idw37HirnuG0r4KvnmqCJD35UeDL2i35_quTmjEItTwAZWuUl9nTZKOKCngJU3p02opFm5cAdo2PvfMUokc"};window.__DD_BUILD="98ef52f";</script>
 </head>
 <body>
 
@@ -818,6 +820,7 @@ body.wide .app { max-width: 1180px; }
         <label for="f-due">Deadline</label>
         <input id="f-due" name="due" type="date">
       </div>
+        <label class="nobreak"><input type="checkbox" id="f-doby" name="doBy"> <span>Do by this date <small>Fine to schedule it earlier.</small></span></label>
       <div class="field" id="f-dc-wrap" hidden>
         <label for="f-dc">Due by</label>
         <select id="f-dc"></select>
@@ -879,6 +882,7 @@ body.wide .app { max-width: 1180px; }
         <div class="e-grid">
           <div class="field"><label for="e-do">Do date</label><input id="e-do" type="date"></div>
           <div class="field"><label for="e-due">Deadline</label><input id="e-due" type="date"></div>
+          <label class="nobreak full"><input type="checkbox" id="e-doby"> <span>Do by this date <small>Fine to schedule it earlier.</small></span></label>
           <div class="field full" id="e-dc-wrap" hidden><label for="e-dc">Due by</label><select id="e-dc"></select></div>
           <fieldset class="field full">
             <legend>Priority</legend>
@@ -1843,9 +1847,10 @@ body.wide .app { max-width: 1180px; }
         '<input id="sub-title" maxlength="200" value="' + esc(s.title) + '" placeholder="What is the step?"></div>' +
       '<div class="f"><label for="sub-do">Do date</label><input id="sub-do" type="date" value="' + esc(s.doDate) + '"></div>' +
       '<div class="f"><label for="sub-due">Deadline</label><input id="sub-due" type="date" value="' + esc(s.due) + '"></div>' +
+      '<div class="f t"><label class="nobreak"><input type="checkbox" id="sub-doby"' + (s.doBy ? ' checked' : '') + '> <span>Do by the do date <small>Fine to schedule it earlier.</small></span></label></div>' +
       (s.hasKids ? '<div class="f t sub-eff-note">Time is added up from its sub-items.</div>' :
         '<div class="f t"><label for="sub-eff">Time</label><select id="sub-eff">' +
-        '<option value="">Not set (uses the task\'s)</option>' + EFF_KEYS.map(function (k) { return '<option value="' + k + '"' + (s.effort === k ? ' selected' : '') + '>' + EFF_LABEL[k] + '</option>'; }).join('') + '</select></div>') +
+        '<option value="">Not set (uses the task\'s)</option>' + EFF_KEYS.map(function (k) { return '<option value="' + k + '"' + (s.effort === k ? ' selected' : '') + '>' + EFF_LABEL[k] + '</option>'; }).join('') + '<option value="reminder"' + (s.effort === 'reminder' ? ' selected' : '') + '>Reminder (just tick it off, no time)</option></select></div>') +
       (state.sched && state.sched.effortOn ? '<div class="f t"><label for="sub-ex">Effort</label><select id="sub-ex"><option value="">Not set (uses the task\'s)</option>' + EX_KEYS.map(function (k) { return '<option value="' + k + '"' + (s.exert === k ? ' selected' : '') + '>' + EX_LABEL[k] + '</option>'; }).join('') + '</select></div>' : '') +
       '<div class="acts"><button class="btn primary sm" type="button" data-act="sub-save">' + (s.editId ? 'Save' : 'Add') + '</button>' +
       '<button class="btn sm" type="button" data-act="sub-cancel">Cancel</button></div></div>';
@@ -1861,14 +1866,15 @@ body.wide .app { max-width: 1180px; }
       var doN = it.doDate ? diffDays(it.doDate) : 0;
       var dueN = it.due ? diffDays(it.due) : 0;
       var dh = '';
-      if (it.doDate) dh += '<span class="' + (!done && doN < 0 ? 'warn' : '') + '" title="Do date">' + IC.cal + esc(sd(it.doDate)) + '</span>';
+      if (it.doDate) dh += '<span class="' + (!done && doN < 0 ? 'warn' : '') + '" title="' + (it.doBy ? 'Do by (fine to schedule earlier)' : 'Do date') + '">' + IC.cal + (it.doBy ? 'by ' : '') + esc(sd(it.doDate)) + '</span>';
       if (it.due) dh += '<span class="' + (!done ? (dueN < 0 ? 'bad' : (dueN <= 2 ? 'warn' : '')) : '') + '" title="Deadline">' + IC.clock + esc(sd(it.due)) + '</span>';
       var kidsOpen = (it.children || []).filter(function (c) { return !c.done; });
       if (level === 1 && (it.children || []).length) {
         var kb = leavesMinutes(t, kidsOpen) / state.sched.blockMins;
         if (!done && kb > 0) dh += '<span title="Time, added up from its sub-items">' + IC.blocks + esc(fmtBlocks(kb)) + '</span>';
-      } else if (EFF_N[it.effort]) dh += '<span title="Time: ' + EFF_LABEL[it.effort] + '">' + barsHtml(EFF_N[it.effort]) + '</span>';
-      if (state.sched.effortOn && EX_LABEL[it.exert] && !done) dh += '<span title="Effort: ' + EX_LABEL[it.exert] + '">' + esc(EX_LABEL[it.exert]) + ' effort</span>';
+      } else if (it.effort === 'reminder') dh += '<span title="Just something to tick off">Reminder</span>';
+      else if (EFF_N[it.effort]) dh += '<span title="Time: ' + EFF_LABEL[it.effort] + '">' + barsHtml(EFF_N[it.effort]) + '</span>';
+      if (state.sched.effortOn && EX_LABEL[it.exert] && !done) dh += '<span title="Effort: ' + EX_LABEL[it.exert] + '">' + esc(exLabelText(it.exert)) + '</span>';
       if (!done) dh += progHtml(blockProgress(t.id, it.id));
       var confirming = state.pendingSubDelete === it.id;
       head = '<div class="sub-row">' +
@@ -1926,7 +1932,7 @@ body.wide .app { max-width: 1180px; }
       }).join('');
     } else if (t.doDate) {
       var doN = diffDays(t.doDate);
-      chips += '<span class="mc do' + (!t.done && doN < 0 ? ' warn' : (!t.done && doN === 0 ? ' now' : '')) + (state.sort === 'do' ? ' key' : '') + '" title="Do date">' + IC.cal + esc(sd(t.doDate)) + '</span>';
+      chips += '<span class="mc do' + (!t.done && doN < 0 ? ' warn' : (!t.done && doN === 0 ? ' now' : '')) + (state.sort === 'do' ? ' key' : '') + '" title="' + (t.doBy ? 'Do by (fine to schedule earlier)' : 'Do date') + '">' + IC.cal + (t.doBy ? 'by ' : '') + esc(sd(t.doDate)) + '</span>';
     }
     if (PRI[t.priority]) chips += '<span class="mc pri p-' + t.priority + '" title="Priority: ' + PRI_LABEL[t.priority] + '">' + IC.flag + PRI_LABEL[t.priority] + '</span>';
     if (!t.done && !subs.length) chips += progHtml(blockProgress(t.id, ''));
@@ -1936,7 +1942,7 @@ body.wide .app { max-width: 1180px; }
     } else if (EFF_N[t.effort]) {
       chips += '<span class="mc eff" title="Time: ' + EFF_LABEL[t.effort] + '">' + barsHtml(EFF_N[t.effort]) + EFF_LABEL[t.effort] + '</span>';
     }
-    if (state.sched.effortOn && EX_LABEL[t.exert] && !t.done) chips += '<span class="mc eff" title="Effort: ' + EX_LABEL[t.exert] + '">' + esc(EX_LABEL[t.exert]) + ' effort</span>';
+    if (state.sched.effortOn && EX_LABEL[t.exert] && !t.done) chips += '<span class="mc eff" title="Effort: ' + EX_LABEL[t.exert] + '">' + esc(exLabelText(t.exert)) + '</span>';
 
     var confirming = state.pendingDelete === t.id;
     var notesOpen = !!state.expanded[t.id];
@@ -2139,7 +2145,7 @@ body.wide .app { max-width: 1180px; }
     fillDueClass($('#f-dc'), $('#f-dc-wrap'), F.module.value.trim(), F.due.value, '');
   }
   /* a task with subtasks still needs its own effort when some open step has none */
-  function needsParentEffort(t) { return !!(t && subsOf(t).length && openLeaves(t).some(function (l) { return !EFF_N[l.effort]; })); }
+  function needsParentEffort(t) { return !!(t && subsOf(t).length && openLeaves(t).some(function (l) { return !EFF_N[l.effort] && l.effort !== 'reminder'; })); }
   function syncExertFields() { var on = !!(state.sched && state.sched.effortOn); ['#ex-set', '#e-ex-set'].forEach(function (q) { var el = $(q); if (el) el.hidden = !on; }); }
   function syncEffortField(t) {
     var has = !!(t && subsOf(t).length), need = needsParentEffort(t);
@@ -2177,6 +2183,7 @@ body.wide .app { max-width: 1180px; }
     $('#e-module').value = t.module || '';
     $('#e-title').value = t.title || '';
     $('#e-do').value = t.doDate || '';
+    $('#e-doby').checked = !!t.doBy;
     $('#e-due').value = t.due || '';
     fillDueClass($('#e-dc'), $('#e-dc-wrap'), t.module || '', t.due || '', t.dueClass || '');
     $('#e-notes').value = t.notes || '';
@@ -2218,7 +2225,7 @@ body.wide .app { max-width: 1180px; }
     var known = allModuleCodes().filter(function (m) { return m.toLowerCase() === module.toLowerCase(); })[0];
     if (known) module = known;
     var task = Object.assign({}, base, {
-      module: module, title: title, doDate: $('#e-do').value || '', due: $('#e-due').value || '',
+      module: module, title: title, doDate: $('#e-do').value || '', doBy: !!$('#e-do').value && $('#e-doby').checked, due: $('#e-due').value || '',
       priority: eChoice('e-priority'), exert: eChoice('e-exert'), effort: subsOf(base).length && !needsParentEffort(base) ? '' : eChoice('e-effort'), notes: $('#e-notes').value.trim(), example: false,
       dueClass: $('#e-dc-wrap').hidden ? '' : $('#e-dc').value
     });
@@ -2234,7 +2241,7 @@ body.wide .app { max-width: 1180px; }
     if (!title) { setErr('Add a task title.'); F.title.focus(); return; }
     var known = allModuleCodes().filter(function (m) { return m.toLowerCase() === module.toLowerCase(); })[0];
     if (known) module = known;
-    var doDate = F.doDate.value || '';
+    var doDate = F.doDate.value || '', doBy = !!doDate && $('#f-doby').checked;
     var due = F.due.value || '';
     var priority = getChoice('priority');
     var effort = getChoice('effort'), exert = getChoice('exert');
@@ -2242,8 +2249,8 @@ body.wide .app { max-width: 1180px; }
     var editing = state.editing;
     var base = editing ? taskById(editing) : null;
     var task = base
-      ? Object.assign({}, base, { module: module, title: title, doDate: doDate, due: due, priority: priority, exert: exert, effort: subsOf(base).length && !needsParentEffort(base) ? '' : effort, notes: notes, example: false, dueClass: $('#f-dc-wrap').hidden ? '' : $('#f-dc').value })
-      : { id: store.newId(), module: module, title: title, doDate: doDate, due: due, priority: priority, exert: exert, effort: effort, notes: notes, subtasks: [], done: false, example: false, created: Date.now(), dueClass: $('#f-dc-wrap').hidden ? '' : $('#f-dc').value };
+      ? Object.assign({}, base, { module: module, title: title, doDate: doDate, doBy: doBy, due: due, priority: priority, exert: exert, effort: subsOf(base).length && !needsParentEffort(base) ? '' : effort, notes: notes, example: false, dueClass: $('#f-dc-wrap').hidden ? '' : $('#f-dc').value })
+      : { id: store.newId(), module: module, title: title, doDate: doDate, doBy: doBy, due: due, priority: priority, exert: exert, effort: effort, notes: notes, subtasks: [], done: false, example: false, created: Date.now(), dueClass: $('#f-dc-wrap').hidden ? '' : $('#f-dc').value };
     persist(task).then(function () {
       resetForm(false);
       F.module.focus();
@@ -2280,7 +2287,7 @@ body.wide .app { max-width: 1180px; }
   function openSubForm(taskId, parentId, editId, item) {
     state.sub = {
       taskId: taskId, parentId: parentId || null, editId: editId || null,
-      title: item ? item.title || '' : '', doDate: item ? item.doDate || '' : '', due: item ? item.due || '' : '',
+      title: item ? item.title || '' : '', doDate: item ? item.doDate || '' : '', doBy: !!(item && item.doBy), due: item ? item.due || '' : '',
       effort: item ? item.effort || '' : '', exert: item ? item.exert || '' : '', hasKids: !!(item && (item.children || []).length)
     };
     state.focusSub = true;
@@ -2294,9 +2301,9 @@ body.wide .app { max-width: 1180px; }
     var p = mutateTask(d.taskId, function (c) {
       if (d.editId) {
         var found = findSub(c, d.editId);
-        if (found) { found.item.title = title; found.item.doDate = d.doDate || ''; found.item.due = d.due || ''; found.item.exert = d.exert || ''; if (!d.hasKids) found.item.effort = d.effort || ''; }
+        if (found) { found.item.title = title; found.item.doDate = d.doDate || ''; found.item.doBy = !!d.doDate && !!d.doBy; found.item.due = d.due || ''; found.item.exert = d.exert || ''; if (!d.hasKids) found.item.effort = d.effort || ''; }
       } else {
-        var item = { id: uid(), title: title, doDate: d.doDate || '', due: d.due || '', effort: d.effort || '', exert: d.exert || '', done: false };
+        var item = { id: uid(), title: title, doDate: d.doDate || '', doBy: !!d.doDate && !!d.doBy, due: d.due || '', effort: d.effort || '', exert: d.exert || '', done: false };
         if (d.parentId) {
           var par = findSub(c, d.parentId);
           if (par && par.level === 1) { par.item.children = par.item.children || []; par.item.children.push(item); }
@@ -2306,7 +2313,7 @@ body.wide .app { max-width: 1180px; }
       }
     });
     if (d.editId) state.sub = null;
-    else { d.title = ''; d.doDate = ''; d.due = ''; state.focusSub = true; }
+    else { d.title = ''; d.doDate = ''; d.doBy = false; d.due = ''; state.focusSub = true; }
     renderList();
     p.catch(function (err) { saveError(err); render(); });
   }
@@ -2315,6 +2322,7 @@ body.wide .app { max-width: 1180px; }
     var id = e.target.id;
     if (id === 'sub-title') state.sub.title = e.target.value;
     else if (id === 'sub-do') state.sub.doDate = e.target.value;
+    else if (id === 'sub-doby') state.sub.doBy = e.target.checked;
     else if (id === 'sub-due') state.sub.due = e.target.value;
     else if (id === 'sub-eff') state.sub.effort = e.target.value;
     else if (id === 'sub-ex') state.sub.exert = e.target.value;
@@ -2429,6 +2437,8 @@ body.wide .app { max-width: 1180px; }
   var SWATCHES = [0, 22, 42, 80, 140, 168, 196, 222, 252, 282, 314, 340];
   var DAY_ORDER = [1, 2, 3, 4, 5, 6, 0];
   var KINDS = ['Meal', 'Social', 'Society', 'Careers', 'Other'];
+  /* the pill on a commitment: meals read "Break" when meals count as breaks */
+  function fxPill(fx) { return fx.kind === 'Meal' && state.sched.mealsAsBreaks ? 'Break' : kindLabel(fx.kind, fx.kindOther); }
   function kindLabel(kind, other) { return kind === 'Other' && other && String(other).trim() ? String(other).trim() : (kind || ''); }
   var PRESETS = [
     { label: 'Lunch', kind: 'Meal', start: '12:30', end: '13:30', days: [1, 2, 3, 4, 5] },
@@ -3412,6 +3422,8 @@ body.wide .app { max-width: 1180px; }
   }
   /* effort: a step without a level of its own uses its task's. Unset counts as nothing. */
   function exertOf(t, leaf) { return leaf && EX_LABEL[leaf.exert] ? leaf.exert : (t && EX_LABEL[t.exert] ? t.exert : ''); }
+  /* "High effort", but plain "Effortless" */
+  function exLabelText(level) { return level === 'effortless' ? EX_LABEL.effortless : EX_LABEL[level] + ' effort'; }
   function exertPts(level) { return level ? (+state.sched.effortPts[level] || 0) : 0; }
   function effortCapFor(d) {
     var s = state.sched, x = (s.effortDays || []).filter(function (o) { return o.date === d; })[0];
@@ -3444,15 +3456,15 @@ body.wide .app { max-width: 1180px; }
   /* steps with their own effort count separately; steps without one share whatever is left of the task's effort (nothing, if the others already use it all) */
   function leavesMinutes(t, leaves) {
     var n = 0, bare = false;
-    leaves.forEach(function (l) { if (EFF_N[l.effort]) n += levelMinutes(l.effort); else bare = true; });
+    leaves.forEach(function (l) { if (EFF_N[l.effort]) n += levelMinutes(l.effort); else if (l.effort !== 'reminder') bare = true; });
     return n + (bare ? Math.max(0, levelMinutes(t.effort) - n) : 0);
   }
   function effortlessLeaves(t) {
     var out = [];
     subsOf(t).forEach(function (s) {
       var ch = s.children || [];
-      if (ch.length) ch.forEach(function (c) { if (!EFF_N[c.effort]) out.push(c); });
-      else if (!EFF_N[s.effort]) out.push(s);
+      if (ch.length) ch.forEach(function (c) { if (!EFF_N[c.effort] && c.effort !== 'reminder') out.push(c); });
+      else if (!EFF_N[s.effort] && s.effort !== 'reminder') out.push(s);
     });
     return out;
   }
@@ -3475,11 +3487,18 @@ body.wide .app { max-width: 1180px; }
     var par = subsOf(t).filter(function (x) { return (x.children || []).some(function (c) { return c === s || c.id === s.id; }); })[0];
     return (par && par[key]) || t[key] || '';
   }
+  /* whether the do date that applies to a step is a "do by" date, which follows the same inheritance as the date itself */
+  function stepBy(t, s) {
+    if (!s) return !!t.doBy;
+    if (s.doDate) return !!s.doBy;
+    var par = subsOf(t).filter(function (x) { return (x.children || []).some(function (c) { return c === s || c.id === s.id; }); })[0];
+    return par && par.doDate ? !!par.doBy : !!t.doBy;
+  }
   function planItems(kept) {
     var items = [];
     function mk(t, s, minutes, full) {
-      var sd = s ? stepDate(t, s, 'due') : '';
-      return { task: t, sub: s, level: effortOf(t, s), minutes: minutes, full: full, start: stepDate(t, s, 'doDate'), due: s ? sd : (t.due || ''), dueClass: (s && sd && sd !== t.due) ? '' : (t.dueClass || '') };
+      var sd = s ? stepDate(t, s, 'due') : '', dd = stepDate(t, s, 'doDate'), by = !!dd && stepBy(t, s);
+      return { task: t, sub: s, level: effortOf(t, s), minutes: minutes, full: full, start: by ? '' : dd, by: by ? dd : '', due: s ? sd : (t.due || ''), dueClass: (s && sd && sd !== t.due) ? '' : (t.dueClass || '') };
     }
     state.tasks.forEach(function (t) {
       if (t.done) return;
@@ -3488,6 +3507,7 @@ body.wide .app { max-width: 1180px; }
         var lv = openLeaves(t);
         var bare = [];
         lv.forEach(function (s) {
+          if (s.effort === 'reminder') return;   /* a reminder has no time: nothing to plan, just tick it off */
           if (!EFF_N[s.effort]) { bare.push(s); return; }
           var fm = levelMinutes(s.effort), m = fm - keptMinutes(kept, t.id, s.id);
           if (m >= 5) items.push(mk(t, s, m, fm));
@@ -3531,7 +3551,7 @@ body.wide .app { max-width: 1180px; }
   }
   function planSig() {
     var parts = state.tasks.filter(function (t) { return !t.done; }).map(function (t) {
-      return [t.id, t.doDate, t.due, t.dueClass || '', t.priority, t.effort, state.sched.effortOn ? t.exert || '' : '', subsOf(t).map(function (s) { return [s.id, s.done ? 1 : 0, s.doDate, s.due, s.effort, state.sched.effortOn ? s.exert || '' : '', (s.children || []).map(function (c) { return [c.id, c.done ? 1 : 0, c.doDate, c.due, c.effort, state.sched.effortOn ? c.exert || '' : ''].join('.'); }).join(',')].join('~'); }).join('|')].join('^');
+      return [t.id, t.doDate, t.doBy ? 1 : 0, t.due, t.dueClass || '', t.priority, t.effort, state.sched.effortOn ? t.exert || '' : '', subsOf(t).map(function (s) { return [s.id, s.done ? 1 : 0, s.doDate, s.doBy ? 1 : 0, s.due, s.effort, state.sched.effortOn ? s.exert || '' : '', (s.children || []).map(function (c) { return [c.id, c.done ? 1 : 0, c.doDate, c.doBy ? 1 : 0, c.due, c.effort, state.sched.effortOn ? c.exert || '' : ''].join('.'); }).join(',')].join('~'); }).join('|')].join('^');
     }).sort().join('\n');
     return hash(parts + '#' + JSON.stringify(sigSched()) + '#' + JSON.stringify(state.tt) + '#' + JSON.stringify(state.modsDoc.items));
   }
@@ -3621,7 +3641,7 @@ body.wide .app { max-width: 1180px; }
       cap[d] = Math.max(0, s.maxDayHours * 60 - used);
     });
     var bonus = { top: 7, high: 3, medium: 1 };
-    function rank(it) { return (it.due ? Math.max(0, diffDays(it.due)) : 60) - (bonus[it.task.priority] || 0) - (it.dueClass ? 0.5 : 0); }
+    function rank(it) { var dl = it.by && (!it.due || it.by < it.due) ? it.by : it.due; return (dl ? Math.max(0, diffDays(dl)) : 60) - (bonus[it.task.priority] || 0) - (it.dueClass ? 0.5 : 0); }
     /* when a task is due by a class, the latest it can run on its deadline day (class start less the travel buffer), or -1 */
     var cutCache = {};
     function classCutoff(it, d) {
@@ -3642,7 +3662,7 @@ body.wide .app { max-width: 1180px; }
       var bins = trivBins[d] = trivBins[d] || [], i = bins.findIndex(function (x) { return x + len <= s.blockMins; });
       if (i >= 0) bins[i] += len; else bins.push(len);
     }
-    function place(it, strict, cut, enf, dueOnly) {
+    function place(it, strict, cut, enf, lim) {
       var firstDay = it.start && it.start > today ? it.start : today, alone = it.full <= small || it.level === 'trivial';
       if (firstDay > lastDay) return;
       var order = days.map(function (_, i) { return i; });
@@ -3658,7 +3678,8 @@ body.wide .app { max-width: 1180px; }
       for (var oi = 0; oi < order.length && it.rem > 0; oi++) {
         var d = days[order[oi]];
         if (d < firstDay) continue;
-        if ((strict || cut || dueOnly) && it.due && d > it.due) continue;
+        if ((strict || cut) && it.due && d > it.due) continue;
+        if (lim && d > lim) continue;
         var ek = it.task.id + '|' + (it.sub ? it.sub.id : ''), ep = EO ? exertPts(exertOf(it.task, it.sub)) : 0;
         /* a day already holding effort will not take a task that would push it past the day's total (a lone task bigger than the total still goes in) */
         if (EO && enf && ep > 0 && !eKeys[d][ek] && eUse[d] > 0 && eUse[d] + ep > ecap[d]) continue;
@@ -3717,12 +3738,14 @@ body.wide .app { max-width: 1180px; }
       if (EO) {
         /* stay within each day's effort total and meet the deadline; then, unless the total is strict, go over it rather than miss the deadline; only then run late */
         if (it.dueClass) place(it, false, true, true);
-        place(it, false, false, true, !!it.due);
-        if (it.rem > 0 && !s.effortStrict && it.due) place(it, false, false, false, true);
+        if (it.by) place(it, false, false, true, it.due && it.due < it.by ? it.due : it.by);
+        if (it.rem > 0) place(it, false, false, true, it.due || '');
+        if (it.rem > 0 && !s.effortStrict && it.due) place(it, false, false, false, it.due);
         if (it.rem > 0) place(it, false, false, true, false);
         if (it.rem > 0 && !s.effortStrict) place(it, false, false, false, false);
       } else {
         if (it.dueClass) place(it, false, true);   /* first try to finish before the class */
+        if (it.by) place(it, false, false, false, it.due && it.due < it.by ? it.due : it.by);   /* a do-by date: aim to be done by then, earlier is fine */
         place(it, false, false);
       }
       var name = it.task.module + ' ' + it.task.title + (it.sub ? ' (' + it.sub.title + ')' : '');
@@ -3779,7 +3802,7 @@ body.wide .app { max-width: 1180px; }
         '<span class="pl"><span>' + esc(ev.t) + '</span>' + (ev.l ? '<span class="loc">' + esc(ev.l) + '</span>' : '') + '</span><span class="kind">' + esc(ev.k || 'Class') + '</span></li>';
     }
     if (x.kind === 'fixed') {
-      return '<li class="pe fixed"><span></span><span class="pt">' + range + '</span><span class="pl"><span>' + esc(x.fx.label) + '</span>' + (x.fx.loc ? '<span class="loc">' + esc(x.fx.loc) + '</span>' : '') + '</span><span class="kind">' + esc(kindLabel(x.fx.kind, x.fx.kindOther)) + '</span></li>';
+      return '<li class="pe fixed"><span></span><span class="pt">' + range + '</span><span class="pl"><span>' + esc(x.fx.label) + '</span>' + (x.fx.loc ? '<span class="loc">' + esc(x.fx.loc) + '</span>' : '') + '</span><span class="kind">' + esc(fxPill(x.fx)) + '</span></li>';
     }
     var b = x.b, t = taskById(b.taskId), sf = t && b.subId ? findSub(t, b.subId) : null, sub = sf ? sf.item : null;
     var info = studyInfo(b);
@@ -3799,7 +3822,7 @@ body.wide .app { max-width: 1180px; }
     return '<li class="pe study tint' + (bdone ? ' done' : '') + (isNow ? ' now' : '') + '"' + (t ? ' style="' + modStyle(t.module) + '"' : '') + ' data-bid="' + esc(b.id) + '">' +
       '<input type="checkbox" data-act="blk-done" aria-label="Mark block done"' + (bdone ? ' checked' : '') + (taskDone ? ' disabled title="The task is complete"' : '') + '>' +
       '<span class="pt">' + range + '</span>' +
-      '<span class="pl">' + (t ? chipHtml(t.module) + '<span>' + esc(info.title) + '</span>' + (x.cont ? '<span class="pe-eff" title="The second half of a block that began the evening before">continued</span>' : x.wrap ? '<span class="pe-eff" title="This block carries on after midnight">to ' + esc(b.end) + ' next day</span>' : '') + (EFF_N[info.level] ? '<span class="pe-eff" title="Time: ' + EFF_LABEL[info.level] + (info.inherited ? ' (the task\'s)' : '') + '">' + barsHtml(EFF_N[info.level]) + EFF_LABEL[info.level] + '</span>' : '') + (state.sched.effortOn && exertOf(t, sub) ? '<span class="pe-eff" title="Effort: ' + EX_LABEL[exertOf(t, sub)] + '">' + EX_LABEL[exertOf(t, sub)] + ' effort</span>' : '') + (prg.total > 1 ? '<span class="pe-eff" title="Blocks ticked off for this step">' + prg.done + '/' + prg.total + '</span>' : '') : '<span>Removed task</span>') + '</span>' +
+      '<span class="pl">' + (t ? chipHtml(t.module) + '<span>' + esc(info.title) + '</span>' + (x.cont ? '<span class="pe-eff" title="The second half of a block that began the evening before">continued</span>' : x.wrap ? '<span class="pe-eff" title="This block carries on after midnight">to ' + esc(b.end) + ' next day</span>' : '') + (EFF_N[info.level] ? '<span class="pe-eff" title="Time: ' + EFF_LABEL[info.level] + (info.inherited ? ' (the task\'s)' : '') + '">' + barsHtml(EFF_N[info.level]) + EFF_LABEL[info.level] + '</span>' : '') + (state.sched.effortOn && exertOf(t, sub) ? '<span class="pe-eff" title="Effort: ' + EX_LABEL[exertOf(t, sub)] + '">' + exLabelText(exertOf(t, sub)) + '</span>' : '') + (prg.total > 1 ? '<span class="pe-eff" title="Blocks ticked off for this step">' + prg.done + '/' + prg.total + '</span>' : '') : '<span>Removed task</span>') + '</span>' +
       '<button class="link" type="button" data-act="blk-edit">Edit</button>' +
       (warn.length && !bdone ? '<span class="pwarn">' + IC.flag + esc(warn.join('. ')) + '</span>' : '') + '</li>';
   }
@@ -3826,7 +3849,7 @@ body.wide .app { max-width: 1180px; }
     if (t.study) parts.push(['study', dur(t.study) + ' study']);
     if (state.sched.effortOn) {
       var ef = dayEffort(d), ecp = effortCapFor(d);
-      if (ef || t.study) parts.push([ef > ecp ? 'ov' : 'ef', 'Effort ' + (Math.round(ef * 10) / 10) + '/' + (Math.round(ecp * 10) / 10) + (ef > ecp ? ' (over)' : '')]);
+      if (ef || t.study) parts.push([ef > ecp ? 'ov' : 'ef', (Math.round(ef * 10) / 10) + '/' + (Math.round(ecp * 10) / 10) + ' effort' + (ef > ecp ? ' (over)' : '')]);
     }
     if (t.cls) parts.push(['class', dur(t.cls) + ' class']);
     if (t.fx) parts.push(['fx', dur(t.fx) + ' commitments']);
@@ -4075,7 +4098,7 @@ body.wide .app { max-width: 1180px; }
       var fx = x.fx;
       cls += fx.kind === 'Meal' ? ' meal' : '';
       inner = '<div class="cb-t">' + esc(fx.label) + '</div>' +
-        (tall ? '<div class="cb-s"><span class="pill">' + esc(kindLabel(fx.kind, fx.kindOther)) + '</span></div><div class="cb-s"><span>' + range + '</span></div>' : '') +
+        (tall ? '<div class="cb-s"><span class="pill">' + esc(fxPill(fx)) + '</span></div><div class="cb-s"><span>' + range + '</span></div>' : '') +
         (taller && fx.loc ? '<div class="cb-s"><span>' + esc(fx.loc) + '</span></div>' : '');
       if (!tall) inner = '<div class="cb-t">' + esc(fx.label) + ' <span class="cb-r">' + hm(x.s) + '</span></div>';
     }
@@ -4189,7 +4212,7 @@ body.wide .app { max-width: 1180px; }
   }
   function entryInfo(x) {
     if (x.kind === 'class') return { title: x.ev.t, mod: x.ev.m || '', tag: x.ev.k || 'Class', loc: x.ev.l || '' };
-    if (x.kind === 'fixed') return { title: x.fx.label, mod: '', tag: kindLabel(x.fx.kind, x.fx.kindOther), loc: x.fx.loc || '' };
+    if (x.kind === 'fixed') return { title: x.fx.label, mod: '', tag: fxPill(x.fx), loc: x.fx.loc || '' };
     var i = studyInfo(x.b);
     return { title: i.title, mod: i.mod, tag: 'Study', loc: '', level: i.level };
   }
@@ -4370,7 +4393,7 @@ body.wide .app { max-width: 1180px; }
     state.tasks.forEach(function (t) {
       if (t.done && t.id !== currentTaskId) return;
       opts += '<option value="' + esc(t.id) + '|">' + esc(t.module + ' · ' + t.title) + '</option>';
-      subsOf(t).forEach(function (s) { if (!s.done) opts += '<option value="' + esc(t.id) + '|' + esc(s.id) + '">' + esc('    ' + t.module + ' · ' + t.title + ' › ' + s.title) + '</option>'; });
+      subsOf(t).forEach(function (s) { if (!s.done && s.effort !== 'reminder') opts += '<option value="' + esc(t.id) + '|' + esc(s.id) + '">' + esc('    ' + t.module + ' · ' + t.title + ' › ' + s.title) + '</option>'; });
     });
     return opts;
   }
